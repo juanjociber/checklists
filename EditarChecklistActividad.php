@@ -5,7 +5,7 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/ChecklistData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
@@ -20,7 +20,7 @@
   
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $checklist = FnBuscarChecklist($conmy, $ID, $CLIID);
+    $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
     if(!empty($checklist->Id)){
       $PLAID = $checklist ->PlaId;
       $isAuthorized = true;
@@ -91,11 +91,11 @@
         <div class="col-12">
           <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb">                        
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarChecklistDatos.php?id=<?php echo $ID ?>" class="text-decoration-none">DATOS</a></li>
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/InsertarChecklist.php?id=<?php echo $ID ?>" class="text-decoration-none">CHECKLIST</a></li>
-              <li class="breadcrumb-item active fw-bold" aria-current="page">ACTIVIDAD</li>
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarChecklistObservacion.php?id=<?php echo $ID ?>" class="text-decoration-none">OBSERVACION</a></li>
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarChecklistValidacion.php?id=<?php echo $ID ?>" class="text-decoration-none">VALIDACION</a></li>
+              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListDatos.php?id=<?php echo $ID ?>" class="text-decoration-none">DATOS</a></li>
+              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckList.php?id=<?php echo $ID ?>" class="text-decoration-none">CHECKLIST</a></li>
+              <!-- <li class="breadcrumb-item active fw-bold" aria-current="page">ACTIVIDAD</li> -->
+              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListObservacion.php?id=<?php echo $ID ?>" class="text-decoration-none">OBSERVACION</a></li>
+              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListValidacion.php?id=<?php echo $ID ?>" class="text-decoration-none">VALIDACION</a></li>
             </ol>
           </nav>
         </div>
@@ -196,7 +196,7 @@
       <div class="loader-full"></div>
     </div>
 
-    <script src="/checklist/js/EditarChecklistActividad.js"></script>
+    <script src="/checklist/js/EditarCheckListActividad.js"></script>
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
     <script src="/gesman/menu/sidebar.js"></script>

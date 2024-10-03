@@ -508,7 +508,7 @@ const FnModificarActividad = async () => {
 };
 
 function FnListarChecklists(){
-  window.location.href='/checklist/Checklists.php';
+  window.location.href='/checklist/CheckLists.php';
   return false;
 }
 
@@ -516,7 +516,7 @@ function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   console.log(id);
   if(id > 0){
-      window.location.href='/checklist/Checklist.php?id='+id;
+      window.location.href='/checklist/CheckList.php?id='+id;
   }
   return false;
 }

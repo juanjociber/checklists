@@ -5,7 +5,7 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/checklistData.php"; 
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php"; 
   
   $CLIID = $_SESSION['CliId'];
 ?>
@@ -112,9 +112,9 @@
   </div>
 
   <script src="/mycloud/library/jquery-3.5.1/jquery-3.5.1.js"></script>
+  <script src="/checklist/js/CheckLists.js"></script>
   <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script src="/mycloud/library/select2-4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script src="/checklist/js/Checklists.js"></script>
   <script src="/gesman/menu/sidebar.js"></script>
 </body>
 </html>

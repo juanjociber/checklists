@@ -1,6 +1,84 @@
 <?php
   /** tblchecklist */
-  function FnBuscarChecklist($conmy, $id, $cliid) {
+  function FnRegistrarCheckList($conmy, $checklist) {
+    try {
+        $stmt = $conmy->prepare("CALL spman_agregarchecklist(:_cliid, :_solid, :_plaid, :_equid, :_fecha, :_cliruc, :_clinombre, :_clidireccion, :_clicontacto, :_clitelefono, 
+        :_clicorreo, :_supervisor, :_equcodigo, :_equnombre, :_equmarca, :_equmodelo, :_equplaca, :_equserie, :_equmotor, :_equtransmision, :_equdiferencial, 
+        :_equkm, :_equhm, :_usuario, @_id)");
+        $stmt->bindParam(':_cliid', $checklist['cliid'], PDO::PARAM_INT);
+        $stmt->bindParam(':_solid', $checklist['solid'], PDO::PARAM_INT);
+        $stmt->bindParam(':_plaid', $checklist['plaid'], PDO::PARAM_INT);
+        $stmt->bindParam(':_equid', $checklist['equid'], PDO::PARAM_INT);
+        $stmt->bindParam(':_fecha', $checklist['fecha'], PDO::PARAM_STR);
+        $stmt->bindParam(':_cliruc', $checklist['cliruc'], PDO::PARAM_STR);
+        $stmt->bindParam(':_clinombre', $checklist['clinombre'], PDO::PARAM_STR);
+        $stmt->bindParam(':_clidireccion', $checklist['clidireccion'], PDO::PARAM_STR);
+        $stmt->bindParam(':_clicontacto', $checklist['clicontacto'], PDO::PARAM_STR);
+        $stmt->bindParam(':_clitelefono', $checklist['clitelefono'], PDO::PARAM_STR);
+        $stmt->bindParam(':_clicorreo', $checklist['clicorreo'], PDO::PARAM_STR);
+        $stmt->bindParam(':_supervisor', $checklist['supervisor'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equcodigo', $checklist['equcodigo'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equnombre', $checklist['equnombre'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equmarca', $checklist['equmarca'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equmodelo', $checklist['equmodelo'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equplaca', $checklist['equplaca'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equserie', $checklist['equserie'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equmotor', $checklist['equmotor'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equtransmision', $checklist['equtransmision'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equdiferencial', $checklist['equdiferencial'], PDO::PARAM_STR);
+        $stmt->bindParam(':_equkm', $checklist['equkm'], PDO::PARAM_INT);
+        $stmt->bindParam(':_equhm', $checklist['equhm'], PDO::PARAM_INT);
+        $stmt->bindParam(':_usuario', $checklist['usuario'], PDO::PARAM_STR);
+        $stmt->execute();
+
+        $stmt = $conmy->query("SELECT @_id as id");
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row['id'];
+    } catch (PDOException $e) {
+        throw new Exception($e->getMessage());//sera propagado al catch(Exception $ex) del nivel superior.
+    }
+  }
+
+  function FnBuscarCheckLists($conmy, $checklist) {
+    try {
+      $checklists=array('data'=>array(), 'pag'=>0);
+      $query = "";
+
+      if(!empty($checklist->Nombre)){
+        $query = " and nombre like '%".$checklist->Nombre."%'";
+      }else{
+        if(!empty($checklist->Equipo)){$query .=" and equid=".$checklist->Equipo;}
+        $query.=" and fecha between '".$checklist->FechaInicial."' and '".$checklist->FechaFinal."'";
+      }
+
+      $query.=" limit ".$checklist->Pagina.", 2";
+
+      $stmt = $conmy->prepare("select id, nombre, fecha, cli_nombre, cli_contacto, equ_nombre, estado from tblchecklists where cliid=:CliId".$query.";");
+      $stmt->bindParam(':CliId', $checklist->CliId, PDO::PARAM_INT);
+      $stmt->execute();
+      $n=$stmt->rowCount();
+      if($n>0){
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          $checklists['data'][]=array(
+            'id'=>(int)$row['id'],
+            'nombre'=>$row['nombre'],
+            'fecha'=>$row['fecha'],
+            'clinombre'=>$row['cli_nombre'],
+            'clicontacto'=>$row['cli_contacto'],
+            'equnombre'=>$row['equ_nombre'],
+            'estado'=>(int)$row['estado']
+          );
+        }
+        $checklists['pag']=$n;
+      }            
+      return $checklists;
+    } catch (PDOException $e) {
+        throw new Exception($e->getMessage().$msg);
+    }
+  }
+
+  function FnBuscarChecklist($conmy, $cliid, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, cliid, solid, plaid, equid, fecha, numero, nombre, cli_ruc, cli_nombre, cli_direccion, cli_contacto, cli_telefono, cli_correo, supervisor, equ_codigo, equ_nombre, equ_marca, equ_modelo, equ_placa, equ_serie, equ_motor, equ_transmision, equ_diferencial, equ_km, equ_hm, imagen1, imagen2, imagen3, imagen4, emp_firma, cli_firma, estado FROM tblchecklists WHERE id = :Id AND cliid = :Cliid");
       $stmt->execute(array(':Id' => $id, ':Cliid' => $cliid));
@@ -48,6 +126,62 @@
         throw new Exception($ex->getMessage());
     } catch (Exception $ex) {
         throw new Exception($ex->getMessage());
+    }
+  }
+
+  // function FnBuscarCheckList($conmy, $cliid, $id) {
+  //   try {
+  //       $datos=array();
+
+  //       $stmt = $conmy->prepare("select id, plaid, nombre, estado FROM tblchecklists WHERE id=:Id and cliid=:CliId;");
+  //       $stmt->execute(array(':Id'=>$id, ':CliId'=>$cliid));
+  //       $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+  //       if ($row) {
+  //           $datos['id']=$row['id'];
+  //           $datos['plaid']=$row['plaid'];
+  //           $datos['nombre']=$row['nombre'];
+  //           $datos['estado']=$row['estado'];
+  //       }            
+  //       return $datos;
+  //   } catch (PDOException $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   } catch (Exception $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   }
+  // }
+
+  function FnModificarChecklist($conmy, $checklist) {
+    try {
+      $stmt = $conmy->prepare("UPDATE tblchecklists 
+                               SET  fecha = :Fecha, cli_contacto = :CliContacto, supervisor = :Supervisor, equ_nombre = :EquNombre, equ_marca = :EquMarca, 
+                               equ_modelo = :EquModelo, equ_placa = :EquPlaca, equ_serie = :EquSerie, equ_motor = :EquMotor, equ_transmision =:EquTransmision, 
+                               equ_diferencial =:EquDiferencial, equ_km = :EquKm, equ_hm = :EquHm, actualizacion = :Actualizacion WHERE id = :Id");
+      $params = array(
+        ':Fecha' => $checklist->Fecha,
+        ':CliContacto' => $checklist->CliContacto,
+        ':Supervisor' => $checklist->Supervisor,
+        ':EquNombre' => $checklist->EquNombre,
+        ':EquMarca' => $checklist->EquMarca,
+        ':EquModelo' => $checklist->EquModelo,
+        ':EquPlaca' => $checklist->EquPlaca,
+        ':EquSerie' => $checklist->EquSerie,
+        ':EquMotor' => $checklist->EquMotor,
+        ':EquTransmision' => $checklist->EquTransmision,
+        ':EquDiferencial' => $checklist->EquDiferencial,
+        ':EquKm' => $checklist->EquKm,
+        ':EquHm' => $checklist->EquHm,
+        ':Actualizacion' => $checklist->Usuario,
+        ':Id' => $checklist->Id
+      );
+      $result = $stmt->execute($params);
+
+      if ($stmt->rowCount() == 0) {
+          throw new Exception('Cambios no realizados.');
+      }
+      return $result;
+    } catch (PDOException $e) {
+        throw new Exception($e->getMessage());
     }
   }
 
@@ -156,6 +290,26 @@
     }
   }
 
+  // function FnBuscarPlantillaPreguntas($conmy, $plaid) {
+  //   try {
+  //       $datos=array();
+  //       $stmt = $conmy->prepare("select id, plaid, descripcion FROM tblchkpreguntas WHERE plaid=:PlaId;");
+  //       $stmt->execute(array(':PlaId'=>$plaid));
+  //       while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+  //           $datos[]=array(
+  //               'id'=>$row['id'],
+  //               'plaid'=>$row['plaid'],                        
+  //               'pregunta'=>$row['descripcion']
+  //           );
+  //       }          
+  //       return $datos;
+  //   } catch (PDOException $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   } catch (Exception $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   }
+  // }
+
   function FnRegistrarPlantillaPregunta($conmy, $plantillaPregunta) {
     try {
         $res = false;
@@ -212,12 +366,85 @@
     }
   }
 
+  function FnBuscarTablaActividades($conmy, $id) {
+    try {
+      $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE chkid=:ChkId");
+      $stmt->execute(array(':ChkId'=>$id));
+      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $resultados;
+    } catch (PDOException $ex) {
+      return null;
+    }
+  }
+
+  function FnBuscarTablaActividad($conmy, $id) {
+    try {
+      $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE id=:Id");
+      $stmt->execute(array(':Id' => $id));
+      $actividad = new stdClass();
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          $actividad->Id = $row['id'];
+          $actividad->PreId = $row['preid'];
+          $actividad->ChkId = $row['chkid'];
+          $actividad->Descripcion = $row['descripcion'];
+          $actividad->Respuesta = $row['respuesta'];
+          $actividad->Observaciones = $row['observaciones'];
+          $actividad->Archivo = $row['archivo'];
+          $actividad->Estado = $row['estado'];
+        }
+        return $actividad;
+    } catch (PDOException $e) {
+        throw new Exception($e->getMessage());
+    }
+  }
+
+  function FnModificarTablaActividad($conmy, $actividad) {
+    try {
+        $stmt = $conmy->prepare("UPDATE tblchkactividades SET descripcion = :Descripcion, respuesta = :Respuesta, observaciones = :Observaciones, archivo = :Archivo, actualizacion = :Actualizacion WHERE id =:Id");
+        $params = array(
+            ':Descripcion' => $actividad->Descripcion,
+            ':Respuesta' => $actividad->Respuesta,
+            ':Observaciones' => $actividad->Observaciones,
+            ':Archivo' => $actividad->Archivo,
+            ':Actualizacion' => $actividad->Usuario,
+            ':Id' => $actividad->Id
+        );
+        $result = $stmt->execute($params);
+        
+        // Comprobar si se realizó alguna actualización
+        if ($stmt->rowCount() == 0) {
+            throw new Exception('Cambios no realizados.');
+        }
+        return $result;
+    } catch (PDOException $ex) {
+        error_log($ex->getMessage()); // Log del error
+        throw new Exception('Error en la base de datos: ' . $ex->getMessage());
+    }
+  }
+
+  // function FnBuscarCheckListPreguntas($conmy, $chkid) {
+  //   try {
+  //       $datos=array();
+  //       $stmt = $conmy->prepare("select id, preid, descripcion, respuesta FROM tblchkactividades WHERE chkid=:ChkId;");
+  //       $stmt->execute(array(':ChkId'=>$chkid));
+
+  //       while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+  //           $datos[]=array(
+  //               'id'=>$row['id'],
+  //               'preid'=>$row['preid'],                        
+  //               'pregunta'=>$row['descripcion'],
+  //               'respuesta'=>$row['respuesta']
+  //           );
+  //       }
+  //       return $datos;
+  //   } catch (PDOException $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   } catch (Exception $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   }
+  // }
 
 
-
-
-  
-  
 
   function FnBuscarActividad($conmy, $id) {
     try {
@@ -236,6 +463,9 @@
     }
   }
 
+  /** ================================
+   *  TABLA: tblchkalternativas 
+   *  ================================*/
   function FnRegistrarAlternativa($conmy, $alternativa) {
     try {
       $res = false;
@@ -250,44 +480,9 @@
     }
   }
 
-  function FnModificarChecklist($conmy, $checklist) {
-    try {
-      $stmt = $conmy->prepare("UPDATE tblchecklists 
-                               SET  fecha = :Fecha, cli_contacto = :CliContacto, supervisor = :Supervisor, equ_nombre = :EquNombre, equ_marca = :EquMarca, 
-                               equ_modelo = :EquModelo, equ_placa = :EquPlaca, equ_serie = :EquSerie, equ_motor = :EquMotor, equ_transmision =:EquTransmision, 
-                               equ_diferencial =:EquDiferencial, equ_km = :EquKm, equ_hm = :EquHm, actualizacion = :Actualizacion WHERE id = :Id");
-      $params = array(
-        ':Fecha' => $checklist->Fecha,
-        ':CliContacto' => $checklist->CliContacto,
-        ':Supervisor' => $checklist->Supervisor,
-        ':EquNombre' => $checklist->EquNombre,
-        ':EquMarca' => $checklist->EquMarca,
-        ':EquModelo' => $checklist->EquModelo,
-        ':EquPlaca' => $checklist->EquPlaca,
-        ':EquSerie' => $checklist->EquSerie,
-        ':EquMotor' => $checklist->EquMotor,
-        ':EquTransmision' => $checklist->EquTransmision,
-        ':EquDiferencial' => $checklist->EquDiferencial,
-        ':EquKm' => $checklist->EquKm,
-        ':EquHm' => $checklist->EquHm,
-        ':Actualizacion' => $checklist->Usuario,
-        ':Id' => $checklist->Id
-      );
-      $result = $stmt->execute($params);
-
-      if ($stmt->rowCount() == 0) {
-          throw new Exception('Cambios no realizados.');
-      }
-      return $result;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
   function FnBuscarAlternativas($conmy,$ids) {
     try {
       $placeholders = implode(',', $ids);
-
       $stmt = $conmy->prepare("SELECT id, preid, descripcion, estado FROM tblchkalternativas WHERE preid IN($placeholders)");
       $stmt->execute();
       $alternativas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -308,43 +503,26 @@
     }
   }
 
-  function FnBuscarChecklists($conmy, $checklist) {
-    try {
-      $checklists=array('data'=>array(), 'pag'=>0);
-      $query = "";
-
-      if(!empty($checklist->Nombre)){
-        $query = " and nombre like '%".$checklist->Nombre."%'";
-      }else{
-        if(!empty($checklist->Equipo)){$query .=" and equid=".$checklist->Equipo;}
-        $query.=" and fecha between '".$checklist->FechaInicial."' and '".$checklist->FechaFinal."'";
-      }
-
-      $query.=" limit ".$checklist->Pagina.", 2";
-
-      $stmt = $conmy->prepare("select id, nombre, fecha, cli_nombre, cli_contacto, equ_nombre, estado from tblchecklists where cliid=:CliId".$query.";");
-      $stmt->bindParam(':CliId', $checklist->CliId, PDO::PARAM_INT);
-      $stmt->execute();
-      $n=$stmt->rowCount();
-      if($n>0){
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          $checklists['data'][]=array(
-            'id'=>(int)$row['id'],
-            'nombre'=>$row['nombre'],
-            'fecha'=>$row['fecha'],
-            'clinombre'=>$row['cli_nombre'],
-            'clicontacto'=>$row['cli_contacto'],
-            'equnombre'=>$row['equ_nombre'],
-            'estado'=>(int)$row['estado']
-          );
-        }
-        $checklists['pag']=$n;
-      }            
-      return $checklists;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage().$msg);
-    }
-  }
+  // function FnBuscarPlantillaPreguntasAlternativas($conmy, $preguntas) {
+  //   try {
+  //       $datos=array();
+  //       $query=implode(',', $preguntas);
+  //       $stmt = $conmy->prepare("select id, preid, descripcion FROM tblchkalternativas WHERE preid in($query);");
+  //       $stmt->execute();
+  //       while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+  //           $datos[]=array(
+  //               'id'=>$row['id'],
+  //               'preid'=>$row['preid'],                        
+  //               'respuesta'=>$row['descripcion']
+  //           );
+  //       }        
+  //       return $datos;
+  //   } catch (PDOException $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   } catch (Exception $ex) {
+  //       throw new Exception($ex->getMessage());
+  //   }
+  // }
 
   function FnEliminarAlternativa($conmy, $id) {
     try {
@@ -360,6 +538,9 @@
     }
   }
 
+  /** ================================
+   *  TABLA: tblchkobservaciones 
+   *  ================================*/
   function FnRegistrarObservacion($conmy, $observacion) {
     try {
       $res = false;
@@ -463,7 +644,9 @@
     }
   }
 
-  // BUSCAR SUPERVISORES
+  /** ================================
+   *  TABLA: cli_supervisores 
+   *  ================================*/
   function FnBuscarSupervisores($comy) {
     try {
       $stmt = $comy->prepare("SELECT idsupervisor, idcliente, supervisor FROM cli_supervisores WHERE idcliente = 1");
@@ -472,62 +655,6 @@
       return $supervisores;
     } catch (PDOException $e) {
       throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnBuscarTablaActividades($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE chkid=:ChkId");
-      $stmt->execute(array(':ChkId'=>$id));
-      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $resultados;
-    } catch (PDOException $ex) {
-      return null;
-    }
-  }
-
-  function FnBuscarTablaActividad($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE id=:Id");
-      $stmt->execute(array(':Id' => $id));
-      $actividad = new stdClass();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          $actividad->Id = $row['id'];
-          $actividad->PreId = $row['preid'];
-          $actividad->ChkId = $row['chkid'];
-          $actividad->Descripcion = $row['descripcion'];
-          $actividad->Respuesta = $row['respuesta'];
-          $actividad->Observaciones = $row['observaciones'];
-          $actividad->Archivo = $row['archivo'];
-          $actividad->Estado = $row['estado'];
-        }
-        return $actividad;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnModificarTablaActividad($conmy, $actividad) {
-    try {
-        $stmt = $conmy->prepare("UPDATE tblchkactividades SET descripcion = :Descripcion, respuesta = :Respuesta, observaciones = :Observaciones, archivo = :Archivo, actualizacion = :Actualizacion WHERE id =:Id");
-        $params = array(
-            ':Descripcion' => $actividad->Descripcion,
-            ':Respuesta' => $actividad->Respuesta,
-            ':Observaciones' => $actividad->Observaciones,
-            ':Archivo' => $actividad->Archivo,
-            ':Actualizacion' => $actividad->Usuario,
-            ':Id' => $actividad->Id
-        );
-        $result = $stmt->execute($params);
-        
-        // Comprobar si se realizó alguna actualización
-        if ($stmt->rowCount() == 0) {
-            throw new Exception('Cambios no realizados.');
-        }
-        return $result;
-    } catch (PDOException $ex) {
-        error_log($ex->getMessage()); // Log del error
-        throw new Exception('Error en la base de datos: ' . $ex->getMessage());
     }
   }
 ?>

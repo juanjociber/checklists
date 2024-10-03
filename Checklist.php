@@ -5,7 +5,7 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/checklistData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id']; 
@@ -17,7 +17,7 @@
   $NUMERO=0;
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $checklist = FnBuscarChecklist($conmy, $ID, $CLIID);
+    $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
     if(!empty($checklist->Id)){
       $isAuthorized = true;
       $claseHabilitado = "btn-outline-primary";
@@ -73,7 +73,6 @@
       <div class="row border-bottom mb-2 fs-5">
         <div class="col-12 fw-bold d-flex justify-content-between">
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $_SESSION['CliNombre'] : 'UNKNOWN'; ?></p>
-          <input type="hidden" id="txtIdPlantilla" value="0"/>
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $checklist->Nombre : 'UNKNOWN'; ?></p>
         </div>
       </div>
@@ -325,7 +324,7 @@
       <?php endif ?>
     </div>
     
-    <script src="/checklist/js/Checklist.js"></script>
+    <script src="/checklist/js/CheckList.js"></script>
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="/mycloud/library/bootstrap-5-alerta-1.0/js/bootstrap-5-alerta-1.0.js"></script>
     <script src="/gesman/menu/sidebar.js"></script>

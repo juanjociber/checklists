@@ -65,7 +65,7 @@ async function FnBuscarChecklist2(){
     formData.append('pagina', PaginasTotal);
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch('/checklist/search/BuscarChecklists.php', {
+    const response = await fetch('/checklist/search/BuscarCheckLists.php', {
         method:'POST',
         body: formData
     });/*.then(response=>response.text()).then((response)=>{console.log(response)}).catch(err=>console.log(err));*/
@@ -155,8 +155,9 @@ async function FnBuscarPrimero() {
 }
 
 function FnChecklist(id){
+  console.log(id);
   if(id > 0){
-    window.location.href='/checklist/Checklist.php?id='+id;
+    window.location.href='/checklist/CheckList.php?id='+id;
   }
   return false;
 }

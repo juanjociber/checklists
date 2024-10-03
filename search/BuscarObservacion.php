@@ -1,11 +1,11 @@
 <?php 
   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/ChecklistData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   $data = array('res' => false,'msg' => 'Error general.', 'data'=>null);
 
   try {
-  //   if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
+    if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     if(empty($_POST['id'])){ throw new Exception("La informacion esta incompleta."); }
     
     $observacion = FnBuscarObservacion($conmy, $_POST['id']);

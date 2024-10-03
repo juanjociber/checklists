@@ -7,7 +7,7 @@
   $CLIID = $_SESSION['CliId'];
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/ChecklistData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
 
   $plantilla= new stdClass();
   $plantillaPreguntas =array();

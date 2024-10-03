@@ -1,7 +1,7 @@
 <?php 
 //   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/ChecklistData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   
   $data = array('res' => false, 'msg' => 'Error general.');
   

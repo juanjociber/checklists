@@ -1,17 +1,13 @@
 <?php
   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/ChecklistData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   $data = array('res' => false, 'pag' => 0, 'msg' => 'Error general.', 'data'=>array());
 
   try {
-    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) {
-      throw new Exception("Usuario no tiene Autorización.");
-    }
+    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) {throw new Exception("Usuario no tiene Autorización.");}
 
-    if (empty($_POST['fechainicial']) || empty($_POST['fechafinal'])) {
-      throw new Exception("Las fechas de búsqueda están incompletas.");
-    }
+    if (empty($_POST['fechainicial']) || empty($_POST['fechafinal'])) {throw new Exception("Las fechas de búsqueda están incompletas.");}
 
     $checklist = new stdClass();
     $checklist->CliId = $_SESSION['CliId'];
@@ -22,7 +18,7 @@
     $checklist->Pagina = !empty($_POST['pagina']) ? (int)$_POST['pagina'] : 0;
 
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $checklists = FnBuscarChecklists($conmy, $checklist);
+    $checklists = FnBuscarCheckLists($conmy, $checklist);
 
     if ($checklists['pag'] > 0) {
       $data['res'] = true;

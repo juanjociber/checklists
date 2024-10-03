@@ -371,14 +371,15 @@ const llenarSelectConDispositivosDisponibles = async () => {
       option.text = dispositivo.label || `Dispositivo ${dispositivo.deviceId}`;
       $listaDeDispositivos.appendChild(option);
     });
-  } else {
-    Swal.fire({
-      title: "Error",
-      text: "No se encoentraron dispositivos de cámara",
-      icon: "error",
-      timer: 2000
-    });
-  }
+  } 
+  // else {
+  //   Swal.fire({
+  //     title: "Error",
+  //     text: "No se encontró dispositivo de cámara",
+  //     icon: "error",
+  //     timer: 2000
+  //   });
+  // }
 };
 
 /** FUNCIÓN MOSTRAR CAMARA */
@@ -483,7 +484,7 @@ async function FnAgregarFoto(){
 
 /**LISTAR CHEKCLITS */
 function FnListarChecklists(){
-  window.location.href='/checklist/Checklists.php';
+  window.location.href='/checklist/CheckLists.php';
   return false;
 }
 
@@ -492,7 +493,7 @@ function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   console.log(id);
   if(id > 0){
-    window.location.href='/checklist/checklist.php?id='+id;
+    window.location.href='/checklist/checkList.php?id='+id;
   }
   return false;
 }

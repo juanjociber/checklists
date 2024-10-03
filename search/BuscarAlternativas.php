@@ -1,15 +1,11 @@
 <?php
-// session_start();
-require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/ChecklistData.php";
-
-$data = array('res' => false, 'msg' => 'Error general.', 'data' => null);
+  session_start();
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+  $data = array('res' => false, 'msg' => 'Error general.', 'data' => null);
 
 try {
-  // Verificar la autorización del usuario
-  // if (empty($_SESSION['CliId']) || empty($_SESSION['UserName'])) {
-  //     throw new Exception("Usuario no tiene Autorización.");
-  // }
+  if (empty($_SESSION['CliId']) || empty($_SESSION['UserName'])) {throw new Exception("Usuario no tiene Autorización.");}
 
   $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $preid = $_POST['preid'];
@@ -29,5 +25,5 @@ try {
     $data['msg'] = $ex->getMessage();
     $conmy = null;
 } 
-echo json_encode($data);
+  echo json_encode($data);
 ?>
