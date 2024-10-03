@@ -19,6 +19,7 @@
         $CHECKLIST=FnBuscarCheckList($conmy, $_SESSION['CliId'], $ID);
 
         if(!empty($CHECKLIST['id'])){
+          $plantilla = FnBuscarPlantilla($conmy, $CHECKLIST['plaid']);
           $CHK_PREGUNTAS=array();
           $CHK_PREGUNTAS=FnBuscarCheckListPreguntas($conmy, $CHECKLIST['id']);
           $PLA_ALTERNATIVAS=array();
@@ -85,11 +86,6 @@
         $conmy = null;
         print_r($ex);
     }
-
-     // echo '<pre>';
-    // print_r($DATOS);
-    // echo '</pre>';
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -113,10 +109,18 @@
 <body>
   <?php require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/menu/sidebar.php';?>
   <div class="container section-top">
+    <div class="row mb-3">
+      <div class="col-12 btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
+        <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnResumenChecklist(); return false;"><i class="fas fa-desktop"></i><span class="d-none d-sm-block"> Resumen</span></button>
+      </div>
+    </div>
 
     <div class="row border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold" style="display:flex; justify-content:space-between;">
         <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['CliNombre'];?></p>
+        <input type="text" class="d-none" id="txtIdChecklist" value="<?php echo $ID ?>"/>
+        <input type="hidden" id="txtIdChkActividad" value="0"/>
         <input type="hidden" id="txtId" value="<?php echo $ID;?>" readonly/>
         <p class="m-0 p-0 text-center text-secondary"><?php echo empty($CHECKLIST['nombre'])?null:$CHECKLIST['nombre'];?></p>
       </div>
@@ -141,7 +145,7 @@
     <!-- PLANTILLAS -->
     <div class="row">
       <div class="col-12 mb-2 border-bottom bg-light">
-        <p class="mt-2 mb-2 fw-bold text-secondary">SILUETAS</p>
+        <p class="mt-2 mb-2 fw-bold text-secondary">PLANTILLAS</p>
       </div>
       <div class="contenedor-imagen mt-2">
         <div class="card p-0">
@@ -175,33 +179,128 @@
       </div>
     </div>
 
-
-    <div class="row mb-1 p-1">
+    <!-- PREGUNTAS Y REPUESTAS -->
+    <div class="row mb-1 actividades p-1">
       <div class="col-12 mb-2 border-bottom bg-light">
         <p class="mt-2 mb-2 fw-bold text-secondary">PREGUNTAS Y RESPUESTAS</p>
       </div>
-      <?php 
-        foreach($DATOS as $key=>$valor){
-          echo '<div class="col-12 mb-2">';                   
-          echo '<p class="m-0 fw-bold">'.$valor['pregunta'].'</p>';
-          foreach($valor['alternativas'] as $key2=>$valor2){
-            $checked='';
-            if($valor2['estado']==1){$checked='checked';}
-            echo '
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="rbPregunta'.$key.'" id="rbPregunta'.$key.'" '.$checked.' datapreid="'.$valor['id'].'" dataprenombre="'.$valor['pregunta'].'" value="'.$key2.'">
-                <label class="form-check-label" for="rbPregunta'.$key.'">'.$key2.'</label>
-            </div>';
-          }
-        echo '</div>';
+      <?php  
+        foreach($DATOS as $key => $valor){
+          echo '<div class="col-12 mb-2 border border-1" style="position:relative">';                   
+            echo '<p class="m-0 text-secondary fw-bold pregunta">'.$valor['pregunta'].'</p>';
+            // VERIFICAR SI EXISTE ALGUNA ALTERNATIVA MARCADA
+            $existeCheked = false;
+            foreach ($valor['alternativas'] as $valor2) {
+              if ($valor2['estado'] == 1) {
+                $existeCheked = true;
+                break; 
+              }
+            }
+            // MOSTRAR BOTÓN EDICIÓN CON ALTERNATIVAS CHECKED
+            if ($existeCheked) {
+              echo '<div style="position:absolute; top:10px; right:10px">
+                    <span class="border border-0">
+                      <i class="fas fa-edit text-secondary" style="cursor: pointer;" dataId="'.$valor['id'].'" dataPreId="'.$valor['preid'].'" dataDescripcion="'.$valor['pregunta'].'" onclick="FnModalModificarActividad(this)"></i>
+                    </span> 
+                  </div>';
+            }
+            echo '<div class="d-flex">';
+            foreach ($valor['alternativas'] as $key2 => $valor2) {
+              $checked = '';
+              if ($valor2['estado'] == 1) { $checked = 'checked'; }
+              echo '
+              <div id="contenedorAlternativas"> 
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="radio_'.$key.'" id="rbPregunta'.$key.'" '.$checked.' datapreid="'.$valor['id'].'" dataprenombre="'.$valor['pregunta'].'" value="'.$key2.'">
+                  <input type="hidden" value="'.$valor['preid'].'">
+                  <input type="hidden" id="txtEstado" value="'.$valor2['estado'].'">
+                  <label class="form-check-label" for="rbPregunta'.$key.'">'.$key2.'</label>
+                </div>
+              </div>';
+            }
+            echo '</div>';
+
+          echo '</div>';
         }
       ?>
+    </div>
+
+    <!-- BOTON ENVIO AL SERVIDOR -->
+    <div class="row">
+      <div class="col-12 mt-2 mb-2">
+        <button id="guardarDataEquipo" class="btn btn-outline-primary pt-2 pb-2 col-12 fw-bold" onclick="FnAgregarDatosChecklist()"><i class="fas fa-save"></i> GUARDAR</button>
+      </div>
     </div>
           
   <!-- endif -->
   </div>
 
-  <!-- <script src="/checklist/js/EditarCheckList.js"></script> -->
+  <!-- MODAL DIBUJAR CANVA -->
+  <div class="modal fade " id="modalAgregarCanva" tabindex="-1" aria-labelledby="modalAgregarCanvaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header bg-secondary text-white">
+          <h5 class="modal-title fs-5" id="modalAgregarCanvaLabel">REALIZAR TRAZADO</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex justify-content-center align-items-center">
+          <canvas id="canvasDibujo" class="canvas-dibujo" ></canvas>
+        </div>
+        <div class="modal-footer">
+          <input type="color" id="colorPickerDibujo" class="form-control form-control-color" value="#ff0000">
+          <button type="button" class="btn btn-secondary" id="btnLimpiarCanvas">Limpiar</button>
+          <button type="button" class="btn btn-primary" onclick="FnGuardarDibujo();">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODIFICAR DATOS DE ACTIVIDAD -->
+  <div class="modal fade" id="modalModificarActividad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header text-secondary">
+          <h5 class="modal-title fs-5 fw-bold" id="modalModificarActividadLabel">MODIFICAR ACTIVIDAD</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pb-1">
+          <div class="row">
+            <input type="hidden" id="txtRespuesta" value="">                      
+            <div class="col-12">
+              <label for="txtDescripcion" class="form-label mb-0">Descripcion</label>
+              <input id="txtDescripcion" type="text" class="form-control mb-2"/>
+            </div>
+            <div class="col-12 mb-2">
+              <label class="form-label mb-0 col-12">Respuesta</label>
+              <input type="hidden" id="txtPreid" value="0">
+              <div id="tblAlternativas"></div>
+            </div>
+            <div class="col-12">
+              <label for="txtObservacion" class="form-label mb-0">Observacion</label>
+              <input id="txtObservacion" type="text" class="form-control mb-2"/>
+            </div>
+            <div class="col-12">
+              <label for="fileImagen" class="form-label mb-0">Imagen</label>
+              <input id="fileImagen" type="file" accept="image/*" class="form-control mb-2"/>
+            </div>
+            <div class="col-12 m-0">
+              <div class="col-md-12 text-center" id="divImagen"><i class="fas fa-images fs-2"></i></div>
+            </div>
+          </div>
+        </div>
+        <div id="msjModicarActividad" class="modal-body pt-1"></div>
+        <div class="col-12 modal-footer">
+          <button type="button" class="btn btn-primary fw-bold pt-2 pb-2 col-12 w-100" onclick="FnModificarActividad();"><i class="fas fa-save"></i> GUARDAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-loader-full">
+    <div class="loader-full"></div>
+  </div>
+
+  <script src="/checklist/js/EditarCheckList.js"></script>
   <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
   <script src="/gesman/menu/sidebar.js"></script>

@@ -24,9 +24,13 @@
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
     
+    $PLAID = $checklist->PlaId;
+    
     if(!empty($checklist->Id)){
       $checkListPreguntas = FnBuscarCheckListPreguntas($conmy, $checklist->Id);
       if(count($checkListPreguntas) == 0){
+
+
         $plantillaPreguntas=FnBuscarPlantillaPreguntas($conmy, $checklist ->PlaId);
 
         $ids = array_map(function($elemento) {
@@ -73,6 +77,11 @@
       $errorMessage = $e->getMessage();
       $conmy = null;
   }
+
+
+  // echo '<pre>';
+  //   print_r($tablaActividades);
+  // echo '</pre>';
 
 ?>
 <!doctype html>

@@ -301,35 +301,33 @@ function obtenerImagenes(arrayImagenes) {
 
 function FnAgregarDatosChecklist() {
   try {
-    vgLoader.classList.remove('loader-full-hidden');
+    // vgLoader.classList.remove('loader-full-hidden');
     // IMAGENES
     const arrayImagenes = ['#imagen1', '#imagen2', '#imagen3', '#imagen4'];
     const imagenes = obtenerImagenes(arrayImagenes); 
     // PREGUNTAS Y RESPUESTAS
     const respuestas = [];
-    const arregloRespuestas = [];
+
     document.querySelectorAll('.actividades > .col-12.mb-2').forEach((actividadContainer) => {
       const preguntaDescripcion = actividadContainer.querySelector('.pregunta');
       if (!preguntaDescripcion) {
         return;
       }
       const descripcion = preguntaDescripcion.innerText;
-      const alternativas = actividadContainer.querySelector('#contenedorAlternativas');
+      const alternativas = actividadContainer.querySelectorAll('#contenedorAlternativas .form-check');
 
-      if (!alternativas) {
-        return;
-      }   
-      alternativas.querySelectorAll('.form-check').forEach((item) => {
+      // Revisar cada alternativa dentro de la pregunta
+      alternativas.forEach((item) => {
         const input = item.querySelector('input[type="radio"]');
         const preidInput = item.querySelector('input[type="hidden"]');
         const respuestaLabel = item.querySelector('label');
-        estado = item.querySelector('#txtEstado').value;
+        const estado = item.querySelector('#txtEstado').value;
 
         if (input && preidInput && respuestaLabel) {
           const preid = preidInput.value;
           const respuesta = respuestaLabel.innerText;
-          // CONTEO DE ALTERNATIVAS
-          arregloRespuestas.push({input, respuesta});
+
+          // Solo agregar la respuesta si el input está marcado
           if (input.checked) {
             respuestas.push({
               Id: input.id,
@@ -344,6 +342,7 @@ function FnAgregarDatosChecklist() {
         }
       });
     });
+
     // JSON FINAL
     const data = {
       Id: document.getElementById('txtIdChecklist').value,
@@ -353,10 +352,12 @@ function FnAgregarDatosChecklist() {
       imagen4: imagenes.imagen4,
       respuestas
     };
-    //console.log(data); 
-    //console.log('respuestas: ',arregloRespuestas.length);  
-    // ENVIAR DATOS AL SERVIDOR (IMAGENES + RESPUESTAS)
-    if(arregloRespuestas.length > 0){
+
+    console.log(data);
+    // return;
+    
+    // Enviar datos al servidor (IMAGENES + RESPUESTAS)
+    if (respuestas.length > 0) {
       fetch('/checklist/insert/AgregarChecklist.php', {
         method: 'POST',
         headers: {
@@ -366,20 +367,20 @@ function FnAgregarDatosChecklist() {
       })
       .then(response => response.json())
       .then(datos => {
-        // console.log(datos);
         if (!datos.res) {
           throw new Error(datos.msg);
         }
         // Ocultar loader después de un pequeño retraso
         setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-        // console.log(arregloRespuestas.length);
         // Mostrar mensaje de éxito
         return Swal.fire({
           title: "Aviso",
           text: datos.msg,
           icon: "success",
           timer: 2000
-        }).then( setTimeout(() => { location.reload(); }, 1000));
+        }).then(() => {
+          // setTimeout(() => { location.reload(); }, 1000);
+        });
       })
       .catch(error => {
         setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
@@ -390,19 +391,15 @@ function FnAgregarDatosChecklist() {
           timer: 2000
         });
       });
-    }
-    else{
+    } else {
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-      // Swal.fire({
-      //   title: "Aviso",
-      //   text: "No existe respuestas para enviar al servidor",
-      //   icon: "info",
-      //   timer: 2000
-      // });
-      // const boton = document.querySelector('#guardarDataEquipo');
-      // if (arregloRespuestas.length === 0) {
-      //   boton.setAttribute('disabled', 'true'); 
-      // } 
+      // No hay respuestas para enviar
+      Swal.fire({
+        title: "Aviso",
+        text: "No existe respuestas para enviar al servidor",
+        icon: "info",
+        timer: 2000
+      });
     }
   } catch (error) {
     setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
@@ -415,15 +412,19 @@ function FnAgregarDatosChecklist() {
   }
 }
 
+
 /** MODAL BUSCAR-MODIFICAR ACTIVIDAD */
 async function FnModalModificarActividad(actividad) {
   console.log(actividad.getAttribute('dataId'));
+  console.log(actividad.getAttribute('dataPreId'));
+  console.log(actividad.getAttribute('dataDescripcion'));
+  
   try {
     document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
     document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
     document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
-    document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion');
-    document.getElementById('txtRespuesta').value=actividad.getAttribute('dataRespuesta');
+    // document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion');
+    // document.getElementById('txtRespuesta').value=actividad.getAttribute('dataRespuesta');
     const formData = new FormData();
     formData.append('preid', document.getElementById('txtPreid').value);
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
@@ -458,6 +459,15 @@ async function FnModalModificarActividad(actividad) {
       text: error.message,
     });
   }
+  const modalModificarActividad = new bootstrap.Modal(document.getElementById('modalModificarActividad'), {keyboard: false}).show();
+  return false;
+}
+
+function FnModificarRespuesta(respuesta){
+  console.log(respuesta.getAttribute('datapreid'));  
+  console.log(respuesta.getAttribute('dataprenombre'));
+  console.log(respuesta.getAttribute('value'));
+
   const modalModificarActividad = new bootstrap.Modal(document.getElementById('modalModificarActividad'), {keyboard: false}).show();
   return false;
 }

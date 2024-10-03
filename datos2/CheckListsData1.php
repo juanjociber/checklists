@@ -123,4 +123,24 @@
             throw new Exception($ex->getMessage());
         }
     }
+
+    function FnBuscarPlantilla($conmy, $id){
+        try {
+          $stmt = $conmy->prepare("SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas WHERE id=:Id");
+          $stmt -> execute(array(':Id'=>$id));
+          $plantilla = new stdClass();
+          while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+            $plantilla->Id = $row['id'];
+            $plantilla->Tipo = $row['tipo'];
+            $plantilla->Imagen1 = $row['imagen1'];
+            $plantilla->Imagen2 = $row['imagen2'];
+            $plantilla->Imagen3 = $row['imagen3'];
+            $plantilla->Imagen4 = $row['imagen4'];
+            $plantilla->Estado = $row['estado'];
+          } 
+          return $plantilla;
+        } catch (PDOException $e) {
+          throw new Exception($e->getMessage());
+        }
+      }
 ?>
