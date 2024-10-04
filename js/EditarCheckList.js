@@ -282,7 +282,6 @@ function calculateSize(img, maxWidth, maxHeight) {
   return [width, height];
 }
 
-
 function obtenerImagenes(arrayImagenes) {
   const resultados = {};
   arrayImagenes.forEach(elemento => {
@@ -301,152 +300,122 @@ function obtenerImagenes(arrayImagenes) {
 
 function FnAgregarDatosChecklist() {
   try {
-    // vgLoader.classList.remove('loader-full-hidden');
-    // IMAGENES
     const arrayImagenes = ['#imagen1', '#imagen2', '#imagen3', '#imagen4'];
     const imagenes = obtenerImagenes(arrayImagenes); 
-    // PREGUNTAS Y RESPUESTAS
-    const respuestas = [];
 
-    document.querySelectorAll('.actividades > .col-12.mb-2').forEach((actividadContainer) => {
-      const preguntaDescripcion = actividadContainer.querySelector('.pregunta');
-      if (!preguntaDescripcion) {
-        return;
-      }
-      const descripcion = preguntaDescripcion.innerText;
-      const alternativas = actividadContainer.querySelectorAll('#contenedorAlternativas .form-check');
+    const respuestas = Array.from(document.querySelectorAll('.actividades > .col-12.mb-2'))
+      .map((actividadContainer) => {
+        const preguntaDescripcion = actividadContainer.querySelector('.pregunta')?.innerText;
+        if (!preguntaDescripcion) return null;
 
-      // Revisar cada alternativa dentro de la pregunta
-      alternativas.forEach((item) => {
-        const input = item.querySelector('input[type="radio"]');
-        const preidInput = item.querySelector('input[type="hidden"]');
-        const respuestaLabel = item.querySelector('label');
-        const estado = item.querySelector('#txtEstado').value;
+        const alternativas = Array.from(actividadContainer.querySelectorAll('#contenedorAlternativas .form-check'))
+          .map(item => {
+            const input = item.querySelector('input[type="radio"]');
+            const preidInput = item.querySelector('input[type="hidden"]');
+            const respuestaLabel = item.querySelector('label')?.innerText;
+            const estado = item.querySelector('#txtEstado')?.value;
 
-        if (input && preidInput && respuestaLabel) {
-          const preid = preidInput.value;
-          const respuesta = respuestaLabel.innerText;
+            if (input?.checked && preidInput && respuestaLabel) {
+              return {
+                Id: input.id,
+                Respuesta: respuestaLabel,
+                Preid: preidInput.value,
+                Descripcion: preguntaDescripcion,
+                Estado: estado || 'N/A' 
+              };
+            }
+            return null;
+          })
+          .filter(Boolean); 
 
-          // Solo agregar la respuesta si el input está marcado
-          if (input.checked) {
-            respuestas.push({
-              Id: input.id,
-              Respuesta: respuesta,
-              Preid: preid,
-              Descripcion: descripcion,
-              Estado: estado
-            });
-          }
-        } else {
-          console.warn('Datos incompletos en una pregunta, saltando...');
-        }
-      });
-    });
+        return alternativas.length > 0 ? alternativas : null;
+      })
+      .flat()
+      .filter(Boolean); 
 
-    // JSON FINAL
     const data = {
       Id: document.getElementById('txtIdChecklist').value,
-      imagen1: imagenes.imagen1,
-      imagen2: imagenes.imagen2,
-      imagen3: imagenes.imagen3,
-      imagen4: imagenes.imagen4,
+      ...imagenes,
       respuestas
     };
-
     console.log(data);
-    // return;
-    
-    // Enviar datos al servidor (IMAGENES + RESPUESTAS)
-    if (respuestas.length > 0) {
-      fetch('/checklist/insert/AgregarChecklist.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(datos => {
-        if (!datos.res) {
-          throw new Error(datos.msg);
-        }
-        // Ocultar loader después de un pequeño retraso
-        setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-        // Mostrar mensaje de éxito
-        return Swal.fire({
-          title: "Aviso",
-          text: datos.msg,
-          icon: "success",
-          timer: 2000
-        }).then(() => {
-          // setTimeout(() => { location.reload(); }, 1000);
-        });
-      })
-      .catch(error => {
-        setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-        Swal.fire({
-          title: "Error",
-          text: error.message,
-          icon: "error",
-          timer: 2000
-        });
-      });
-    } else {
+    fetch('/checklist/insert/AgregarChecklist.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(datos => {
+      if (!datos.res) throw new Error(datos.msg);
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-      // No hay respuestas para enviar
       Swal.fire({
         title: "Aviso",
-        text: "No existe respuestas para enviar al servidor",
-        icon: "info",
+        text: datos.msg,
+        icon: "success",
         timer: 2000
+      }).then(() => {
+        // setTimeout(() => { location.reload(); }, 1000);
       });
-    }
-  } catch (error) {
-    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-    Swal.fire({
-      title: "Error",
-      text: error.message,
-      icon: "error",
-      timer: 2000
+    })
+    .catch(error => {
+      handleFetchError(error);
     });
+  } catch (error) {
+    handleFetchError(error);
   }
+}
+
+// FUNCION PARA MANEJO DE ERRORES GENERALES
+function handleFetchError(error) {
+  setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+  Swal.fire({
+    title: "Aviso",
+    text: error.message,
+    icon: "info",
+    timer: 2000
+  });
 }
 
 
 /** MODAL BUSCAR-MODIFICAR ACTIVIDAD */
-async function FnModalModificarActividad(actividad) {
-  console.log(actividad.getAttribute('dataId'));
-  console.log(actividad.getAttribute('dataPreId'));
-  console.log(actividad.getAttribute('dataDescripcion'));
-  
+async function FnModalModificarActividad(actividad) { 
   try {
     document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
     document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
     document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
-    // document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion');
-    // document.getElementById('txtRespuesta').value=actividad.getAttribute('dataRespuesta');
+    
     const formData = new FormData();
     formData.append('preid', document.getElementById('txtPreid').value);
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+
     const response = await fetch('/checklist/search/BuscarAlternativas.php', {
       method: 'POST',
       body: formData
     });
+
     if (!response.ok) { 
       throw new Error(response.status + ' ' + response.statusText); 
     }
     const datos = await response.json();
-    console.log('DATOS MODAL',datos);
+    console.log('DATOS MODAL', datos.data);
+    // ALTERNATIVA SELECCIONADA
+    const alternativaSeleccionada = document.querySelector(`input[name="radio_${document.getElementById('txtPreid').value}"]:checked`);
+    if (alternativaSeleccionada) {
+      document.getElementById('txtRespuesta').value = alternativaSeleccionada.value;
+    } 
+    // LIMPIAR Y AGREGAR NUEVAS ALTERNATIVAS
     document.getElementById('tblAlternativas').innerHTML = '';
     datos.data.forEach(item => {
-      let checked=''; 
-      if(item.descripcion == document.getElementById('txtRespuesta').value){
-        checked = 'checked'; 
+      let checked = '';
+      if (item.descripcion == document.getElementById('txtRespuesta').value) {
+        checked = 'checked';
       }
       document.getElementById('tblAlternativas').innerHTML += `
         <div class="form-check">
-          <input class="form-check-input" type="radio" ${checked} name="respuestaRadio" id="chkRespuesta" value="${item.descripcion}">
-          <label class="form-check-label" for="chkRespuesta">${item.descripcion}</label>
+          <input class="form-check-input" type="radio" ${checked} name="respuestaRadio" id="chkRespuesta_${item.id}" value="${item.descripcion}">
+          <label class="form-check-label" for="chkRespuesta_${item.id}">${item.descripcion}</label>
         </div>`;
     });
     if (!datos.res) { 
@@ -459,15 +428,6 @@ async function FnModalModificarActividad(actividad) {
       text: error.message,
     });
   }
-  const modalModificarActividad = new bootstrap.Modal(document.getElementById('modalModificarActividad'), {keyboard: false}).show();
-  return false;
-}
-
-function FnModificarRespuesta(respuesta){
-  console.log(respuesta.getAttribute('datapreid'));  
-  console.log(respuesta.getAttribute('dataprenombre'));
-  console.log(respuesta.getAttribute('value'));
-
   const modalModificarActividad = new bootstrap.Modal(document.getElementById('modalModificarActividad'), {keyboard: false}).show();
   return false;
 }

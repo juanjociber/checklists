@@ -143,4 +143,28 @@
           throw new Exception($e->getMessage());
         }
       }
+
+      function FnModificarTablaActividad($conmy, $actividad) {
+        try {
+            $stmt = $conmy->prepare("UPDATE tblchkactividades SET descripcion = :Descripcion, respuesta = :Respuesta, observaciones = :Observaciones, archivo = :Archivo, actualizacion = :Actualizacion WHERE id =:Id");
+            $params = array(
+                ':Descripcion' => $actividad->Descripcion,
+                ':Respuesta' => $actividad->Respuesta,
+                ':Observaciones' => $actividad->Observaciones,
+                ':Archivo' => $actividad->Archivo,
+                ':Actualizacion' => $actividad->Usuario,
+                ':Id' => $actividad->Id
+            );
+            $result = $stmt->execute($params);
+            
+            // Comprobar si se realizó alguna actualización
+            if ($stmt->rowCount() == 0) {
+                throw new Exception('Cambios no realizados.');
+            }
+            return $result;
+        } catch (PDOException $ex) {
+            error_log($ex->getMessage()); // Log del error
+            throw new Exception('Error en la base de datos: ' . $ex->getMessage());
+        }
+      }
 ?>

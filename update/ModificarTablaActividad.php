@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+// require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos2/CheckListsData1.php";
 $data = array('res' => false, 'msg' => 'Error general.');
 
 try {
@@ -8,7 +9,7 @@ try {
   
   $FileName = null;
   if(!empty($_POST['archivo'])) {
-    $FileName = 'ACT_' . $_POST['id'] . '_' . uniqid() . '.jpeg';
+    $FileName = 'ACT_'.$_POST['id'].'_'.uniqid().'.jpeg';
     $FileEncoded = str_replace("data:image/jpeg;base64,", "", $_POST['archivo']);
     $FileDecoded = base64_decode($FileEncoded);
     file_put_contents($_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName, $FileDecoded);

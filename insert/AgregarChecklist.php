@@ -6,7 +6,7 @@ try {
   // LECTURA A DATOS DEL JSON
   $input = json_decode(file_get_contents('php://input'), true);
   if (!$input || !isset($input['Id']) || empty($input['respuestas'])) {
-    echo json_encode(array('res' => false, 'msg' => 'Datos incompletos.'));
+    echo json_encode(array('res' => false, 'msg' => 'Datos incompletos para enviar al servidor.'));
     exit;
   }
   $USUARIO = date('Ymd-His (').'jhuiza'.')';
