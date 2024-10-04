@@ -129,27 +129,27 @@
     }
   }
 
-  // function FnBuscarCheckList($conmy, $cliid, $id) {
-  //   try {
-  //       $datos=array();
+  function FnBuscarCheckList1($conmy, $cliid, $id) {
+    try {
+        $datos=array();
 
-  //       $stmt = $conmy->prepare("select id, plaid, nombre, estado FROM tblchecklists WHERE id=:Id and cliid=:CliId;");
-  //       $stmt->execute(array(':Id'=>$id, ':CliId'=>$cliid));
-  //       $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt = $conmy->prepare("select id, plaid, nombre, estado FROM tblchecklists WHERE id=:Id and cliid=:CliId;");
+        $stmt->execute(array(':Id'=>$id, ':CliId'=>$cliid));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
         
-  //       if ($row) {
-  //           $datos['id']=$row['id'];
-  //           $datos['plaid']=$row['plaid'];
-  //           $datos['nombre']=$row['nombre'];
-  //           $datos['estado']=$row['estado'];
-  //       }            
-  //       return $datos;
-  //   } catch (PDOException $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   } catch (Exception $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   }
-  // }
+        if ($row) {
+            $datos['id']=$row['id'];
+            $datos['plaid']=$row['plaid'];
+            $datos['nombre']=$row['nombre'];
+            $datos['estado']=$row['estado'];
+        }            
+        return $datos;
+    } catch (PDOException $ex) {
+        throw new Exception($ex->getMessage());
+    } catch (Exception $ex) {
+        throw new Exception($ex->getMessage());
+    }
+  }
 
   function FnModificarChecklist($conmy, $checklist) {
     try {
@@ -290,25 +290,25 @@
     }
   }
 
-  // function FnBuscarPlantillaPreguntas($conmy, $plaid) {
-  //   try {
-  //       $datos=array();
-  //       $stmt = $conmy->prepare("select id, plaid, descripcion FROM tblchkpreguntas WHERE plaid=:PlaId;");
-  //       $stmt->execute(array(':PlaId'=>$plaid));
-  //       while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-  //           $datos[]=array(
-  //               'id'=>$row['id'],
-  //               'plaid'=>$row['plaid'],                        
-  //               'pregunta'=>$row['descripcion']
-  //           );
-  //       }          
-  //       return $datos;
-  //   } catch (PDOException $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   } catch (Exception $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   }
-  // }
+  function FnBuscarPlantillaPreguntas1($conmy, $plaid) {
+    try {
+        $datos=array();
+        $stmt = $conmy->prepare("select id, plaid, descripcion FROM tblchkpreguntas WHERE plaid=:PlaId;");
+        $stmt->execute(array(':PlaId'=>$plaid));
+        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+            $datos[]=array(
+                'id'=>$row['id'],
+                'plaid'=>$row['plaid'],                        
+                'pregunta'=>$row['descripcion']
+            );
+        }          
+        return $datos;
+    } catch (PDOException $ex) {
+        throw new Exception($ex->getMessage());
+    } catch (Exception $ex) {
+        throw new Exception($ex->getMessage());
+    }
+  }
 
   function FnRegistrarPlantillaPregunta($conmy, $plantillaPregunta) {
     try {
@@ -366,6 +366,30 @@
     }
   }
 
+  function FnBuscarCheckListPreguntas1($conmy, $chkid) {
+    try {
+        $datos=array();
+        $stmt = $conmy->prepare("select id, preid, descripcion, respuesta, observaciones, archivo FROM tblchkactividades WHERE chkid=:ChkId;");
+        $stmt->execute(array(':ChkId'=>$chkid));
+
+        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+            $datos[]=array(
+                'id'=>$row['id'],
+                'preid'=>$row['preid'],                        
+                'pregunta'=>$row['descripcion'],
+                'respuesta'=>$row['respuesta'],
+                'observaciones'=>$row['observaciones'],
+                'archivo'=>$row['archivo']
+            );
+        }
+        return $datos;
+    } catch (PDOException $ex) {
+        throw new Exception($ex->getMessage());
+    } catch (Exception $ex) {
+        throw new Exception($ex->getMessage());
+    }
+  }
+
   function FnBuscarTablaActividades($conmy, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE chkid=:ChkId");
@@ -410,8 +434,6 @@
             ':Id' => $actividad->Id
         );
         $result = $stmt->execute($params);
-        
-        // Comprobar si se realizó alguna actualización
         if ($stmt->rowCount() == 0) {
             throw new Exception('Cambios no realizados.');
         }
@@ -421,30 +443,6 @@
         throw new Exception('Error en la base de datos: ' . $ex->getMessage());
     }
   }
-
-  // function FnBuscarCheckListPreguntas($conmy, $chkid) {
-  //   try {
-  //       $datos=array();
-  //       $stmt = $conmy->prepare("select id, preid, descripcion, respuesta FROM tblchkactividades WHERE chkid=:ChkId;");
-  //       $stmt->execute(array(':ChkId'=>$chkid));
-
-  //       while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-  //           $datos[]=array(
-  //               'id'=>$row['id'],
-  //               'preid'=>$row['preid'],                        
-  //               'pregunta'=>$row['descripcion'],
-  //               'respuesta'=>$row['respuesta']
-  //           );
-  //       }
-  //       return $datos;
-  //   } catch (PDOException $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   } catch (Exception $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   }
-  // }
-
-
 
   function FnBuscarActividad($conmy, $id) {
     try {
@@ -503,26 +501,26 @@
     }
   }
 
-  // function FnBuscarPlantillaPreguntasAlternativas($conmy, $preguntas) {
-  //   try {
-  //       $datos=array();
-  //       $query=implode(',', $preguntas);
-  //       $stmt = $conmy->prepare("select id, preid, descripcion FROM tblchkalternativas WHERE preid in($query);");
-  //       $stmt->execute();
-  //       while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-  //           $datos[]=array(
-  //               'id'=>$row['id'],
-  //               'preid'=>$row['preid'],                        
-  //               'respuesta'=>$row['descripcion']
-  //           );
-  //       }        
-  //       return $datos;
-  //   } catch (PDOException $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   } catch (Exception $ex) {
-  //       throw new Exception($ex->getMessage());
-  //   }
-  // }
+  function FnBuscarPlantillaPreguntasAlternativas($conmy, $preguntas) {
+    try {
+        $datos=array();
+        $query=implode(',', $preguntas);
+        $stmt = $conmy->prepare("select id, preid, descripcion FROM tblchkalternativas WHERE preid in($query);");
+        $stmt->execute();
+        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
+            $datos[]=array(
+                'id'=>$row['id'],
+                'preid'=>$row['preid'],                        
+                'respuesta'=>$row['descripcion']
+            );
+        }        
+        return $datos;
+    } catch (PDOException $ex) {
+        throw new Exception($ex->getMessage());
+    } catch (Exception $ex) {
+        throw new Exception($ex->getMessage());
+    }
+  }
 
   function FnEliminarAlternativa($conmy, $id) {
     try {

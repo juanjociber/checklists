@@ -378,13 +378,14 @@ function handleFetchError(error) {
   });
 }
 
-
 /** MODAL BUSCAR-MODIFICAR ACTIVIDAD */
 async function FnModalModificarActividad(actividad) { 
+  console.log(actividad.getAttribute('dataArchivo'));
   try {
     document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
     document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
     document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
+    document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion');
     
     const formData = new FormData();
     formData.append('preid', document.getElementById('txtPreid').value);
@@ -394,7 +395,6 @@ async function FnModalModificarActividad(actividad) {
       method: 'POST',
       body: formData
     });
-
     if (!response.ok) { 
       throw new Error(response.status + ' ' + response.statusText); 
     }
@@ -435,42 +435,42 @@ async function FnModalModificarActividad(actividad) {
 /** MODIFICAR ACTIVIDAD */
 const FnModificarActividad = async () => {
   try {
-      vgLoader.classList.remove('loader-full-hidden');
-      let archivo=null;
-      if (document.getElementById('canvas')) {
-          archivo = document.querySelector("#canvas").toDataURL("image/jpeg");
-      } else if (document.getElementById('fileImagen').files.length === 1) {
-          archivo = document.getElementById('fileImagen').files[0];
-      }
-      const respuestaSeleccionada = document.querySelector('input[name="respuestaRadio"]:checked');
-      const formData = new FormData();
-      formData.append('id', document.getElementById('txtIdChkActividad').value);
-      formData.append('descripcion', document.getElementById('txtDescripcion').value);
-      formData.append('respuesta', respuestaSeleccionada.value);
-      formData.append('observaciones', document.getElementById('txtObservacion').value);
-      formData.append('archivo', archivo || '');
-      console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+    vgLoader.classList.remove('loader-full-hidden');
+    let archivo=null;
+    if (document.getElementById('canvas')) {
+      archivo = document.querySelector("#canvas").toDataURL("image/jpeg");
+    } else if (document.getElementById('fileImagen').files.length === 1) {
+      archivo = document.getElementById('fileImagen').files[0];
+    }
+    const respuestaSeleccionada = document.querySelector('input[name="respuestaRadio"]:checked');
+    const formData = new FormData();
+    formData.append('id', document.getElementById('txtIdChkActividad').value);
+    formData.append('descripcion', document.getElementById('txtDescripcion').value);
+    formData.append('respuesta', respuestaSeleccionada.value);
+    formData.append('observaciones', document.getElementById('txtObservacion').value);
+    formData.append('archivo', archivo || '');
+    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-      const response = await fetch("/checklist/update/ModificarTablaActividad.php", {
-          method: "POST",
-          body: formData
-      });
-      if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const datos = await response.json();
-      // console.log(datos);
-      if (!datos.res) {
-          throw new Error(datos.msg);
-      }
-      setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-      await Swal.fire({
-          title: "Aviso",
-          text: datos.msg,
-          icon: "success",
-          timer: 2000
-      });
-      setTimeout(() => { location.reload(); }, 1000);
+    const response = await fetch("/checklist/update/ModificarTablaActividad.php", {
+      method: "POST",
+      body: formData
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const datos = await response.json();
+    // console.log(datos);
+    if (!datos.res) {
+      throw new Error(datos.msg);
+    }
+    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    await Swal.fire({
+      title: "Aviso",
+      text: datos.msg,
+      icon: "success",
+      timer: 2000
+    });
+    setTimeout(() => { location.reload(); }, 1000);
   } catch (error) {
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
       document.getElementById('msjModicarActividad').innerHTML = `<div class="alert alert-danger mb-2 p-1 text-center" role="alert">${error.message}</div>`;
@@ -486,7 +486,7 @@ function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   console.log(id);
   if(id > 0){
-      window.location.href='/checklist/CheckList.php?id='+id;
+    window.location.href='/checklist/CheckList.php?id='+id;
   }
   return false;
 }

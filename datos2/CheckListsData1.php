@@ -39,7 +39,7 @@
         }
     }
 
-    function FnBuscarCheckList($conmy, $cliid, $id) {
+    function FnBuscarCheckList1($conmy, $cliid, $id) {
         try {
             $datos=array();
 
@@ -61,7 +61,7 @@
         }
     }
 
-    function FnBuscarCheckListPreguntas($conmy, $chkid) {
+    function FnBuscarCheckListPreguntas1($conmy, $chkid) {
         try {
             $datos=array();
             $stmt = $conmy->prepare("select id, preid, descripcion, respuesta FROM tblchkactividades WHERE chkid=:ChkId;");
@@ -83,7 +83,7 @@
         }
     }
 
-    function FnBuscarPlantillaPreguntas($conmy, $plaid) {
+    function FnBuscarPlantillaPreguntas1($conmy, $plaid) {
         try {
             $datos=array();
             $stmt = $conmy->prepare("select id, plaid, descripcion FROM tblchkpreguntas WHERE plaid=:PlaId;");

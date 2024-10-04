@@ -1,15 +1,16 @@
 <?php 
-//   session_start();
+  session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   
   $data = array('res' => false, 'msg' => 'Error general.');
   
   try {
-    // if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
+    if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     if (empty($_POST['preid']) || empty($_POST['descripcion'])) {throw new Exception("La información está incompleta.");}
 
-    $USUARIO = date('Ymd-His (').'jhuiza'.')';
+    // $USUARIO = date('Ymd-His (').'jhuiza'.')';
+    $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
     $actividad = new stdClass();
     $actividad->Preid = $_POST['preid'];
     $actividad->Descripcion = $_POST['descripcion'];

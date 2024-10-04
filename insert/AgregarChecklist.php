@@ -40,11 +40,21 @@ try {
   ));
   // INSERTAR TABLA : tblchkactividades
   if (!empty($input['respuestas'])) {
-    $sqlRespuestas = "INSERT INTO tblchkactividades (preid, chkid, descripcion, respuesta, observaciones, archivo, estado, creacion) 
-                      VALUES (:Preid, :Chkid, :Descripcion, :Respuesta, :Observaciones, :Archivo, :Estado, :Creacion)";
-    $stmtRespuestas = $conmy->prepare($sqlRespuestas);
-    
     foreach ($input['respuestas'] as $respuesta) {
+      if($respuesta['Preid'] > 0){
+        $sql = "UPDATE tblchkactividades SET respuesta=:Respuesta, actualizacion=:Actualizacion WHERE id=:Id AND chkid=:Chkid";
+        $stmtRespuestas = $conmy->prepare($sql);
+        $stmtRespuestas->execute(array(
+          ':Respuesta' => $respuesta['Respuesta'],
+          ':Actualizacion' => $USUARIO,
+          ':Id' => $respuesta['Preid'],
+          ':Chkid' => $input['Id'],
+        ));
+      }else{
+        $sqlRespuestas = "INSERT INTO tblchkactividades (preid, chkid, descripcion, respuesta, observaciones, archivo, estado, creacion) 
+          VALUES (:Preid, :Chkid, :Descripcion, :Respuesta, :Observaciones, :Archivo, :Estado, :Creacion)";
+        $stmtRespuestas = $conmy->prepare($sqlRespuestas);
+      }
       $stmtRespuestas->execute(array(
         ':Preid' => $respuesta['Preid'],
         ':Chkid' => $input['Id'],
@@ -66,7 +76,6 @@ try {
     $data['msg'] = $ex->getMessage();
     $conmy = null;
 }
-echo json_encode($data);
-
+  echo json_encode($data);
 ?>
 

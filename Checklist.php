@@ -54,12 +54,19 @@
       /* .img-fluid{height:100%;} */
       .imagen-observacion{display:grid; display:grid;grid-template-columns:25% 50% 25%; }
       @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr}}
+      @media(min-width:768px){
+        .contenedor-checklist{ display: grid; grid-template-columns: 2fr 1fr 2.5fr;}
+        .cabecera1{ grid-column:  1 / 2; }
+        .detalle1{ grid-row:  2 / 3; }
+        .cabecera2{ grid-column:  2 / 3; grid-row:  1 / 2; }
+        .detalle2{ grid-row:  2 / 3; }
+        .cabecera3{ grid-column:  3 / 4;}
+        .detalle3{ grid-column:  3 / 4; grid-row:  2 / 3;}
+      }
     </style>
   </head>
   <body>
-
     <?php require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/menu/sidebar.php';?>
-
     <div class="container section-top">
       <div class="row mb-3">
         <div class="col-12 btn-group" role="group" aria-label="Basic example">
@@ -77,9 +84,8 @@
         </div>
       </div>
 
-      <?php $NUMERO+=1; ?>
-      
       <?php if ($isAuthorized): ?>
+        <?php $NUMERO+=1; ?>
         <!-- DATOS GENERALES -->
         <div class="row p-1 mb-2 mt-2">
           <div class="col-12 m-0 border-bottom bg-light" >
@@ -160,88 +166,228 @@
             </div>
           </div>
         </div>
-        
+      
         <?php $NUMERO+=1; ?>
         <!-- CHECKLIST-->
         <div class="row p-1 mb-2 mt-2">
           <div class="col-12 mb-2 border-bottom bg-light">
             <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - CHECKLIST</p>
           </div>
-          <div class="contenedor-imagen mt-2">
-            <div class="card p-0 h-100">
-              <div class="card-header p-0 bg-transparent text-center">Lado derecho</div>
-              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
-              <div class="card-footer p-0 text-center"></div>
-            </div>
-            <div class="card p-0 h-100">
-              <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
-              <div class="card-footer p-0 text-center"></div>
-            </div>
-            <div class="card p-0 h-100">
-              <div class="card-header p-0 bg-transparent text-center">Lado izquierdo</div>
-              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
-              <div class="card-footer p-0 text-center"></div>
-            </div>
-            <div class="card p-0 h-100">
-              <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
-              <div class="card-footer p-0 text-center"></div>
-            </div>
-          </div>
-        </div>
 
-        <div class="row mb-2 mt-3">
-          <?php 
-            $html = '';
-            if (is_array($tablaActividades) && !empty($tablaActividades)) {
-              foreach($tablaActividades as $actividad) {
-                $html .= '
-                <div class="border border-1 mb-2 pt-2 pb-2">
+          <!-- Carrusel para pantallas pequeñas (hasta 767px) -->
+          <div id="carouselImages" class="carousel slide d-md-none" data-bs-ride="false" data-bs-interval="false">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="card p-0 h-100">
+                  <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
+                  <div class="card-footer p-0 text-center"></div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card p-0 h-100">
+                  <div class="card-header p-0 bg-transparent text-center">Anterior</div>
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
+                  <div class="card-footer p-0 text-center"></div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card p-0 h-100">
+                  <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
+                  <div class="card-footer p-0 text-center"></div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="card p-0 h-100">
+                  <div class="card-header p-0 bg-transparent text-center">Posterior</div>
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
+                  <div class="card-footer p-0 text-center"></div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselImages" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+
+          <!-- Carrusel para pantallas entre 768px y 1199px -->
+          <div id="carouselImagesTablet" class="carousel slide d-none d-md-block d-xl-none" data-bs-ride="false" data-bs-interval="false">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
                 <div class="row">
-                  <div class="col-10">
-                    <div class="d-flex justify-content-start align-items-center">
-                      <i class="far fa-check-square text-secondary" style="margin-right:10px;"></i>
-                      <p class="mb-0 text-secondary" id="idActividad" style="text-align: justify;">'.$actividad['descripcion'].'</p>
+                  <div class="col-6">
+                    <div class="card p-0">
+                      <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
+                      <div class="card-footer p-0 text-center"></div>
                     </div>
                   </div>
-                  <div class="col-2">
-                    <div class="d-flex justify-content-end contenedor-radio" style="gap:10px" id="contenedorAlternativas">
-                      <span>'.$actividad['respuesta'].'</span>
+                  <div class="col-6">
+                    <div class="card p-0">
+                      <div class="card-header p-0 bg-transparent text-center">Anterior</div>
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
+                      <div class="card-footer p-0 text-center"></div>
                     </div>
-                  </div>';
-                // MOSTRAR OBSERVACION SI EXISTE
-                if (!empty($actividad['observaciones'])) {
-                  $html .= '
-                  <div class="col-12 mb-2 mt-2 d-flex justify-content-between align-items-center">
-                    <div class="d-flex">
-                      <label class="text-secondary fw-bold" style="margin-left:24px;">Observación : </label>
-                      <p class="mb-0 text-secondary observacion" id="idActividad" style="text-align: justify; margin-left:10px;">'.$actividad['observaciones'].'</p>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="card p-0">
+                      <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
+                      <div class="card-footer p-0 text-center"></div>
                     </div>
-                  </div>';
-                }
+                  </div>
+                  <div class="col-6">
+                    <div class="card p-0">
+                      <div class="card-header p-0 bg-transparent text-center">Posterior</div>
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
+                      <div class="card-footer p-0 text-center"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImagesTablet" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselImagesTablet" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
 
-                // MOSTRAR ARCHIVO SI EXISTE
-                if (!empty($actividad['archivo'])) {
-                  $html .= '
-                  <div class="col-12 p-1 mb-1 imagen-observacion">
-                    <div class="card p-0 archivo" style="grid-column:2/3">
-                      <div class="card-header p-0 bg-transparent text-center">Imagen</div>
-                      <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid" alt="">
-                      <div class="card-footer p-0 text-center">
-                          <button class="bg-light text-secondary w-100 text-center border border-0" onclick="FnEliminarArchivo()">ELIMINAR</button>
-                      </div>
+          <!-- Mostrar las 4 imágenes sin carrusel para pantallas grandes (1200px o más) -->
+          <div class="row d-none d-xl-flex">
+            <div class="col-lg-3">
+              <div class="card p-0">
+                <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
+                <div class="card-footer p-0 text-center"></div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="card p-0">
+                <div class="card-header p-0 bg-transparent text-center">Anterior</div>
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
+                <div class="card-footer p-0 text-center"></div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="card p-0">
+                <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
+                <div class="card-footer p-0 text-center"></div>
+              </div>
+            </div>
+            <div class="col-lg-3">
+              <div class="card p-0">
+                <div class="card-header p-0 bg-transparent text-center">Posterior</div>
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
+                <div class="card-footer p-0 text-center"></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:20px"></div>
+          <!-- <div class="row mb-2 mt-3"> -->
+            <?php 
+              $html = '';
+              if (is_array($tablaActividades) && !empty($tablaActividades)) {
+                foreach($tablaActividades as $actividad) {
+                  $html.='
+                  <div class="contenedor-checklist border boder-1 mt-1 mb-1 pb-2">
+                    <div class="cabecera1">
+                      <label class="text-secondary fw-bold">Descripción:</label>
                     </div>
-                  </div>';
+                    <div class="detalle1">
+                      <p class="mb-0 text-secondary">'.$actividad['descripcion'].'</p>
+                    </div>
+                    <div class="cabecera2">
+                      <label class="text-secondary fw-bold">Verificación:</label>
+                    </div>
+                    <div class="detalle2 d-flex align-items-center">
+                      <i class="far fa-check-square text-secondary" style="margin-right: 10px"></i>
+                      <p class="mb-0 text-secondary">'.$actividad['respuesta'].'</p>
+                    </div>';
+                    if (!empty($actividad['observaciones'])) {
+                    $html.=
+                    '<div class="cabecera3">
+                      <label class="text-secondary fw-bold">Observación:</label>
+                    </div>
+                    <div class="detalle3">
+                      <p class="mb-0 text-secondary">'.$actividad['observaciones'].'</p>
+                    </div>';
+                    }
+
+                    if (!empty($actividad['archivo'])) {
+                      $html .= '
+                        <div class="card p-0 archivo">
+                          <div class="card-header p-0 bg-transparent text-center">Imagen</div>
+                          <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid" alt="">
+                          <div class="card-footer p-0 text-center"></div>
+                        </div>
+                      ';
+                      }
+
+                  $html.='</div>';
+
+                  
+
+
+              //     $html .= '
+              //     <div class=" mb-2 pt-2 pb-2">
+              //     <div class="row">
+              //       <div class="col-10">
+              //         <div class="d-flex justify-content-start align-items-center">
+              //           <label class="text-secondary fw-bold">Descripción : </label>
+              //           <p class="mb-0 text-secondary" id="idActividad" style="text-align: justify;">'.$actividad['descripcion'].'</p>
+              //         </div>
+              //       </div>
+              //       <div class="col-2">
+              //         <div class="d-flex justify-content-end align-items-center contenedor-radio" style="gap:10px" id="contenedorAlternativas">
+              //           <span class="text-secondary fw-bold">'.$actividad['respuesta'].'</span>
+              //           <i class="far fa-check-square text-secondary" style="margin-right:10px;"></i>
+              //         </div>
+              //       </div>';
+              //     // MOSTRAR OBSERVACION SI EXISTE
+              //     if (!empty($actividad['observaciones'])) {
+              //       $html .= '
+              //       <div class="col-12 mb-2 mt-2 d-flex justify-content-between align-items-center">
+              //         <div class="d-flex">
+              //             <label class="text-secondary fw-bold">Observación : </label>
+              //           <p class="mb-0 text-secondary observacion" id="idActividad" style="text-align: justify; margin-left:10px;">'.$actividad['observaciones'].'</p>
+              //         </div>
+              //       </div>';
+              //     }
+
+              //     // MOSTRAR ARCHIVO SI EXISTE
+              //     if (!empty($actividad['archivo'])) {
+              //       $html .= '
+              //       <div class="col-12 p-1 mb-1 imagen-observacion">
+              //         <div class="card p-0 archivo" style="grid-column:2/3">
+              //           <div class="card-header p-0 bg-transparent text-center">Imagen</div>
+              //           <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid" alt="">
+              //           <div class="card-footer p-0 text-center"></div>
+              //         </div>
+              //       </div>';
+              //     }
+              //     $html .= 
+              //     '</div></div>'; 
                 }
-                $html .= 
-                '</div></div>'; 
               }
-            }
-            echo $html;
-          ?>
+              echo $html;
+            ?>
+          <!-- </div> -->
         </div>
-
         <?php $NUMERO+=1; ?>
         <!-- OBSERVACIONES -->
         <div class="row mb-2 mt-2">
@@ -265,7 +411,7 @@
                   $html .= '
                   <div class="p-1 mb-1 mt-2 imagen-observacion">
                     <div class="card p-0" style="grid-column:2/3">
-                      <div class="card-header bg-transparent text-center">Imagen</div>
+                      <div class="card-header bg-transparent text-center p-0">Imagen</div>
                       <img src="/mycloud/gesman/files/'.$observacion['archivo'].'" class="img-fluid" alt="">
                     </div>                    
                   </div>';
@@ -300,28 +446,28 @@
             <?php endif ?>
           </div>
         </div>
+      <?php endif ?>
+    </div>
 
-        <!-- MODAL PARA FINALIZAR CHEKCLIST -->
-        <div class="modal fade" id="modalFinalizarChecklist" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Finalizar Checklist</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>                
-              <div class="modal-body pb-1">
-                <div class="row text-center fw-bold pt-3">                        
-                  <p class="text-center">Para finalizar el Checklist 001 haga clic en el botón CONFIRMAR.</p>                    
-                </div>
-              </div>
-              <div class="modal-body pt-1" id="msjFinalizarChecklist"></div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="FnFinalizarChecklist(); return false;">CONFIRMAR</button>
-              </div>              
+    <!-- MODAL PARA FINALIZAR CHEKCLIST -->
+    <div class="modal fade" id="modalFinalizarChecklist" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Finalizar Checklist</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>                
+          <div class="modal-body pb-1">
+            <div class="row text-center fw-bold pt-3">                        
+              <p class="text-center">Para finalizar el Checklist 001 haga clic en el botón CONFIRMAR.</p>                    
             </div>
           </div>
+          <div class="modal-body pt-1" id="msjFinalizarChecklist"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="FnFinalizarChecklist(); return false;">CONFIRMAR</button>
+          </div>              
         </div>
-      <?php endif ?>
+      </div>
     </div>
     
     <script src="/checklist/js/CheckList.js"></script>
