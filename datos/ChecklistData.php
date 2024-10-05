@@ -438,7 +438,7 @@
         return $result;
     } catch (PDOException $ex) {
         error_log($ex->getMessage()); // Log del error
-        throw new Exception('Error en la base de datos: ' . $ex->getMessage());
+        throw new Exception($ex->getMessage());
     }
   }
 
@@ -490,7 +490,7 @@
 
   function FnBuscarAlternativas2($conmy, $preid) {
     try {
-      $stmt = $conmy->prepare("SELECT id, preid, descripcion FROM tblchkalternativas WHERE preid=:PreId");
+      $stmt = $conmy->prepare("SELECT id, preid FROM tblchkalternativas WHERE preid=:PreId");
       $stmt->execute(array(':PreId'=>$preid));
       $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
       return $resultados;

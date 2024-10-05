@@ -56,12 +56,13 @@
       @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr}}
       @media(min-width:768px){
         .contenedor-checklist{ display: grid; grid-template-columns: 2fr 1fr 2.5fr;}
-        .cabecera1{ grid-column:  1 / 2; }
-        .detalle1{ grid-row:  2 / 3; }
-        .cabecera2{ grid-column:  2 / 3; grid-row:  1 / 2; }
-        .detalle2{ grid-row:  2 / 3; }
-        .cabecera3{ grid-column:  3 / 4;}
-        .detalle3{ grid-column:  3 / 4; grid-row:  2 / 3;}
+        .cabecera1{ grid-column:  1 / 2;display:flex; align-items:center; }
+        .detalle1{ grid-row:  2 / 3; display:flex; align-items:center; }
+        .cabecera2{ grid-column:  2 / 3; grid-row:  1 / 2; display:flex; align-items:center; }
+        .detalle2{ grid-row:  2 / 3; display:flex; align-items:center; }
+        .cabecera3{ grid-column:  1 / 2; grid-row:  3 / 4; display:flex; align-items:center;}
+        .detalle3{ grid-column:  1 / 2; grid-row:  4 / 5; display:flex; align-items:center;}
+        .archivo{grid-row:1 / 5}
       }
     </style>
   </head>
@@ -301,47 +302,39 @@
           <!-- <div class="row mb-2 mt-3"> -->
             <?php 
               $html = '';
+              $html.='<div class="row border boder-1">';
               if (is_array($tablaActividades) && !empty($tablaActividades)) {
                 foreach($tablaActividades as $actividad) {
                   $html.='
-                  <div class="contenedor-checklist border boder-1 mt-1 mb-1 pb-2">
-                    <div class="cabecera1">
+
+                    <div class="col-md-6">
                       <label class="text-secondary fw-bold">Descripción:</label>
-                    </div>
-                    <div class="detalle1">
                       <p class="mb-0 text-secondary">'.$actividad['descripcion'].'</p>
                     </div>
-                    <div class="cabecera2">
+                    <div class="col-md-6">
                       <label class="text-secondary fw-bold">Verificación:</label>
-                    </div>
-                    <div class="detalle2 d-flex align-items-center">
-                      <i class="far fa-check-square text-secondary" style="margin-right: 10px"></i>
-                      <p class="mb-0 text-secondary">'.$actividad['respuesta'].'</p>
+                      <div class="d-flex align-items-center">
+                        <i class="far fa-check-square text-secondary" style="margin-right: 10px"></i>
+                        <p class="mb-0 text-secondary">'.$actividad['respuesta'].'</p>
+                      </div>
                     </div>';
+
                     if (!empty($actividad['observaciones'])) {
                     $html.=
-                    '<div class="cabecera3">
+                    '<div class="col-12">
                       <label class="text-secondary fw-bold">Observación:</label>
-                    </div>
-                    <div class="detalle3">
                       <p class="mb-0 text-secondary">'.$actividad['observaciones'].'</p>
                     </div>';
                     }
 
                     if (!empty($actividad['archivo'])) {
-                      $html .= '
-                        <div class="card p-0 archivo">
-                          <div class="card-header p-0 bg-transparent text-center">Imagen</div>
-                          <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid" alt="">
-                          <div class="card-footer p-0 text-center"></div>
-                        </div>
-                      ';
-                      }
-
+                    $html .= '
+                      <div class="mt-3">
+                        <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-thumbnail border border-0" alt="">
+                      </div>
+                    ';
+                    }
                   $html.='</div>';
-
-                  
-
 
               //     $html .= '
               //     <div class=" mb-2 pt-2 pb-2">

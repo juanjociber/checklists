@@ -379,27 +379,32 @@ function handleFetchError(error) {
 }
 
 /** MODAL BUSCAR-MODIFICAR ACTIVIDAD */
-async function FnModalModificarActividad(actividad) { 
-  console.log(actividad.getAttribute('dataArchivo'));
-  try {
-    document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
-    document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
-    // document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
-    document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion');
-    
-    const formData = new FormData();
-    formData.append('preid', document.getElementById('txtPreid').value);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+async function FnModalModificarActividad(actividad) {
+  console.log(actividad.getAttribute('dataId'));
+  document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
+  document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion'); 
+  // console.log(actividad.getAttribute('dataId'));
+  // console.log(actividad.getAttribute('dataPreId'));
+  // console.log(actividad.getAttribute('dataObservacion'));
+  // try {
+  //   document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
+  //   document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
+  //   // document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
 
-    const response = await fetch('/checklist/search/BuscarAlternativas.php', {
-      method: 'POST',
-      body: formData
-    });
-    if (!response.ok) { 
-      throw new Error(response.status + ' ' + response.statusText); 
-    }
-    const datos = await response.json();
-    console.log('DATOS MODAL', datos.data);
+    
+  //   const formData = new FormData();
+  //   formData.append('preid', document.getElementById('txtPreid').value);
+  //   console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+
+  //   const response = await fetch('/checklist/search/BuscarAlternativas.php', {
+  //     method: 'POST',
+  //     body: formData
+  //   });
+  //   if (!response.ok) { 
+  //     throw new Error(response.status + ' ' + response.statusText); 
+  //   }
+  //   const datos = await response.json();
+  //   console.log('DATOS MODAL', datos.data);
     // // ALTERNATIVA SELECCIONADA
     // const alternativaSeleccionada = document.querySelector(`input[name="radio_${document.getElementById('txtPreid').value}"]:checked`);
     // if (alternativaSeleccionada) {
@@ -418,16 +423,16 @@ async function FnModalModificarActividad(actividad) {
     //       <label class="form-check-label" for="chkRespuesta_${item.id}">${item.descripcion}</label>
     //     </div>`;
     // });
-    if (!datos.res) { 
-      throw new Error(datos.msg); 
-    }
-  } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: error.message,
-    });
-  }
+  //   if (!datos.res) { 
+  //     throw new Error(datos.msg); 
+  //   }
+  // } catch (error) {
+  //   Swal.fire({
+  //     icon: 'error',
+  //     title: 'Error',
+  //     text: error.message,
+  //   });
+  // }
   const modalModificarActividad = new bootstrap.Modal(document.getElementById('modalModificarActividad'), {keyboard: false}).show();
   return false;
 }
@@ -450,7 +455,7 @@ const FnModificarActividad = async () => {
     formData.append('observaciones', document.getElementById('txtObservacion').value);
     formData.append('archivo', archivo || '');
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
+    
     const response = await fetch("/checklist/update/ModificarTablaActividad.php", {
       method: "POST",
       body: formData
@@ -470,7 +475,7 @@ const FnModificarActividad = async () => {
       icon: "success",
       timer: 2000
     });
-    setTimeout(() => { location.reload(); }, 1000);
+    // setTimeout(() => { location.reload(); }, 1000);
   } catch (error) {
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
       document.getElementById('msjModicarActividad').innerHTML = `<div class="alert alert-danger mb-2 p-1 text-center" role="alert">${error.message}</div>`;

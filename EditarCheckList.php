@@ -88,6 +88,10 @@
       $conmy = null;
       print_r($ex);
   }
+
+  // echo '<pre>';
+  // print_r($DATOS);
+  // echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -256,7 +260,7 @@
   </div>
 
   <!-- MODIFICAR DATOS DE ACTIVIDAD -->
-  <div class="modal fade" id="modalModificarActividad" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal fade" id="modalModificarActividad">
     <div class="modal-dialog modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header text-secondary">
@@ -269,8 +273,8 @@
             <!-- <div class="col-12">
               <label for="txtDescripcion" class="form-label mb-0">Descripcion</label>
               <input id="txtDescripcion" type="text" class="form-control mb-2"/>
-            </div>
-            <div class="col-12 mb-2">
+            </div> -->
+            <!-- <div class="col-12 mb-2">
               <label class="form-label mb-0 col-12">Respuesta</label>
               <input type="hidden" id="txtPreid" value="0">
               <div id="tblAlternativas"></div>
