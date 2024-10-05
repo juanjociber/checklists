@@ -202,7 +202,7 @@
             if ($existeCheked) {
               echo '<div style="position:absolute; top:10px; right:10px">
                     <span class="border border-0">
-                      <i class="fas fa-edit text-secondary" style="cursor: pointer;" dataId="'.$valor['id'].'" dataPreId="'.$valor['preid'].'" dataDescripcion="'.$valor['pregunta'].'" dataObservacion="'.$valor['observaciones'].'" dataArchivo="'.$valor['archivo'].'" onclick="FnModalModificarActividad(this)"></i>
+                      <i class="fas fa-edit text-secondary" style="cursor: pointer;" dataId="'.$valor['id'].'" dataPreId="'.$valor['preid'].'" dataObservacion="'.$valor['observaciones'].'" dataArchivo="'.$valor['archivo'].'" onclick="FnModalModificarActividad(this)"></i>
                     </span> 
                   </div>';
             }
@@ -265,8 +265,8 @@
         </div>
         <div class="modal-body pb-1">
           <div class="row">
-            <input type="hidden" id="txtRespuesta" value="">                      
-            <div class="col-12">
+            <!-- <input type="hidden" id="txtRespuesta" value="">                       -->
+            <!-- <div class="col-12">
               <label for="txtDescripcion" class="form-label mb-0">Descripcion</label>
               <input id="txtDescripcion" type="text" class="form-control mb-2"/>
             </div>
@@ -274,7 +274,7 @@
               <label class="form-label mb-0 col-12">Respuesta</label>
               <input type="hidden" id="txtPreid" value="0">
               <div id="tblAlternativas"></div>
-            </div>
+            </div> -->
             <div class="col-12">
               <label for="txtObservacion" class="form-label mb-0">Observacion</label>
               <input id="txtObservacion" type="text" class="form-control mb-2"/>

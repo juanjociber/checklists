@@ -384,7 +384,7 @@ async function FnModalModificarActividad(actividad) {
   try {
     document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
     document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
-    document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
+    // document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
     document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion');
     
     const formData = new FormData();
@@ -400,24 +400,24 @@ async function FnModalModificarActividad(actividad) {
     }
     const datos = await response.json();
     console.log('DATOS MODAL', datos.data);
-    // ALTERNATIVA SELECCIONADA
-    const alternativaSeleccionada = document.querySelector(`input[name="radio_${document.getElementById('txtPreid').value}"]:checked`);
-    if (alternativaSeleccionada) {
-      document.getElementById('txtRespuesta').value = alternativaSeleccionada.value;
-    } 
-    // LIMPIAR Y AGREGAR NUEVAS ALTERNATIVAS
-    document.getElementById('tblAlternativas').innerHTML = '';
-    datos.data.forEach(item => {
-      let checked = '';
-      if (item.descripcion == document.getElementById('txtRespuesta').value) {
-        checked = 'checked';
-      }
-      document.getElementById('tblAlternativas').innerHTML += `
-        <div class="form-check">
-          <input class="form-check-input" type="radio" ${checked} name="respuestaRadio" id="chkRespuesta_${item.id}" value="${item.descripcion}">
-          <label class="form-check-label" for="chkRespuesta_${item.id}">${item.descripcion}</label>
-        </div>`;
-    });
+    // // ALTERNATIVA SELECCIONADA
+    // const alternativaSeleccionada = document.querySelector(`input[name="radio_${document.getElementById('txtPreid').value}"]:checked`);
+    // if (alternativaSeleccionada) {
+    //   document.getElementById('txtRespuesta').value = alternativaSeleccionada.value;
+    // } 
+    // // LIMPIAR Y AGREGAR NUEVAS ALTERNATIVAS
+    // document.getElementById('tblAlternativas').innerHTML = '';
+    // datos.data.forEach(item => {
+    //   let checked = '';
+    //   if (item.descripcion == document.getElementById('txtRespuesta').value) {
+    //     checked = 'checked';
+    //   }
+    //   document.getElementById('tblAlternativas').innerHTML += `
+    //     <div class="form-check">
+    //       <input class="form-check-input" type="radio" ${checked} name="respuestaRadio" id="chkRespuesta_${item.id}" value="${item.descripcion}">
+    //       <label class="form-check-label" for="chkRespuesta_${item.id}">${item.descripcion}</label>
+    //     </div>`;
+    // });
     if (!datos.res) { 
       throw new Error(datos.msg); 
     }
@@ -442,11 +442,11 @@ const FnModificarActividad = async () => {
     } else if (document.getElementById('fileImagen').files.length === 1) {
       archivo = document.getElementById('fileImagen').files[0];
     }
-    const respuestaSeleccionada = document.querySelector('input[name="respuestaRadio"]:checked');
+    // const respuestaSeleccionada = document.querySelector('input[name="respuestaRadio"]:checked');
     const formData = new FormData();
     formData.append('id', document.getElementById('txtIdChkActividad').value);
-    formData.append('descripcion', document.getElementById('txtDescripcion').value);
-    formData.append('respuesta', respuestaSeleccionada.value);
+    // formData.append('descripcion', document.getElementById('txtDescripcion').value);
+    // formData.append('respuesta', respuestaSeleccionada.value);
     formData.append('observaciones', document.getElementById('txtObservacion').value);
     formData.append('archivo', archivo || '');
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));

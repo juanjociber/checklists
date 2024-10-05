@@ -424,10 +424,8 @@
 
   function FnModificarTablaActividad($conmy, $actividad) {
     try {
-        $stmt = $conmy->prepare("UPDATE tblchkactividades SET descripcion = :Descripcion, respuesta = :Respuesta, observaciones = :Observaciones, archivo = :Archivo, actualizacion = :Actualizacion WHERE id =:Id");
+        $stmt = $conmy->prepare("UPDATE tblchkactividades SET observaciones = :Observaciones, archivo = :Archivo, actualizacion = :Actualizacion WHERE id =:Id");
         $params = array(
-            ':Descripcion' => $actividad->Descripcion,
-            ':Respuesta' => $actividad->Respuesta,
             ':Observaciones' => $actividad->Observaciones,
             ':Archivo' => $actividad->Archivo,
             ':Actualizacion' => $actividad->Usuario,

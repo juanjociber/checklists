@@ -6,7 +6,7 @@ $data = array('res' => false, 'msg' => 'Error general.', 'data'=>'');
 
 try {
   if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) {throw new Exception("Usuario no tiene Autorización.");}
-  if (empty($_POST['id']) || empty($_POST['descripcion']) || empty($_POST['respuesta'])) {throw new Exception("La información está incompleta.");}
+  if (empty($_POST['id'])) {throw new Exception("La información está incompleta.");}
   
   // $USUARIO = date('Ymd-His (').'jhuiza'.')'; 
   $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
@@ -19,8 +19,6 @@ try {
   }
   $actividad = new stdClass();
   $actividad->Id = $_POST['id'];
-  $actividad->Descripcion = $_POST['descripcion'];
-  $actividad->Respuesta = $_POST['respuesta'];
   $actividad->Observaciones = empty($_POST['observaciones']) ? null : ($_POST['observaciones']);
   $actividad->Archivo = $FileName; 
   $actividad->Usuario = $USUARIO;
