@@ -54,16 +54,17 @@
       /* .img-fluid{height:100%;} */
       .imagen-observacion{display:grid; display:grid;grid-template-columns:25% 50% 25%; }
       @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr}}
-      @media(min-width:768px){
-        .contenedor-checklist{ display: grid; grid-template-columns: 2fr 1fr 2.5fr;}
-        .cabecera1{ grid-column:  1 / 2;display:flex; align-items:center; }
-        .detalle1{ grid-row:  2 / 3; display:flex; align-items:center; }
-        .cabecera2{ grid-column:  2 / 3; grid-row:  1 / 2; display:flex; align-items:center; }
-        .detalle2{ grid-row:  2 / 3; display:flex; align-items:center; }
-        .cabecera3{ grid-column:  1 / 2; grid-row:  3 / 4; display:flex; align-items:center;}
-        .detalle3{ grid-column:  1 / 2; grid-row:  4 / 5; display:flex; align-items:center;}
-        .archivo{grid-row:1 / 5}
+      .contenedor-respuestas{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.4fr 1fr 1fr;
       }
+      .descripcion1{
+        grid-column: 1 / 3;
+      }
+      .observacion1{
+        grid-column: 1 / 4;
+      }
+
     </style>
   </head>
   <body>
@@ -298,88 +299,45 @@
               </div>
             </div>
           </div>
-          <div style="margin-top:20px"></div>
-          <!-- <div class="row mb-2 mt-3"> -->
-            <?php 
-              $html = '';
-              $html.='<div class="row border boder-1">';
-              if (is_array($tablaActividades) && !empty($tablaActividades)) {
-                foreach($tablaActividades as $actividad) {
-                  $html.='
-
-                    <div class="col-md-6">
+        </div>
+        <!-- <div style="margin-top:20px"></div> -->
+        <div class=" mb-2 mt-3">
+          <?php 
+            $html = '';
+            if (is_array($tablaActividades) && !empty($tablaActividades)) {
+              foreach($tablaActividades as $actividad) {
+                $html.='
+                  <div class="contenedor-respuestas border boder-1">
+                    <div class="descripcion1" style="">
                       <label class="text-secondary fw-bold">Descripción:</label>
                       <p class="mb-0 text-secondary">'.$actividad['descripcion'].'</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="verificacion1">
                       <label class="text-secondary fw-bold">Verificación:</label>
                       <div class="d-flex align-items-center">
                         <i class="far fa-check-square text-secondary" style="margin-right: 10px"></i>
                         <p class="mb-0 text-secondary">'.$actividad['respuesta'].'</p>
                       </div>
                     </div>';
-
                     if (!empty($actividad['observaciones'])) {
                     $html.=
-                    '<div class="col-12">
+                    '<div class="observacion1">
                       <label class="text-secondary fw-bold">Observación:</label>
                       <p class="mb-0 text-secondary">'.$actividad['observaciones'].'</p>
                     </div>';
                     }
-
                     if (!empty($actividad['archivo'])) {
                     $html .= '
-                      <div class="mt-3">
+                      <div class="archivo1">
                         <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-thumbnail border border-0" alt="">
                       </div>
                     ';
                     }
-                  $html.='</div>';
-
-              //     $html .= '
-              //     <div class=" mb-2 pt-2 pb-2">
-              //     <div class="row">
-              //       <div class="col-10">
-              //         <div class="d-flex justify-content-start align-items-center">
-              //           <label class="text-secondary fw-bold">Descripción : </label>
-              //           <p class="mb-0 text-secondary" id="idActividad" style="text-align: justify;">'.$actividad['descripcion'].'</p>
-              //         </div>
-              //       </div>
-              //       <div class="col-2">
-              //         <div class="d-flex justify-content-end align-items-center contenedor-radio" style="gap:10px" id="contenedorAlternativas">
-              //           <span class="text-secondary fw-bold">'.$actividad['respuesta'].'</span>
-              //           <i class="far fa-check-square text-secondary" style="margin-right:10px;"></i>
-              //         </div>
-              //       </div>';
-              //     // MOSTRAR OBSERVACION SI EXISTE
-              //     if (!empty($actividad['observaciones'])) {
-              //       $html .= '
-              //       <div class="col-12 mb-2 mt-2 d-flex justify-content-between align-items-center">
-              //         <div class="d-flex">
-              //             <label class="text-secondary fw-bold">Observación : </label>
-              //           <p class="mb-0 text-secondary observacion" id="idActividad" style="text-align: justify; margin-left:10px;">'.$actividad['observaciones'].'</p>
-              //         </div>
-              //       </div>';
-              //     }
-
-              //     // MOSTRAR ARCHIVO SI EXISTE
-              //     if (!empty($actividad['archivo'])) {
-              //       $html .= '
-              //       <div class="col-12 p-1 mb-1 imagen-observacion">
-              //         <div class="card p-0 archivo" style="grid-column:2/3">
-              //           <div class="card-header p-0 bg-transparent text-center">Imagen</div>
-              //           <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid" alt="">
-              //           <div class="card-footer p-0 text-center"></div>
-              //         </div>
-              //       </div>';
-              //     }
-              //     $html .= 
-              //     '</div></div>'; 
-                }
+                $html.='</div>';
               }
-              echo $html;
-            ?>
-          <!-- </div> -->
+            }
+            echo $html;
+          ?>
         </div>
         <?php $NUMERO+=1; ?>
         <!-- OBSERVACIONES -->
@@ -439,6 +397,7 @@
             <?php endif ?>
           </div>
         </div>
+
       <?php endif ?>
     </div>
 
