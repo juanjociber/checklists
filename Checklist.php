@@ -18,12 +18,14 @@
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
-    if(!empty($checklist->Id)){
-      $isAuthorized = true;
-      $claseHabilitado = "btn-outline-primary";
-      $atributoHabilitado = "";      
-      $tablaActividades = FnBuscarTablaActividades($conmy, $ID);
-      $observaciones = FnBuscarObservaciones($conmy, $ID);
+    if(is_numeric($ID) && $ID > 0){
+      if($checklist){
+        $isAuthorized = true;
+        $claseHabilitado = "btn-outline-primary";
+        $atributoHabilitado = "";      
+        $tablaActividades = FnBuscarTablaActividades($conmy, $ID);
+        $observaciones = FnBuscarObservaciones($conmy, $ID);
+      }
     }
   } catch (PDOException $e) {
       $errorMessage = $e->getMessage();
@@ -47,24 +49,33 @@
     <link rel="stylesheet" href="/mycloud/library/gpemsac/css/gpemsac.css"> 
     <link rel="stylesheet" href="/gesman/menu/sidebar.css">
     <style>
-      .hijos p:first-child{ padding-top: 10px;}
-      .contenedor-imagen{display:grid;grid-template-columns:1fr 1fr !important;gap:10px;}
-      @media(min-width:768px){.contenedor-imagen{grid-template-columns:1fr 1fr 1fr 1fr !important;}}
-      @media(max-width:768px){.contenedor-radio{padding-left:30px;}}
-      /* .img-fluid{height:100%;} */
-      .imagen-observacion{display:grid; display:grid;grid-template-columns:25% 50% 25%; }
-      @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr}}
-      .contenedor-respuestas{
-        display: grid;
-        grid-template-columns: 1fr 1fr 1.4fr 1fr 1fr;
+      .imagen-observacion{display:grid; display:grid; grid-template-columns:30% 40% 30%; }
+      @media(min-width:992px){.imagen-observacion{grid-template-columns:1fr 0.5fr 1fr !important; }}
+      @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr;}}
+      .contenedor-respuestas,.contenedor-imagen{ display: grid; grid-template-columns: 1fr 1fr 3fr 1fr 1fr; margin-bottom: 10px; padding:5px; }
+      .descripcion1{ grid-column: 1 / 4; }
+      .verificacion1{ grid-column: 4 / 6; }
+      .observacion1{ grid-column: 1 / 6; }
+      .archivo1{ grid-column: 3 / 4; place-self:center;}
+      @media(min-width:576px){
+        .contenedor-respuestas{ grid-template-columns: 1.5fr 1fr 1fr 1fr; }
+        .descripcion1{ grid-column: 1/ 3; }
+        .verificacion1{ grid-column: 3/ 4; }
+        .observacion1{ grid-column: 1/ 4; }
+        .archivo1{ grid-column: 4/ 5; grid-row: 1 / 3; place-self:center; }
+        @media(min-width:992px){
+          .contenedor-respuestas{ grid-template-columns: 1.5fr 1fr 1fr 0.8fr; }
+          .descripcion1{ grid-column: 1/ 2; }
+          .verificacion1{ grid-column: 2/ 3; }
+          .archivo1{ grid-row: 1 / 3; place-self:center; }
+        @media(min-width:1200px){
+          .descripcion1{ grid-column: 1/ 3; }
+          .contenedor-respuestas{ grid-template-columns: 1fr 1fr 0.9fr 1fr 1fr; }
+          .verificacion1{ grid-column: 3 / 4; grid-row: 1/ 2; }
+          .observacion1{ grid-column: 4/ 6; }
+          .archivo1{ grid-column: 3 / 4; grid-row: 2 / 3; place-self:center; }
+        }
       }
-      .descripcion1{
-        grid-column: 1 / 3;
-      }
-      .observacion1{
-        grid-column: 1 / 4;
-      }
-
     </style>
   </head>
   <body>
@@ -90,32 +101,32 @@
         <?php $NUMERO+=1; ?>
         <!-- DATOS GENERALES -->
         <div class="row p-1 mb-2 mt-2">
-          <div class="col-12 m-0 border-bottom bg-light" >
-            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - DATOS GENERALES</p>
+          <div class="col-12 m-0 border border-1 bg-light" >
+            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - DATOS GENERALES:</p>
           </div>
           <div class="row p-1 m-0">
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Fecha</p> 
-              <p class="m-0"><?php echo $checklist->Fecha ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->Fecha ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Cliente:</p> 
-              <p class="m-0"><?php echo $checklist->CliNombre ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->CliNombre ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Teléfono:</p> 
-              <p class="m-0"><?php echo $checklist->CliTelefono ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo empty($checklist->CliTelefono) ? 'UNKNOWN' : $checklist->CliTelefono; ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Correo:</p> 
-              <p class="m-0"><?php echo $checklist->CliCorreo ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo empty($checklist->CliCorreo) ? 'UNKNOWN' : $checklist->CliCorreo; ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Supervisor</p> 
-              <p class="m-0"><?php echo $checklist->Supervisor ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo empty($checklist->Supervisor) ? 'UNKNOWN' : $checklist->Supervisor ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
-              <p class="m-0 text-secondary" style="font-size: 12px;">Estado</p>
+              <p class="m-0 text-secondary fw-bold" style="font-size: 12px;">Estado</p>
               <?php
                 switch ($checklist->Estado){
                   case 1:
@@ -138,33 +149,33 @@
         <?php $NUMERO+=1; ?>
         <!-- DATOS DEL EQUIPO -->
         <div class="row p-1 mb-2 mt-2">
-          <div class="col-12 mb-0 border-bottom bg-light">
-            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - DATOS DEL EQUIPO</p>
+          <div class="col-12 mb-0 border border-1 bg-light">
+            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - DATOS DEL EQUIPO:</p>
           </div>
           <div class="row p-1 m-0">
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Nombre Equipo</p>
-              <p class="m-0"><?php echo $checklist->EquNombre ?></p>              
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquNombre ?></p>              
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Modelo Equipo</p> 
-              <p class="m-0"><?php echo $checklist->EquModelo ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquModelo ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Serie Equipo</p> 
-              <p class="m-0"><?php echo $checklist->EquSerie ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquSerie ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Marca Equipo</p> 
-              <p class="m-0"><?php echo $checklist->EquMarca ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquMarca ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Kilometraje</p> 
-              <p class="m-0"><?php echo $checklist->EquKm ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquKm ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Horas Motor</p> 
-              <p class="m-0"><?php echo $checklist->EquHm ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquHm ?></p>
             </div>
           </div>
         </div>
@@ -172,8 +183,8 @@
         <?php $NUMERO+=1; ?>
         <!-- CHECKLIST-->
         <div class="row p-1 mb-2 mt-2">
-          <div class="col-12 mb-2 border-bottom bg-light">
-            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - CHECKLIST</p>
+          <div class="col-12 mb-2 border border-1 bg-light">
+            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - CHECKLIST:</p>
           </div>
 
           <!-- Carrusel para pantallas pequeñas (hasta 767px) -->
@@ -309,21 +320,21 @@
                 $html.='
                   <div class="contenedor-respuestas border boder-1">
                     <div class="descripcion1" style="">
-                      <label class="text-secondary fw-bold">Descripción:</label>
-                      <p class="mb-0 text-secondary">'.$actividad['descripcion'].'</p>
+                      <label class="text-secondary">Descripción:</label>
+                      <p class="mb-0 text-secondary fw-bold">'.$actividad['descripcion'].'</p>
                     </div>
                     <div class="verificacion1">
-                      <label class="text-secondary fw-bold">Verificación:</label>
+                      <label class="text-secondary">Verificación:</label>
                       <div class="d-flex align-items-center">
                         <i class="far fa-check-square text-secondary" style="margin-right: 10px"></i>
-                        <p class="mb-0 text-secondary">'.$actividad['respuesta'].'</p>
+                        <p class="mb-0 text-secondary fw-bold">'.$actividad['respuesta'].'</p>
                       </div>
                     </div>';
                     if (!empty($actividad['observaciones'])) {
                     $html.=
                     '<div class="observacion1">
-                      <label class="text-secondary fw-bold">Observación:</label>
-                      <p class="mb-0 text-secondary">'.$actividad['observaciones'].'</p>
+                      <label class="text-secondary">Observación:</label>
+                      <p class="mb-0 text-secondary fw-bold">'.$actividad['observaciones'].'</p>
                     </div>';
                     }
                     if (!empty($actividad['archivo'])) {
@@ -342,13 +353,13 @@
         <?php $NUMERO+=1; ?>
         <!-- OBSERVACIONES -->
         <div class="row mb-2 mt-2">
-          <div class="col-12 mb-2 border-bottom bg-light">
-            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - OBSERVACIONES</p>
+          <div class="col-12 mb-2 border border-1 bg-light">
+            <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - OBSERVACIONES:</p>
           </div>
           <?php 
           $html = '';
           foreach($observaciones as $observacion) {
-              $html .= '
+            $html .= '
               <div class="row mb-2">
                 <div class="col-12">
                   <div class="d-flex justify-content-between align-items-center">
@@ -357,25 +368,24 @@
                       <p class="mb-0 text-secondary" id="idObservacion" style="text-align: justify;">'.$observacion['descripcion'].'</p>
                     </div>
                   </div>
-                </div>';
-                if ($observacion['archivo']) {
-                  $html .= '
-                  <div class="p-1 mb-1 mt-2 imagen-observacion">
-                    <div class="card p-0" style="grid-column:2/3">
-                      <div class="card-header bg-transparent text-center p-0">Imagen</div>
-                      <img src="/mycloud/gesman/files/'.$observacion['archivo'].'" class="img-fluid" alt="">
-                    </div>                    
-                  </div>';
-                }
-              $html .= '
+                </div>
               </div>';
+              if ($observacion['archivo']) {
+              $html .= '
+              <div class="p-1 mb-1 mt-2 imagen-observacion">
+                <div class="card p-0" style="grid-column:2/3">
+                  <div class="card-header bg-transparent text-center p-0">Imagen</div>
+                  <img src="/mycloud/gesman/files/'.$observacion['archivo'].'" class="img-fluid" alt="">
+                </div>                    
+              </div>';
+              }
           }  
           echo $html;
           ?>
         </div>
 
         <div class="row mb-2 mt-2">
-          <div class="col-12 mb-2 border-bottom bg-light">
+          <div class="col-12 mb-2 border border-1 bg-light">
             <p class="mt-2 mb-2 fw-bold text-secondary"> V° B°</p>
           </div>
           <div class="col-6">

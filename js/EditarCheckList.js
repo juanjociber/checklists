@@ -298,6 +298,11 @@ function obtenerImagenes(arrayImagenes) {
   return resultados;
 }
 
+function FnModificarRespuesta(consulta){
+  console.log(consulta.getAttribute('datapreid'));
+  document.querySelector('#txtPreId').value = consulta.getAttribute('datapreid');
+}
+
 function FnAgregarDatosChecklist() {
   try {
     const arrayImagenes = ['#imagen1', '#imagen2', '#imagen3', '#imagen4'];
@@ -317,7 +322,7 @@ function FnAgregarDatosChecklist() {
 
             if (input?.checked && preidInput && respuestaLabel) {
               return {
-                Id: input.id,
+                id: input.id,
                 Respuesta: respuestaLabel,
                 Preid: preidInput.value,
                 Descripcion: preguntaDescripcion,
@@ -339,29 +344,39 @@ function FnAgregarDatosChecklist() {
       respuestas
     };
     console.log(data);
-    fetch('/checklist/insert/AgregarChecklist.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(datos => {
-      if (!datos.res) throw new Error(datos.msg);
-      setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-      Swal.fire({
-        title: "Aviso",
-        text: datos.msg,
-        icon: "success",
-        timer: 2000
-      }).then(() => {
-        // setTimeout(() => { location.reload(); }, 1000);
-      });
-    })
-    .catch(error => {
-      handleFetchError(error);
-    });
+    if(document.querySelector('#txtPreId').value > 0){
+      console.log('UPDATE');
+    }else{
+      console.log('INSERT');
+      if(document.querySelector('#txtPreId').value == 0 ){
+        fetch('/checklist/insert/AgregarChecklist.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(datos => {
+          console.log(datos);
+          if (!datos.res) throw new Error(datos.msg);
+          setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+          Swal.fire({
+            title: "Aviso",
+            text: datos.msg,
+            icon: "success",
+            // timer: 2000
+          }).then(() => {
+            // setTimeout(() => { location.reload(); }, 1000);
+          });
+        })
+        .catch(error => {
+          handleFetchError(error);
+        });
+      }else{
+        console.log('ACTUALIZA');
+      }
+    }    
   } catch (error) {
     handleFetchError(error);
   }
@@ -374,7 +389,7 @@ function handleFetchError(error) {
     title: "Aviso",
     text: error.message,
     icon: "info",
-    timer: 2000
+    // timer: 2000
   });
 }
 
@@ -383,56 +398,7 @@ async function FnModalModificarActividad(actividad) {
   console.log(actividad.getAttribute('dataId'));
   document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
   document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion'); 
-  // console.log(actividad.getAttribute('dataId'));
-  // console.log(actividad.getAttribute('dataPreId'));
-  // console.log(actividad.getAttribute('dataObservacion'));
-  // try {
-  //   document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
-  //   document.getElementById('txtPreid').value = actividad.getAttribute('dataPreId');
-  //   // document.getElementById('txtDescripcion').value = actividad.getAttribute('dataDescripcion');
-
-    
-  //   const formData = new FormData();
-  //   formData.append('preid', document.getElementById('txtPreid').value);
-  //   console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
-  //   const response = await fetch('/checklist/search/BuscarAlternativas.php', {
-  //     method: 'POST',
-  //     body: formData
-  //   });
-  //   if (!response.ok) { 
-  //     throw new Error(response.status + ' ' + response.statusText); 
-  //   }
-  //   const datos = await response.json();
-  //   console.log('DATOS MODAL', datos.data);
-    // // ALTERNATIVA SELECCIONADA
-    // const alternativaSeleccionada = document.querySelector(`input[name="radio_${document.getElementById('txtPreid').value}"]:checked`);
-    // if (alternativaSeleccionada) {
-    //   document.getElementById('txtRespuesta').value = alternativaSeleccionada.value;
-    // } 
-    // // LIMPIAR Y AGREGAR NUEVAS ALTERNATIVAS
-    // document.getElementById('tblAlternativas').innerHTML = '';
-    // datos.data.forEach(item => {
-    //   let checked = '';
-    //   if (item.descripcion == document.getElementById('txtRespuesta').value) {
-    //     checked = 'checked';
-    //   }
-    //   document.getElementById('tblAlternativas').innerHTML += `
-    //     <div class="form-check">
-    //       <input class="form-check-input" type="radio" ${checked} name="respuestaRadio" id="chkRespuesta_${item.id}" value="${item.descripcion}">
-    //       <label class="form-check-label" for="chkRespuesta_${item.id}">${item.descripcion}</label>
-    //     </div>`;
-    // });
-  //   if (!datos.res) { 
-  //     throw new Error(datos.msg); 
-  //   }
-  // } catch (error) {
-  //   Swal.fire({
-  //     icon: 'error',
-  //     title: 'Error',
-  //     text: error.message,
-  //   });
-  // }
+  
   const modalModificarActividad = new bootstrap.Modal(document.getElementById('modalModificarActividad'), {keyboard: false}).show();
   return false;
 }
@@ -447,11 +413,8 @@ const FnModificarActividad = async () => {
     } else if (document.getElementById('fileImagen').files.length === 1) {
       archivo = document.getElementById('fileImagen').files[0];
     }
-    // const respuestaSeleccionada = document.querySelector('input[name="respuestaRadio"]:checked');
     const formData = new FormData();
     formData.append('id', document.getElementById('txtIdChkActividad').value);
-    // formData.append('descripcion', document.getElementById('txtDescripcion').value);
-    // formData.append('respuesta', respuestaSeleccionada.value);
     formData.append('observaciones', document.getElementById('txtObservacion').value);
     formData.append('archivo', archivo || '');
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
@@ -475,7 +438,7 @@ const FnModificarActividad = async () => {
       icon: "success",
       timer: 2000
     });
-    // setTimeout(() => { location.reload(); }, 1000);
+    setTimeout(() => { location.reload(); }, 1000);
   } catch (error) {
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
       document.getElementById('msjModicarActividad').innerHTML = `<div class="alert alert-danger mb-2 p-1 text-center" role="alert">${error.message}</div>`;

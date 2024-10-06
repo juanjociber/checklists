@@ -88,10 +88,6 @@
       $conmy = null;
       print_r($ex);
   }
-
-  // echo '<pre>';
-  // print_r($DATOS);
-  // echo '</pre>';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -128,6 +124,7 @@
         <input type="text" class="d-none" id="txtIdChecklist" value="<?php echo $ID ?>"/>
         <input type="hidden" id="txtIdChkActividad" value="0"/>
         <input type="hidden" id="txtId" value="<?php echo $ID;?>" readonly/>
+        <input type="hidden" id="txtPreId" value="0">
         <p class="m-0 p-0 text-center text-secondary"><?php echo empty($CHECKLIST['nombre'])?null:$CHECKLIST['nombre'];?></p>
       </div>
     </div>
@@ -150,8 +147,8 @@
 
     <!-- PLANTILLAS -->
     <div class="row">
-      <div class="col-12 mb-2 border-bottom bg-light">
-        <p class="mt-2 mb-2 fw-bold text-secondary">PLANTILLAS</p>
+      <div class="col-12 mb-2 border border-1 bg-light">
+        <p class="mt-2 mb-2 fw-bold text-secondary">PLANTILLAS:</p>
       </div>
       <div class="contenedor-imagen mt-2">
         <div class="card p-0">
@@ -187,7 +184,7 @@
 
     <!-- PREGUNTAS Y REPUESTAS -->
     <div class="row mb-1 actividades p-1">
-      <div class="col-12 mb-2 border-bottom bg-light">
+      <div class="col-12 mb-2 border border-1 bg-light">
         <p class="mt-2 mb-2 fw-bold text-secondary">PREGUNTAS Y RESPUESTAS</p>
       </div>
       <?php  
@@ -217,7 +214,7 @@
               echo '
               <div id="contenedorAlternativas"> 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="radio_'.$key.'" id="rbPregunta'.$key.'" '.$checked.' datapreid="'.$valor['id'].'" dataprenombre="'.$valor['pregunta'].'" value="'.$key2.'">
+                  <input class="form-check-input" type="radio" name="radio_'.$key.'" id="rbPregunta'.$key.'" '.$checked.' datapreid="'.$valor['id'].'" dataprenombre="'.$valor['pregunta'].'" value="'.$key2.'" onclick="FnModificarRespuesta(this)">
                   <input type="hidden" value="'.$valor['preid'].'">
                   <input type="hidden" id="txtEstado" value="'.$valor2['estado'].'">
                   <label class="form-check-label" for="rbPregunta'.$key.'">'.$key2.'</label>

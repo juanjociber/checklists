@@ -84,7 +84,7 @@
       </div>
     </div>
     <select class="mb-2 border boder-0 p-1 d-none" name="listaDeDispositivos" id="listaDeDispositivos"></select>
-    <div class="row bg-light fw-bold mb-2 m-0">
+    <div class="row border border-1 bg-light fw-bold mb-2 m-0">
       <div class="col-12">
         <label class="pt-2 pb-2 d-flex justify-content-between align-items-center text-secondary">OBSERVACIONES <i class="fas fa-plus fw-bold" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="left" title="Agregar" onclick="FnModalAgregarObservacion()"></i></label> 
       </div>
