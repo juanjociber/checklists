@@ -442,6 +442,20 @@
     }
   }
 
+  function FnEliminarArchivoActividad($conmy, $id) {
+    try {
+      $res = false;
+      $stmt = $conmy->prepare("UPDATE tblchkactividades SET archivo=null WHERE id=:Id");
+      $params = array(':Id' => $id);
+      if ($stmt->execute($params)) {
+        $res = true;
+      }
+      return $res;
+    } catch (PDOException $e) {
+        throw new Exception($e->getMessage());
+    }
+  }
+
   function FnBuscarActividad($conmy, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, plaid, descripcion, estado FROM tblchkpreguntas WHERE id=:Id");

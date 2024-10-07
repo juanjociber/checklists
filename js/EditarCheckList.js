@@ -309,34 +309,34 @@ function FnAgregarDatosChecklist() {
     const imagenes = obtenerImagenes(arrayImagenes); 
 
     const respuestas = Array.from(document.querySelectorAll('.actividades > .col-12.mb-2'))
-      .map((actividadContainer) => {
-        const preguntaDescripcion = actividadContainer.querySelector('.pregunta')?.innerText;
-        if (!preguntaDescripcion) return null;
+    .map((actividadContainer) => {
+      const preguntaDescripcion = actividadContainer.querySelector('.pregunta')?.innerText;
+      if (!preguntaDescripcion) return null;
 
-        const alternativas = Array.from(actividadContainer.querySelectorAll('#contenedorAlternativas .form-check'))
-          .map(item => {
-            const input = item.querySelector('input[type="radio"]');
-            const preidInput = item.querySelector('input[type="hidden"]');
-            const respuestaLabel = item.querySelector('label')?.innerText;
-            const estado = item.querySelector('#txtEstado')?.value;
+      const alternativas = Array.from(actividadContainer.querySelectorAll('#contenedorAlternativas .form-check'))
+        .map(item => {
+          const input = item.querySelector('input[type="radio"]');
+          const preidInput = item.querySelector('input[type="hidden"]');
+          const respuestaLabel = item.querySelector('label')?.innerText;
+          const estado = item.querySelector('#txtEstado')?.value;
 
-            if (input?.checked && preidInput && respuestaLabel) {
-              return {
-                id: input.id,
-                Respuesta: respuestaLabel,
-                Preid: preidInput.value,
-                Descripcion: preguntaDescripcion,
-                Estado: estado || 'N/A' 
-              };
-            }
-            return null;
-          })
-          .filter(Boolean); 
+          if (input?.checked && preidInput && respuestaLabel) {
+            return {
+              Id: input.getAttribute('datapreid'),
+              Respuesta: respuestaLabel,
+              Preid: preidInput.value,
+              Descripcion: preguntaDescripcion,
+              Estado: estado || 'N/A' 
+            };
+          }
+          return null;
+        })
+        .filter(Boolean); 
 
-        return alternativas.length > 0 ? alternativas : null;
-      })
-      .flat()
-      .filter(Boolean); 
+      return alternativas.length > 0 ? alternativas : null;
+    })
+    .flat()
+    .filter(Boolean); 
 
     const data = {
       Id: document.getElementById('txtIdChecklist').value,
@@ -344,39 +344,31 @@ function FnAgregarDatosChecklist() {
       respuestas
     };
     console.log(data);
-    if(document.querySelector('#txtPreId').value > 0){
-      console.log('UPDATE');
-    }else{
-      console.log('INSERT');
-      if(document.querySelector('#txtPreId').value == 0 ){
-        fetch('/checklist/insert/AgregarChecklist.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(datos => {
-          console.log(datos);
-          if (!datos.res) throw new Error(datos.msg);
-          setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-          Swal.fire({
-            title: "Aviso",
-            text: datos.msg,
-            icon: "success",
-            // timer: 2000
-          }).then(() => {
-            // setTimeout(() => { location.reload(); }, 1000);
-          });
-        })
-        .catch(error => {
-          handleFetchError(error);
-        });
-      }else{
-        console.log('ACTUALIZA');
-      }
-    }    
+    fetch('/checklist/insert/AgregarChecklist.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    //.then(response=>response.text()).then((response)=>{console.log(response)}).catch(err=>console.log(err))
+    .then(response => response.json())
+    .then(datos => {
+      console.log(datos);
+      if (!datos.res) throw new Error(datos.msg);
+      setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+      Swal.fire({
+        title: "Aviso",
+        text: datos.msg,
+        icon: "success",
+        timer: 2000
+      }).then(() => {
+        setTimeout(() => { location.reload(); }, 1000);
+      });
+    })
+    .catch(error => {
+      handleFetchError(error);
+    });
   } catch (error) {
     handleFetchError(error);
   }
@@ -389,7 +381,7 @@ function handleFetchError(error) {
     title: "Aviso",
     text: error.message,
     icon: "info",
-    // timer: 2000
+    timer: 2000
   });
 }
 
@@ -444,6 +436,48 @@ const FnModificarActividad = async () => {
       document.getElementById('msjModicarActividad').innerHTML = `<div class="alert alert-danger mb-2 p-1 text-center" role="alert">${error.message}</div>`;
   }
 };
+
+async function FnEliminarArchivoActividad(id){
+  console.log(id);
+  try {
+    vgLoader.classList.remove('loader-full-hidden');
+    const formData = new FormData();
+    formData.append('id', id);
+    const response = await fetch('/checklist/delete/EliminarArchivoActividad.php', {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok) {
+      throw new Error(`Error en la respuesta del servidor: ${response.statusText}`);
+    }
+    const datos = await response.json();
+    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    if (datos.res) {
+      await Swal.fire({
+        title: "Éxito",
+        text: datos.msg,
+        icon: "success",
+        timer: 2000,
+      });
+    } else {
+      await Swal.fire({
+        title: "Error",
+        text: datos.msg,
+        icon: "error",
+        timer: 2000,
+      });
+    }
+    setTimeout(() => { location.reload(); }, 1000);
+  } catch (error) {
+    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    await Swal.fire({
+      title: "Error",
+      text: error.message,
+      icon: "error",
+      timer: 1000
+    });
+  }
+}
 
 function FnListarChecklists(){
   window.location.href='/checklist/CheckLists.php';

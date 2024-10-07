@@ -331,18 +331,17 @@
                       </div>
                     </div>';
                     if (!empty($actividad['observaciones'])) {
-                    $html.=
-                    '<div class="observacion1">
+                    $html.='
+                    <div class="observacion1">
                       <label class="text-secondary">Observación:</label>
                       <p class="mb-0 text-secondary fw-bold">'.$actividad['observaciones'].'</p>
                     </div>';
                     }
                     if (!empty($actividad['archivo'])) {
                     $html .= '
-                      <div class="archivo1">
-                        <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-thumbnail border border-0" alt="">
-                      </div>
-                    ';
+                    <div class="archivo1">
+                      <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-thumbnail border border-0" alt="">
+                    </div>';
                     }
                 $html.='</div>';
               }

@@ -88,6 +88,7 @@
       $conmy = null;
       print_r($ex);
   }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -107,6 +108,12 @@
   <style>
     .contenedor-imagen{display:grid !important;gap:10px; grid-template-columns:1fr 1fr !important;}
     @media(min-width:769px){.contenedor-imagen{grid-template-columns:1fr 1fr 1fr 1fr !important;}}
+    .contenedor-archivo{
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+    }
+    .observacion1{ grid-column: 1 / 4; }
+    .archivo1{ grid-column: 2 / 3; }
+    @media(min-width:1200px){.contenedor-archivo{grid-template-columns:1fr 0.7fr 1fr;}}
   </style>
 <body>
   <?php require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/menu/sidebar.php';?>
@@ -183,14 +190,17 @@
     </div>
 
     <!-- PREGUNTAS Y REPUESTAS -->
-    <div class="row mb-1 actividades p-1">
+    <div class="row mb-1 actividades p-1 mt-3">
       <div class="col-12 mb-2 border border-1 bg-light">
         <p class="mt-2 mb-2 fw-bold text-secondary">PREGUNTAS Y RESPUESTAS</p>
       </div>
-      <?php  
+      <?php
+        $contador=0;   
         foreach($DATOS as $key => $valor){
-          echo '<div class="col-12 mb-2 border border-1" style="position:relative">';                   
-            echo '<p class="m-0 text-secondary fw-bold pregunta">'.$valor['pregunta'].'</p>';
+          echo '
+          <div class="col-12 mb-2 border border-1" style="position:relative">';                   
+            echo '
+            <p class="m-0 text-secondary fw-bold pregunta">'.$valor['pregunta'].'</p>';
             // VERIFICAR SI EXISTE ALGUNA ALTERNATIVA MARCADA
             $existeCheked = false;
             foreach ($valor['alternativas'] as $valor2) {
@@ -201,28 +211,51 @@
             }
             // MOSTRAR BOTÓN EDICIÓN CON ALTERNATIVAS CHECKED
             if ($existeCheked) {
-              echo '<div style="position:absolute; top:10px; right:10px">
-                    <span class="border border-0">
-                      <i class="fas fa-edit text-secondary" style="cursor: pointer;" dataId="'.$valor['id'].'" dataPreId="'.$valor['preid'].'" dataObservacion="'.$valor['observaciones'].'" dataArchivo="'.$valor['archivo'].'" onclick="FnModalModificarActividad(this)"></i>
-                    </span> 
-                  </div>';
+            echo '
+            <div style="position:absolute; top:10px; right:10px">
+              <span class="border border-0">
+                <i class="fas fa-edit text-secondary" style="cursor: pointer;" dataId="'.$valor['id'].'" dataPreId="'.$valor['preid'].'" dataObservacion="'.$valor['observaciones'].'" dataArchivo="'.$valor['archivo'].'" onclick="FnModalModificarActividad(this)"></i>
+              </span> 
+            </div>';
             }
-            echo '<div class="d-flex">';
-            foreach ($valor['alternativas'] as $key2 => $valor2) {
+            echo '
+            <div class="d-flex">';
+              foreach ($valor['alternativas'] as $key2 => $valor2) {
               $checked = '';
+              $contador+=1;
               if ($valor2['estado'] == 1) { $checked = 'checked'; }
-              echo '
-              <div id="contenedorAlternativas"> 
+              echo 
+              '<div id="contenedorAlternativas"> 
                 <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="radio_'.$key.'" id="rbPregunta'.$key.'" '.$checked.' datapreid="'.$valor['id'].'" dataprenombre="'.$valor['pregunta'].'" value="'.$key2.'" onclick="FnModificarRespuesta(this)">
+                  <input class="form-check-input" type="radio" name="radio_'.$key.'" id="'.$contador.'" '.$checked.' datapreid="'.$valor['id'].'" dataprenombre="'.$valor['pregunta'].'" value="'.$key2.'" onclick="FnModificarRespuesta(this)">
                   <input type="hidden" value="'.$valor['preid'].'">
                   <input type="hidden" id="txtEstado" value="'.$valor2['estado'].'">
-                  <label class="form-check-label" for="rbPregunta'.$key.'">'.$key2.'</label>
+                  <label class="form-check-label" for="'.$contador.'">'.$key2.'</label>
                 </div>
               </div>';
-            }
-            echo '</div>';
-          echo '</div>';
+              }
+            echo '
+            </div>
+          
+            <div class="contenedor-archivo">';
+              if(!empty($valor['observaciones'])){
+              echo '  
+              <div class="row observacion1 d-flex mt-2";>
+                <label class="text-secondary">Observación:</label>
+                <p class="mb-0 text-secondary fw-bold" id="idActividad" style="text-align: justify;">'.$valor['observaciones'].'</p>
+              </div>';
+              }
+              if(!empty($valor['archivo'])){
+              echo '
+              <div class="archivo1 mt-2 pb-2">
+                <span class="border border-1 d-block bg-light"><i class="fas fa-times text-secondary p-1" style="cursor:pointer; font-size:20px;" onclick="FnEliminarArchivoActividad('.$valor['id'].')"></i></span>
+                <img src="/mycloud/gesman/files/'.$valor['archivo'].'" class="img-thumbnail border border-1" alt="">
+              </div>';
+              } 
+            echo 
+            '</div>';
+          echo '
+          </div>';
         }
       ?>
     </div>

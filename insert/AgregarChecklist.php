@@ -3,13 +3,16 @@
   $data = array('res' => false, 'msg' => 'Error general.');
 
   try {
+    // if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     // LECTURA A DATOS DEL JSON
     $input = json_decode(file_get_contents('php://input'), true);
     if (!$input || !isset($input['Id']) || empty($input['respuestas'])) {
       echo json_encode(array('res' => false, 'msg' => 'Datos incompletos para enviar al servidor.'));
       exit;
     }
+    
     $USUARIO = date('Ymd-His (').'jhuiza'.')';
+    // $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // PROCESAR IMAGENES
@@ -41,30 +44,30 @@
     // INSERTAR TABLA : tblchkactividades
     if (!empty($input['respuestas'])) {
       foreach ($input['respuestas'] as $respuesta) {
-        if($respuesta['Preid'] > 0){
+        if($respuesta['Id'] > 0){
           $sql = "UPDATE tblchkactividades SET respuesta=:Respuesta, actualizacion=:Actualizacion WHERE id=:Id AND chkid=:Chkid";
           $stmtRespuestas = $conmy->prepare($sql);
           $stmtRespuestas->execute(array(
             ':Respuesta' => $respuesta['Respuesta'],
             ':Actualizacion' => $USUARIO,
-            ':Id' => $respuesta['Preid'],
+            ':Id' => $respuesta['Id'],
             ':Chkid' => $input['Id'],
           ));
         }else{
           $sqlRespuestas = "INSERT INTO tblchkactividades (preid, chkid, descripcion, respuesta, observaciones, archivo, estado, creacion) 
             VALUES (:Preid, :Chkid, :Descripcion, :Respuesta, :Observaciones, :Archivo, :Estado, :Creacion)";
           $stmtRespuestas = $conmy->prepare($sqlRespuestas);
+          $stmtRespuestas->execute(array(
+            ':Preid' => $respuesta['Preid'],
+            ':Chkid' => $input['Id'],
+            ':Descripcion' => $respuesta['Descripcion'],
+            ':Respuesta' => $respuesta['Respuesta'],
+            ':Observaciones' => null, 
+            ':Archivo' => null, 
+            ':Estado' => 2,
+            ':Creacion' => $USUARIO
+          ));
         }
-        $stmtRespuestas->execute(array(
-          ':Preid' => $respuesta['Preid'],
-          ':Chkid' => $input['Id'],
-          ':Descripcion' => $respuesta['Descripcion'],
-          ':Respuesta' => $respuesta['Respuesta'],
-          ':Observaciones' => null, 
-          ':Archivo' => null, 
-          ':Estado' => 2,
-          ':Creacion' => $USUARIO
-        ));
       }
     }
     $data['msg'] = "Datos guardados exitosamente.";
