@@ -667,4 +667,75 @@
       throw new Exception($e->getMessage());
     }
   }
+
+  function FnProcesarImagenes($input, $id) {
+    $imageFields = array('imagen1', 'imagen2', 'imagen3', 'imagen4');
+    $fileNames = array();
+    foreach ($imageFields as $field) {
+      if (!empty($input[$field])) {
+        $fileName = 'CHK_'.$id.'_'.uniqid().'.jpeg';
+        $fileEncoded = str_replace("data:image/jpeg;base64,", "", $input[$field]);
+        $fileDecoded = base64_decode($fileEncoded);
+        file_put_contents($_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$fileName, $fileDecoded);
+        /** ALMACENAR NOMBRE DE ARCHIVO */
+        $fileNames[$field] = $fileName; 
+      } else {
+          $fileNames[$field] = null; 
+      }
+    }
+    return $fileNames; 
+  }
+
+  function FnModificarChecklistImagenes($conmy, $fileNames, $usuario, $id) {
+    $sql = "UPDATE tblchecklists SET imagen1 = :Imagen1, imagen2 = :Imagen2, imagen3 = :Imagen3, imagen4 = :Imagen4, actualizacion = :Actualizacion WHERE id = :Id";
+    $stmt = $conmy->prepare($sql);
+    $stmt->execute(array(
+      ':Imagen1' => $fileNames['imagen1'],
+      ':Imagen2' => $fileNames['imagen2'],
+      ':Imagen3' => $fileNames['imagen3'],
+      ':Imagen4' => $fileNames['imagen4'],
+      ':Actualizacion' => $usuario,
+      ':Id' => $id 
+    ));
+  }
+
+  function FnAgregarModificarActividad($conmy, $respuestas, $chkid, $usuario) {
+    foreach ($respuestas as $respuesta) {
+      if ($respuesta['Id'] > 0) {
+        // MODIFICAR RESPUESTA
+        $sql = "UPDATE tblchkactividades SET respuesta=:Respuesta, actualizacion=:Actualizacion WHERE id=:Id AND chkid=:Chkid";
+        $stmtRespuestas = $conmy->prepare($sql);
+        $stmtRespuestas->execute(array(
+          ':Respuesta' => $respuesta['Respuesta'],
+          ':Actualizacion' => $usuario,
+          ':Id' => $respuesta['Id'],
+          ':Chkid' => $chkid,
+        ));
+      } 
+      else {
+        // INSERTAR RESPUESTA NUEVA
+        $sqlRespuestas = "INSERT INTO tblchkactividades (preid, chkid, descripcion, respuesta, observaciones, archivo, estado, creacion) 
+            VALUES (:Preid, :Chkid, :Descripcion, :Respuesta, :Observaciones, :Archivo, :Estado, :Creacion)";
+        $stmtRespuestas = $conmy->prepare($sqlRespuestas);
+        $stmtRespuestas->execute(array(
+          ':Preid' => $respuesta['Preid'],
+          ':Chkid' => $chkid,
+          ':Descripcion' => $respuesta['Descripcion'],
+          ':Respuesta' => $respuesta['Respuesta'],
+          ':Observaciones' => null, 
+          ':Archivo' => null, 
+          ':Estado' => 2,
+          ':Creacion' => $usuario
+        ));
+      }
+    }
+  }
+
+
+
+
+
+
+
+
 ?>

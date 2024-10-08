@@ -60,7 +60,6 @@
       }
       .select2-selection__arrow {
         display: none !important;
-        /*height: 34px !important;*/
       }
     </style>
 </head>
@@ -72,7 +71,7 @@
         <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['CliNombre'];?></p>
       </div>
     </div>
-    <div class="row mb-1 border-bottom">
+    <div class="row mb-1">
       <div class="col-6 col-sm-3 mb-2">
         <p class="m-0" style="font-size:12px;">Checklist</p>
         <input type="text" class="form-control" id="txtChecklist">
@@ -92,21 +91,18 @@
       <div class="col-12 mb-2">
         <button type="button" class="btn btn-outline-primary w-100 form-control" onclick="FnBuscarChecklists(); return false;"><i class="fas fa-search"></i> Buscar</button>
       </div>  
-    </div>
-    
+    </div>  
     <div class="row" id="tblChecklists">
       <div class="col-12">
         <p class="fst-italic">Haga clic en el botón Buscar para obtener resultados.</p>
       </div>
     </div>
-
     <div class="row p-2">            
       <div class="col-12 text-center mb-3 d-none" id="divPaginacion">
         <button type="button" class="btn btn-outline-primary" onclick="fnNuevaPagina(); return false;"><i class="fas fa-chevron-down"></i> Ver mas.. </button>
       </div>
     </div>
   </div>
-    
   <div class="container-loader-full">
     <div class="loader-full"></div>
   </div>

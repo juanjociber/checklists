@@ -94,7 +94,7 @@ async function FnBuscarChecklist2(){
         }
         document.getElementById('tblChecklists').innerHTML +=`
         <div class="col-12">
-          <div class="divselect border-bottom border-secondary mb-2 px-1" onclick="FnChecklist(${item.id}); return false;">
+          <div class="divselect border-bottom border-1 mb-2 px-1" onclick="FnChecklist(${item.id}); return false;">
             <div class="div d-flex justify-content-between">
               <p class="m-0"><span class="fw-bold">${item.nombre}</span> <span class="text-secondary" style="font-size: 13px;">${item.fecha}</span></p><p class="m-0">${estado}</p>
             </div>
