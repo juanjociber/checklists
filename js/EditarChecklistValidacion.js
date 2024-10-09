@@ -24,7 +24,7 @@ async function FnAgregarFirma(tipo) {
     formData.append('tipo', tipo); 
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch('/checklist/insert/AgregarFirma.php', {
+    const response = await fetch('/checklist/insert/AgregarCheckListFirma.php', {
       method: 'POST',
       body: formData
     });

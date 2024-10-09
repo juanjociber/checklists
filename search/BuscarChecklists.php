@@ -5,7 +5,7 @@
   $data = array('res' => false, 'pag' => 0, 'msg' => 'Error general.', 'data'=>array());
 
   try {
-    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) {throw new Exception("Usuario no tiene Autorización.");}
+    if (empty($_SESSION['CliId'])) {throw new Exception("Usuario no tiene Autorización.");}
 
     if (empty($_POST['fechainicial']) || empty($_POST['fechafinal'])) {throw new Exception("Las fechas de búsqueda están incompletas.");}
 

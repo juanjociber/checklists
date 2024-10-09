@@ -72,7 +72,6 @@ async function FnBuscarChecklist2(){
 
     if (!response.ok) { throw new Error(`${response.status} ${response.statusText}`);}
     const datos = await response.json();
-    console.log(datos);
     if (!datos.res) { throw new Error(`${datos.msg}`); }
 
     document.getElementById('tblChecklists').innerHTML = '';
@@ -111,8 +110,8 @@ async function FnBuscarChecklist2(){
 function FnPaginacion(cantidad) {
   try {
     PaginaActual += 1;
-    if (cantidad == 2) {
-      PaginasTotal += 2;
+    if (cantidad == 15) {
+      PaginasTotal += 15;
       document.getElementById("btnSiguiente").classList.remove('d-none');
     } else {
         document.getElementById("btnSiguiente").classList.add('d-none');
@@ -155,7 +154,6 @@ async function FnBuscarPrimero() {
 }
 
 function FnChecklist(id){
-  console.log(id);
   if(id > 0){
     window.location.href='/checklist/CheckList.php?id='+id;
   }

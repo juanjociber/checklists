@@ -24,7 +24,7 @@ try {
   $actividad->Usuario = $USUARIO;
 
   $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $result = FnModificarTablaActividad($conmy, $actividad);
+  $result = FnModificarCheckListActividad($conmy, $actividad);
   if ($result) {
       $data['msg'] = "Modificación exitosa.";
       $data['res'] = true;

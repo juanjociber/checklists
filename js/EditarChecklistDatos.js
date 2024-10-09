@@ -64,44 +64,42 @@ document.addEventListener('DOMContentLoaded', FnCargarSelect);
 /** MODIFICAR CABECERA CHEKLIST */
 const FnModificarChecklist = async () => {
   try {
-      vgLoader.classList.remove('loader-full-hidden');
-      const formData = new FormData();      
-      formData.append('id', document.querySelector('#txtIdChecklist').value);
-      formData.append('fecha', document.querySelector('#dtpFecha').value.trim());
-      formData.append('cli_contacto', document.querySelector('#txtContacto').value.trim());
-      formData.append('supervisor', document.querySelector('#txtSupervisor').value.trim());
-      formData.append('equ_nombre', document.querySelector('#txtEquNombre').value.trim());
-      formData.append('equ_marca', document.querySelector('#txtEquMarca').value.trim()); 
-      formData.append('equ_modelo', document.querySelector('#txtEquModelo').value.trim());
-      formData.append('equ_placa', document.querySelector('#txtEquPlaca').value.trim());
-      formData.append('equ_serie', document.querySelector('#txtEquSerie').value.trim());
-      formData.append('equ_motor', document.querySelector('#txtEquMotor').value.trim());
-      formData.append('equ_transmision', document.querySelector('#txtEquTransmision').value.trim());
-      formData.append('equ_diferencial', document.querySelector('#txtEquDiferencial').value.trim());
-      formData.append('equ_km', document.querySelector('#txtEquKm').value); 
-      formData.append('equ_hm', document.querySelector('#txtEquHm').value);
-      console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-      
-      const response = await fetch('/checklist/update/ModificarChecklist.php', {
-          method: 'POST',
-          body: formData
-      });
-      if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const datos = await response.json();
-      console.log(datos);
-      if (!datos.res) {
-          throw new Error(datos.msg);
-      }    
-      setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-      await Swal.fire({
-          title: "Aviso",
-          text: datos.msg,
-          icon: "success",
-          timer: 2000
-      });
-      setTimeout(() => { location.reload(); }, 100);
+    vgLoader.classList.remove('loader-full-hidden');
+    const formData = new FormData();      
+    formData.append('id', document.querySelector('#txtIdChecklist').value);
+    formData.append('fecha', document.querySelector('#dtpFecha').value.trim());
+    formData.append('cli_contacto', document.querySelector('#txtContacto').value.trim());
+    formData.append('supervisor', document.querySelector('#txtSupervisor').value.trim());
+    formData.append('equ_nombre', document.querySelector('#txtEquNombre').value.trim());
+    formData.append('equ_marca', document.querySelector('#txtEquMarca').value.trim()); 
+    formData.append('equ_modelo', document.querySelector('#txtEquModelo').value.trim());
+    formData.append('equ_placa', document.querySelector('#txtEquPlaca').value.trim());
+    formData.append('equ_serie', document.querySelector('#txtEquSerie').value.trim());
+    formData.append('equ_motor', document.querySelector('#txtEquMotor').value.trim());
+    formData.append('equ_transmision', document.querySelector('#txtEquTransmision').value.trim());
+    formData.append('equ_diferencial', document.querySelector('#txtEquDiferencial').value.trim());
+    formData.append('equ_km', document.querySelector('#txtEquKm').value); 
+    formData.append('equ_hm', document.querySelector('#txtEquHm').value);
+    
+    const response = await fetch('/checklist/update/ModificarCheckList.php', {
+        method: 'POST',
+        body: formData
+    });
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const datos = await response.json();
+    if (!datos.res) {
+        throw new Error(datos.msg);
+    }    
+    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    await Swal.fire({
+        title: "Aviso",
+        text: datos.msg,
+        icon: "success",
+        timer: 2000
+    });
+    setTimeout(() => { location.reload(); }, 100);
   } catch (error) {
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
       await Swal.fire({

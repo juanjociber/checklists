@@ -13,7 +13,7 @@
     $id = (int)$_POST['id'];
     $usuario = $USUARIO;
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    if (FnEliminarArchivoActividad($conmy, $id)) {
+    if (FnEliminarCheckListActividadArchivo($conmy, $id)) {
       $data['msg'] = "Se eliminó Archivo.";
       $data['res'] = true;
     } else {

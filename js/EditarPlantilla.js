@@ -21,10 +21,10 @@ document.getElementById('fileImagen').addEventListener('change', function(event)
   const file = event.target.files[0];
 
   if (!isValidFileType(file)) {
-    console.log('El archivo', file.name, 'Tipo de archivo no permitido.');
+    // console.log('El archivo', file.name, 'Tipo de archivo no permitido.');
   }
   if (!isValidFileSize(file)) {
-    console.log('El archivo', file.name, 'El tamaño del archivo excede los 3MB.');
+    // console.log('El archivo', file.name, 'El tamaño del archivo excede los 3MB.');
   }
   while ($divImagen.firstChild) {
     $divImagen.removeChild($divImagen.firstChild);
@@ -32,11 +32,9 @@ document.getElementById('fileImagen').addEventListener('change', function(event)
   if (file.type.startsWith('image/')) {
     displayImage(file);
   }
-
-  console.log('Nombre del archivo:', file.name);
-  console.log('Tipo del archivo:', file.type);
-  console.log('Tamaño del archivo:', file.size, 'bytes');
-
+  // console.log('Nombre del archivo:', file.name);
+  // console.log('Tipo del archivo:', file.type);
+  // console.log('Tamaño del archivo:', file.size, 'bytes');
   setTimeout(function() {
     vgLoader.classList.add('loader-full-hidden');
   }, 1000)
@@ -134,7 +132,6 @@ async function FnAgregarPlantillaImagen() {
     const formData = new FormData();
     formData.append('id', document.querySelector('#txtIdPlantilla').value);
     formData.append('numImagen', document.querySelector('#txtNumImagen').value); 
-
     var archivo;
     if (document.getElementById('canvas')) {
       archivo = document.querySelector("#canvas").toDataURL("image/jpeg");
@@ -144,8 +141,6 @@ async function FnAgregarPlantillaImagen() {
       throw new Error('No se reconoce el archivo');
     }
     formData.append('archivo', archivo);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
     const response = await fetch('/checklist/insert/AgregarPlantillaImagen.php', {
       method: 'POST',
       body: formData
@@ -154,40 +149,36 @@ async function FnAgregarPlantillaImagen() {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const datos = await response.json();
-    console.log(datos);
     if (!datos.res) {
       throw new Error(datos.msg);
     }
-    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-    Swal.fire({
-      title: "Éxito",
-      text: datos.msg,
-      icon: "success",
-      timer: 2000
-    });
-    setTimeout(() => { location.reload(); }, 1000);
+      setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+      Swal.fire({
+        title: "Éxito",
+        text: datos.msg,
+        icon: "success",
+        timer: 2000
+      });
+      setTimeout(() => { location.reload(); }, 1000);
   } catch (error) {
-    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
-    document.getElementById('msjAgregarImagen').innerHTML = `<div class="alert alert-danger m-0 p-1 text-center" role="alert">${error.message}</div>`;
-    setTimeout(() => { location.reload(); }, 2000);
+      setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+      document.getElementById('msjAgregarImagen').innerHTML = `<div class="alert alert-danger m-0 p-1 text-center" role="alert">${error.message}</div>`;
+      setTimeout(() => { location.reload(); }, 2000);
   }
 }
 
 /** ELIMINAR SILUETAS */
 const FnEliminarPlantillaImagen = async (id, numImagen) => {
-  console.log(id, numImagen);
   try {
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
     formData.append('numImagen', numImagen); 
-
     const response = await fetch('/checklist/delete/EliminarPlantillaImagen.php', {
       method: 'POST',
       body: formData,
     });
     const datos = await response.json();
-    console.log(datos);
     setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
     if (datos.res) {
       Swal.fire({
@@ -222,38 +213,6 @@ const FnModalAgregarPlantillaPregunta = () => {
   return false;
 }
 
-/** ABRIR MODAL BUSCAR-MODIFICAR ACTIVIDAD */
-const FnModalModificarPlantillaPregunta = async (id) => {
-  document.querySelector('#txtIdActividad').value = id;
-  const formData = new FormData();
-  formData.append('id', id);
-  try {
-    const response = await fetch('/checklist/search/BuscarPlantillaPregunta.php', {
-      method: 'POST',
-      body: formData
-    });
-    if (!response.ok) { 
-      throw new Error(response.status + ' ' + response.statusText); 
-    }
-    const datos = await response.json();
-    //console.log(datos);
-    document.getElementById('txtDescripcion2').value = datos.data.Descripcion;
-    if (!datos.res) { 
-      throw new Error(datos.msg); 
-    }
-  } 
-  catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Error',
-      text: error,
-      timer: 1000
-    });
-  }
-  const modalAgregarPlantillaPregunta = new bootstrap.Modal(document.getElementById('modalAgregarPlantillaPregunta'), {keyboard: false}).show();
-  return false;
-};
-
 /** AGREGAR PREGUNTA */
 const FnAgregarPlantillaPregunta = async () => {
   try {
@@ -261,8 +220,6 @@ const FnAgregarPlantillaPregunta = async () => {
     const formData = new FormData();
     formData.append('plaid',document.querySelector('#txtIdPlantilla').value);
     formData.append('descripcion', document.querySelector('#txtDescripcion').value);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
     const response = await fetch("/checklist/insert/AgregarPlantillaPregunta.php", {
       method: "POST",
       body: formData
@@ -271,7 +228,6 @@ const FnAgregarPlantillaPregunta = async () => {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     const datos = await response.json();
-    console.log(datos);
     setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
     if (!datos.res) {
       throw new Error(datos.msg);
@@ -290,6 +246,37 @@ const FnAgregarPlantillaPregunta = async () => {
   }
 };
 
+/** ABRIR MODAL BUSCAR-MODIFICAR ACTIVIDAD */
+const FnModalModificarPlantillaPregunta = async (id) => {
+  document.querySelector('#txtIdActividad').value = id;
+  const formData = new FormData();
+  formData.append('id', id);
+  try {
+    const response = await fetch('/checklist/search/BuscarPlantillaPregunta.php', {
+      method: 'POST',
+      body: formData
+    });
+    if (!response.ok) { 
+      throw new Error(response.status + ' ' + response.statusText); 
+    }
+    const datos = await response.json();
+    document.getElementById('txtDescripcion2').value = datos.data.Descripcion;
+    if (!datos.res) { 
+      throw new Error(datos.msg); 
+    }
+  } 
+  catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: error,
+      timer: 1000
+    });
+  }
+  const modalModificarPlantillaPregunta = new bootstrap.Modal(document.getElementById('modalModificarPlantillaPregunta'), {keyboard: false}).show();
+  return false;
+};
+
 /** MODIFICAR PREGUNTA */
 const FnModificarPlantillaPregunta = async () => {
   try {
@@ -297,8 +284,6 @@ const FnModificarPlantillaPregunta = async () => {
     const formData = new FormData();
     formData.append('id', document.getElementById('txtIdActividad').value);
     formData.append('descripcion', document.getElementById('txtDescripcion2').value);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
     const response = await fetch("/checklist/update/ModificarPlantillaPregunta.php", {
       method: "POST",
       body: formData
@@ -307,7 +292,6 @@ const FnModificarPlantillaPregunta = async () => {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     const datos = await response.json();
-    console.log(datos);
     setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
     if (!datos.res) {
       throw new Error(datos.msg);
@@ -382,8 +366,6 @@ const FnAgregarAlternativa = async () => {
     const formData = new FormData();
     formData.append('preid',document.querySelector('#txtIdActividad').value);
     formData.append('descripcion', document.getElementById('txtAlternativa').value);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
     const response = await fetch("/checklist/insert/AgregarAlternativa.php", {
       method: "POST",
       body: formData
@@ -392,11 +374,16 @@ const FnAgregarAlternativa = async () => {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     const datos = await response.json();
-    console.log(datos);
     setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
     if (!datos.res) {
       throw new Error(datos.msg);
     }
+    await Swal.fire({
+      title: "Éxito",
+      text: datos.msg,
+      icon: "success",
+      timer: 2000,
+    });
     setTimeout(() => { location.reload(); }, 100);
   } catch (error) {
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
@@ -404,7 +391,6 @@ const FnAgregarAlternativa = async () => {
       setTimeout(() => { location.reload(); }, 2000);
   }
 }
-
 
 async function FnEliminarAlternativa(id){
   try {

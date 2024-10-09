@@ -1,5 +1,7 @@
 <?php
-  /** tblchecklist */
+    /* ================================
+     TABLA: tblcheckLists 
+     ================================*/
   function FnRegistrarCheckList($conmy, $checklist) {
     try {
         $stmt = $conmy->prepare("CALL spman_agregarchecklist(:_cliid, :_solid, :_plaid, :_equid, :_fecha, :_cliruc, :_clinombre, :_clidireccion, :_clicontacto, :_clitelefono, 
@@ -51,9 +53,7 @@
         if(!empty($checklist->Equipo)){$query .=" and equid=".$checklist->Equipo;}
         $query.=" and fecha between '".$checklist->FechaInicial."' and '".$checklist->FechaFinal."'";
       }
-
-      $query.=" limit ".$checklist->Pagina.", 2";
-
+      $query.=" limit ".$checklist->Pagina.", 15";
       $stmt = $conmy->prepare("select id, nombre, fecha, cli_nombre, cli_contacto, equ_nombre, estado from tblchecklists where cliid=:CliId".$query.";");
       $stmt->bindParam(':CliId', $checklist->CliId, PDO::PARAM_INT);
       $stmt->execute();
@@ -74,11 +74,11 @@
       }            
       return $checklists;
     } catch (PDOException $e) {
-        throw new Exception($e->getMessage().$msg);
+        throw new Exception($e->getMessage());
     }
   }
 
-  function FnBuscarChecklist($conmy, $cliid, $id) {
+  function FnBuscarCheckList($conmy, $cliid, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, cliid, solid, plaid, equid, fecha, numero, nombre, cli_ruc, cli_nombre, cli_direccion, cli_contacto, cli_telefono, cli_correo, supervisor, equ_codigo, equ_nombre, equ_marca, equ_modelo, equ_placa, equ_serie, equ_motor, equ_transmision, equ_diferencial, equ_km, equ_hm, imagen1, imagen2, imagen3, imagen4, emp_firma, cli_firma, estado FROM tblchecklists WHERE id = :Id AND cliid = :Cliid");
       $stmt->execute(array(':Id' => $id, ':Cliid' => $cliid));
@@ -129,10 +129,9 @@
     }
   }
 
-  function FnBuscarCheckList1($conmy, $cliid, $id) {
+  function FnBuscarCheckList2($conmy, $cliid, $id) {
     try {
         $datos=array();
-
         $stmt = $conmy->prepare("select id, plaid, nombre, estado FROM tblchecklists WHERE id=:Id and cliid=:CliId;");
         $stmt->execute(array(':Id'=>$id, ':CliId'=>$cliid));
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -151,7 +150,7 @@
     }
   }
 
-  function FnModificarChecklist($conmy, $checklist) {
+  function FnModificarCheckList($conmy, $checklist) {
     try {
       $stmt = $conmy->prepare("UPDATE tblchecklists 
                                SET  fecha = :Fecha, cli_contacto = :CliContacto, supervisor = :Supervisor, equ_nombre = :EquNombre, equ_marca = :EquMarca, 
@@ -185,18 +184,18 @@
     }
   }
 
-  /** ================================
-   *  TABLA: tblchkplantillas 
-   *  ================================*/
-  function FnBuscarPlantillas($conmy, $tipo = null) {
+  function FnModificarChecklistImagenes($conmy, $fileNames, $usuario, $id) {
     try {
-      $sql = "SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas";
-      if ($tipo !== null) { $sql .= " WHERE tipo = :Tipo"; }
+      $sql = "UPDATE tblchecklists SET imagen1 = :Imagen1, imagen2 = :Imagen2, imagen3 = :Imagen3, imagen4 = :Imagen4, actualizacion = :Actualizacion WHERE id = :Id";
       $stmt = $conmy->prepare($sql);
-      if ($tipo !== null) { $stmt->bindParam(':Tipo', $tipo, PDO::PARAM_STR); }
-      $stmt->execute();
-      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $resultados;
+      $stmt->execute(array(
+        ':Imagen1' => $fileNames['imagen1'],
+        ':Imagen2' => $fileNames['imagen2'],
+        ':Imagen3' => $fileNames['imagen3'],
+        ':Imagen4' => $fileNames['imagen4'],
+        ':Actualizacion' => $usuario,
+        ':Id' => $id 
+      ));
     } catch (PDOException $e) {
         throw new Exception($e->getMessage());
     } catch (Exception $e) {
@@ -204,169 +203,10 @@
     }
   }
 
-  function FnBuscarPlantilla($conmy, $id){
-    try {
-      $stmt = $conmy->prepare("SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas WHERE id=:Id");
-      $stmt -> execute(array(':Id'=>$id));
-      $plantilla = new stdClass();
-      while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        $plantilla->Id = $row['id'];
-        $plantilla->Tipo = $row['tipo'];
-        $plantilla->Imagen1 = $row['imagen1'];
-        $plantilla->Imagen2 = $row['imagen2'];
-        $plantilla->Imagen3 = $row['imagen3'];
-        $plantilla->Imagen4 = $row['imagen4'];
-        $plantilla->Estado = $row['estado'];
-      } 
-      return $plantilla;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnRegistrarPlantilla($conmy, $plantilla) {
-    try {
-      $res = false;
-      $stmt = $conmy->prepare("INSERT INTO tblchkplantillas(tipo, creacion, actualizacion) VALUES(:Tipo,:Creacion,:Actualizacion)");
-      $params = array(':Tipo' => $plantilla->Tipo,':Creacion' => $plantilla->Creacion,':Actualizacion' => $plantilla->Usuario);
-      if ($stmt->execute($params)) {
-        $res = true;
-      }
-      return $res;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnTipoPlantillaExiste($conmy, $tipo) {
-    try {
-        $stmt = $conmy->prepare("SELECT COUNT(*) FROM tblchkplantillas WHERE tipo = :Tipo");
-        $stmt->bindParam(':Tipo', $tipo, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt->fetchColumn() > 0;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnRegistrarPlantillaImagen($conmy, $plantilla, $numImagen) {
-    try {
-      $imagenCampo = 'imagen'.$numImagen; 
-      $stmt = $conmy->prepare("UPDATE tblchkplantillas SET $imagenCampo = :Imagen, actualizacion = :Actualizacion WHERE id = :Id");
-      $params = array(':Imagen' => $plantilla->Imagen, ':Actualizacion' => $plantilla->Usuario, ':Id' => $plantilla->Id);
-      $result = $stmt->execute($params);
-      if ($stmt->rowCount() == 0) {
-          throw new Exception('Cambios no realizados.');
-      }
-      return $result;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnEliminarPlantillaImagen($conmy, $id, $numImagen) {
-    try {
-      $imagenCampo = 'imagen'.$numImagen;
-      $stmt = $conmy->prepare("UPDATE tblchkplantillas SET ".$imagenCampo."= null WHERE id = :Id");
-      $stmt->execute(array(':Id' => $id));
-      return $stmt->rowCount() > 0;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  /** ================================
-   *  TABLA: tblchkpreguntas 
-   *  ================================*/
-  //FnBuscarActividades($conmy, $id)
-  function FnBuscarPlantillaPreguntas($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, plaid, descripcion, estado FROM tblchkpreguntas WHERE plaid=:Plaid");
-      $stmt->execute(array('Plaid'=>$id));
-      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $resultados;
-    } catch (PDOException $ex) {
-      return null;
-    }
-  }
-
-  function FnBuscarPlantillaPreguntas1($conmy, $plaid) {
-    try {
-        $datos=array();
-        $stmt = $conmy->prepare("select id, plaid, descripcion FROM tblchkpreguntas WHERE plaid=:PlaId;");
-        $stmt->execute(array(':PlaId'=>$plaid));
-        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-            $datos[]=array(
-                'id'=>$row['id'],
-                'plaid'=>$row['plaid'],                        
-                'pregunta'=>$row['descripcion']
-            );
-        }          
-        return $datos;
-    } catch (PDOException $ex) {
-        throw new Exception($ex->getMessage());
-    } catch (Exception $ex) {
-        throw new Exception($ex->getMessage());
-    }
-  }
-
-  function FnRegistrarPlantillaPregunta($conmy, $plantillaPregunta) {
-    try {
-        $res = false;
-        $stmt = $conmy->prepare("INSERT INTO tblchkpreguntas(plaid, descripcion, creacion, actualizacion) VALUES(:Plaid,:Descripcion,:Creacion,:Actualizacion)");
-        $params = array(':Plaid' => $plantillaPregunta->Plaid,':Descripcion' => $plantillaPregunta->Descripcion,':Creacion' => $plantillaPregunta->Creacion,':Actualizacion' => $plantillaPregunta->Actualizacion);
-        if ($stmt->execute($params)) {
-            $res = true;
-        }
-        return $res;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnModificarPlantillaPregunta($conmy, $plantillaPregunta) {
-    try {
-      $stmt = $conmy->prepare("UPDATE tblchkpreguntas SET descripcion=:Descripcion, actualizacion=:Actualizacion WHERE id=:Id;");
-      $params = array(':Descripcion'=>$plantillaPregunta->Descripcion, ':Actualizacion'=>$plantillaPregunta->Usuario, ':Id'=>$plantillaPregunta->Id);
-      $result = $stmt->execute($params);
-      if($stmt->rowCount()==0){
-        throw new Exception('Cambios no realizados.');
-      }
-      return $result;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnEliminarPlantillaPregunta($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("DELETE FROM tblchkpreguntas WHERE id = :Id");
-      $params = array(':Id' => $id);
-      $result = $stmt->execute($params);
-      if($stmt->rowCount()==0){
-        throw new Exception('Cambios no realizados.');
-      }
-      return $result;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
-    }
-  }
-
-    /** ================================
-   *  TABLA: tblchkactividades 
-   *  ================================*/
-  function FnBuscarCheckListPreguntas($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, chkid, preid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE chkid=:ChkId");
-      $stmt->execute(array('ChkId'=>$id));
-      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $resultados;
-    } catch (PDOException $ex) {
-      return null;
-    }
-  }
-
-  function FnBuscarCheckListPreguntas1($conmy, $chkid) {
+  /* ================================
+     TABLA: tblchkactividades 
+     ================================*/
+  function FnBuscarCheckListActividadPreguntas($conmy, $chkid) {
     try {
         $datos=array();
         $stmt = $conmy->prepare("select id, preid, descripcion, respuesta, observaciones, archivo FROM tblchkactividades WHERE chkid=:ChkId;");
@@ -390,7 +230,7 @@
     }
   }
 
-  function FnBuscarTablaActividades($conmy, $id) {
+  function FnBuscarCheckListActividades($conmy, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE chkid=:ChkId");
       $stmt->execute(array(':ChkId'=>$id));
@@ -401,28 +241,7 @@
     }
   }
 
-  function FnBuscarTablaActividad($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, preid, chkid, descripcion, respuesta, observaciones, archivo, estado FROM tblchkactividades WHERE id=:Id");
-      $stmt->execute(array(':Id' => $id));
-      $actividad = new stdClass();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          $actividad->Id = $row['id'];
-          $actividad->PreId = $row['preid'];
-          $actividad->ChkId = $row['chkid'];
-          $actividad->Descripcion = $row['descripcion'];
-          $actividad->Respuesta = $row['respuesta'];
-          $actividad->Observaciones = $row['observaciones'];
-          $actividad->Archivo = $row['archivo'];
-          $actividad->Estado = $row['estado'];
-        }
-        return $actividad;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnModificarTablaActividad($conmy, $actividad) {
+  function FnModificarCheckListActividad($conmy, $actividad) {
     try {
         $stmt = $conmy->prepare("UPDATE tblchkactividades SET observaciones = :Observaciones, archivo = :Archivo, actualizacion = :Actualizacion WHERE id =:Id");
         $params = array(
@@ -442,7 +261,7 @@
     }
   }
 
-  function FnEliminarArchivoActividad($conmy, $id) {
+  function FnEliminarCheckListActividadArchivo($conmy, $id) {
     try {
       $res = false;
       $stmt = $conmy->prepare("UPDATE tblchkactividades SET archivo=null WHERE id=:Id");
@@ -456,102 +275,48 @@
     }
   }
 
-  function FnBuscarActividad($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, plaid, descripcion, estado FROM tblchkpreguntas WHERE id=:Id");
-      $stmt->execute(array(':Id' => $id));
-      $actividad = new stdClass();
-        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-          $actividad->id = $row['id'];
-          $actividad->Plaid = $row['plaid'];
-          $actividad->Descripcion = $row['descripcion'];
-          $actividad->Estado = $row['estado'];
+  function FnAgregarModificarCheckListActividad($conmy, $respuestas, $chkid, $usuario) {
+    foreach ($respuestas as $respuesta) {
+      try {
+        if ($respuesta['Id'] > 0) {
+          // MODIFICAR RESPUESTA
+          $sql = "UPDATE tblchkactividades SET respuesta=:Respuesta, actualizacion=:Actualizacion WHERE id=:Id AND chkid=:Chkid";
+          $stmtRespuestas = $conmy->prepare($sql);
+          $stmtRespuestas->execute(array(
+            ':Respuesta' => $respuesta['Respuesta'],
+            ':Actualizacion' => $usuario,
+            ':Id' => $respuesta['Id'],
+            ':Chkid' => $chkid,
+          ));
+        } 
+        else {
+          // INSERTAR RESPUESTA NUEVA
+          $sqlRespuestas = "INSERT INTO tblchkactividades (preid, chkid, descripcion, respuesta, observaciones, archivo, estado, creacion) 
+              VALUES (:Preid, :Chkid, :Descripcion, :Respuesta, :Observaciones, :Archivo, :Estado, :Creacion)";
+          $stmtRespuestas = $conmy->prepare($sqlRespuestas);
+          $stmtRespuestas->execute(array(
+            ':Preid' => $respuesta['Preid'],
+            ':Chkid' => $chkid,
+            ':Descripcion' => $respuesta['Descripcion'],
+            ':Respuesta' => $respuesta['Respuesta'],
+            ':Observaciones' => null, 
+            ':Archivo' => null, 
+            ':Estado' => 2,
+            ':Creacion' => $usuario
+          ));
         }
-        return $actividad;
-    } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
-    }
-  }
-
-  /** ================================
-   *  TABLA: tblchkalternativas 
-   *  ================================*/
-  function FnRegistrarAlternativa($conmy, $alternativa) {
-    try {
-      $res = false;
-      $stmt = $conmy->prepare("INSERT INTO tblchkalternativas(preid,descripcion,creacion,actualizacion) VALUES(:Preid,:Descripcion,:Creacion,:Actualizacion)");
-      $params = array(':Preid' => $alternativa->Preid,':Descripcion' => $alternativa->Descripcion,':Creacion' => $alternativa->Creacion,':Actualizacion' => $alternativa->Actualizacion);
-      if ($stmt->execute($params)) {
-          $res = true;
+      } catch (PDOException $e) {
+          throw new Exception($e->getMessage());
+      } catch (Exception $e) {
+          throw new Exception($e->getMessage());
       }
-      return $res;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnBuscarAlternativas($conmy,$ids) {
-    try {
-      $placeholders = implode(',', $ids);
-      $stmt = $conmy->prepare("SELECT id, preid, descripcion, estado FROM tblchkalternativas WHERE preid IN($placeholders)");
-      $stmt->execute();
-      $alternativas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $alternativas;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnBuscarAlternativas2($conmy, $preid) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, preid FROM tblchkalternativas WHERE preid=:PreId");
-      $stmt->execute(array(':PreId'=>$preid));
-      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $resultados;
-    } catch (PDOException $ex) {
-      return null;
-    }
-  }
-
-  function FnBuscarPlantillaPreguntasAlternativas($conmy, $preguntas) {
-    try {
-        $datos=array();
-        $query=implode(',', $preguntas);
-        $stmt = $conmy->prepare("select id, preid, descripcion FROM tblchkalternativas WHERE preid in($query);");
-        $stmt->execute();
-        while ($row=$stmt->fetch(PDO::FETCH_ASSOC)) {
-            $datos[]=array(
-                'id'=>$row['id'],
-                'preid'=>$row['preid'],                        
-                'respuesta'=>$row['descripcion']
-            );
-        }        
-        return $datos;
-    } catch (PDOException $ex) {
-        throw new Exception($ex->getMessage());
-    } catch (Exception $ex) {
-        throw new Exception($ex->getMessage());
-    }
-  }
-
-  function FnEliminarAlternativa($conmy, $id) {
-    try {
-      $stmt = $conmy->prepare("DELETE FROM tblchkalternativas WHERE id =:Id");
-      $params = array(':Id' => $id);
-      $result = $stmt->execute($params);
-      if($stmt->rowCount()==0){
-        throw new Exception('Cambios no realizados.');
-      }
-      return $result;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
     }
   }
 
   /** ================================
    *  TABLA: tblchkobservaciones 
    *  ================================*/
-  function FnRegistrarObservacion($conmy, $observacion) {
+  function FnRegistrarCheckListObservacion($conmy, $observacion) {
     try {
       $res = false;
       $stmt = $conmy->prepare("INSERT INTO tblchkobservaciones(chkid, descripcion, creacion, actualizacion) VALUES(:ChkId,:Descripcion,:Creacion,:Actualizacion)");
@@ -565,7 +330,7 @@
     }
   }
 
-  function FnModificarObservacion($conmy, $observacion) {
+  function FnModificarCheckListObservacion($conmy, $observacion) {
     try {
       $stmt = $conmy->prepare("UPDATE tblchkobservaciones SET descripcion=:Descripcion, actualizacion=:Actualizacion WHERE id=:Id;");
       $params = array(':Descripcion'=>$observacion->Descripcion, ':Actualizacion'=>$observacion->Usuario, ':Id'=>$observacion->Id);
@@ -579,7 +344,7 @@
     }
   }
 
-  function FnBuscarObservaciones($conmy, $id) {
+  function FnBuscarCheckListObservaciones($conmy, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, chkid, descripcion, archivo, estado FROM tblchkobservaciones WHERE chkid=:ChkId");
       $stmt->execute(array(':ChkId'=>$id));
@@ -590,7 +355,7 @@
     }
   }
 
-  function FnBuscarObservacion($conmy, $id) {
+  function FnBuscarCheckListObservacion($conmy, $id) {
     try {
       $stmt = $conmy->prepare("SELECT id, chkid, descripcion, archivo, estado FROM tblchkobservaciones WHERE id=:Id");
       $stmt->execute(array(':Id' => $id));
@@ -608,10 +373,10 @@
     }
   }
 
-  function FnEliminarObservacion($conmy, $id) {
+  function FnEliminarCheckListObservacion($conmy, $id, $chkid) {
     try {
-      $stmt = $conmy->prepare("DELETE FROM tblchkobservaciones WHERE id=:Id");
-      $params = array(':Id' => $id);
+      $stmt = $conmy->prepare("DELETE FROM tblchkobservaciones WHERE id=:Id AND chkid=:ChkId");
+      $params = array(':Id' => $id, ':ChkId' => $chkid);
       $result = $stmt->execute($params);
       if($stmt->rowCount()==0){
         throw new Exception('Error al eliminar Observacion.');
@@ -622,7 +387,7 @@
     }
   }
 
-  function FnRegistrarArchivoObservacion($conmy, $observacion) {
+  function FnRegistrarCheckListObservacionArchivo($conmy, $observacion) {
     try {
       $stmt = $conmy->prepare("UPDATE tblchkobservaciones SET archivo=:Archivo, actualizacion=:Actualizacion WHERE id=:Id");
       $params = array(
@@ -640,7 +405,7 @@
     }
   }
 
-  function FnEliminarArchivoObservacion($conmy, $id) {
+  function FnEliminarCheckListObservacionArchivo($conmy, $id) {
     try {
       $res = false;
       $stmt = $conmy->prepare("UPDATE tblchkobservaciones SET archivo=null WHERE id=:Id");
@@ -653,89 +418,5 @@
         throw new Exception($e->getMessage());
     }
   }
-
-  /** ================================
-   *  TABLA: cli_supervisores 
-   *  ================================*/
-  function FnBuscarSupervisores($comy) {
-    try {
-      $stmt = $comy->prepare("SELECT idsupervisor, idcliente, supervisor FROM cli_supervisores WHERE idcliente = 1");
-      $stmt->execute(); 
-      $supervisores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $supervisores;
-    } catch (PDOException $e) {
-      throw new Exception($e->getMessage());
-    }
-  }
-
-  function FnProcesarImagenes($input, $id) {
-    $imageFields = array('imagen1', 'imagen2', 'imagen3', 'imagen4');
-    $fileNames = array();
-    foreach ($imageFields as $field) {
-      if (!empty($input[$field])) {
-        $fileName = 'CHK_'.$id.'_'.uniqid().'.jpeg';
-        $fileEncoded = str_replace("data:image/jpeg;base64,", "", $input[$field]);
-        $fileDecoded = base64_decode($fileEncoded);
-        file_put_contents($_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$fileName, $fileDecoded);
-        /** ALMACENAR NOMBRE DE ARCHIVO */
-        $fileNames[$field] = $fileName; 
-      } else {
-          $fileNames[$field] = null; 
-      }
-    }
-    return $fileNames; 
-  }
-
-  function FnModificarChecklistImagenes($conmy, $fileNames, $usuario, $id) {
-    $sql = "UPDATE tblchecklists SET imagen1 = :Imagen1, imagen2 = :Imagen2, imagen3 = :Imagen3, imagen4 = :Imagen4, actualizacion = :Actualizacion WHERE id = :Id";
-    $stmt = $conmy->prepare($sql);
-    $stmt->execute(array(
-      ':Imagen1' => $fileNames['imagen1'],
-      ':Imagen2' => $fileNames['imagen2'],
-      ':Imagen3' => $fileNames['imagen3'],
-      ':Imagen4' => $fileNames['imagen4'],
-      ':Actualizacion' => $usuario,
-      ':Id' => $id 
-    ));
-  }
-
-  function FnAgregarModificarActividad($conmy, $respuestas, $chkid, $usuario) {
-    foreach ($respuestas as $respuesta) {
-      if ($respuesta['Id'] > 0) {
-        // MODIFICAR RESPUESTA
-        $sql = "UPDATE tblchkactividades SET respuesta=:Respuesta, actualizacion=:Actualizacion WHERE id=:Id AND chkid=:Chkid";
-        $stmtRespuestas = $conmy->prepare($sql);
-        $stmtRespuestas->execute(array(
-          ':Respuesta' => $respuesta['Respuesta'],
-          ':Actualizacion' => $usuario,
-          ':Id' => $respuesta['Id'],
-          ':Chkid' => $chkid,
-        ));
-      } 
-      else {
-        // INSERTAR RESPUESTA NUEVA
-        $sqlRespuestas = "INSERT INTO tblchkactividades (preid, chkid, descripcion, respuesta, observaciones, archivo, estado, creacion) 
-            VALUES (:Preid, :Chkid, :Descripcion, :Respuesta, :Observaciones, :Archivo, :Estado, :Creacion)";
-        $stmtRespuestas = $conmy->prepare($sqlRespuestas);
-        $stmtRespuestas->execute(array(
-          ':Preid' => $respuesta['Preid'],
-          ':Chkid' => $chkid,
-          ':Descripcion' => $respuesta['Descripcion'],
-          ':Respuesta' => $respuesta['Respuesta'],
-          ':Observaciones' => null, 
-          ':Archivo' => null, 
-          ':Estado' => 2,
-          ':Creacion' => $usuario
-        ));
-      }
-    }
-  }
-
-
-
-
-
-
-
 
 ?>

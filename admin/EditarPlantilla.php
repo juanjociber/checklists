@@ -7,7 +7,7 @@
   $CLIID = $_SESSION['CliId'];
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/PlantillaData.php";
 
   $plantilla= new stdClass();
   $plantillaPreguntas =array();
@@ -79,7 +79,7 @@
     <div class="row border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold d-flex justify-content-between">
         <p class="m-0 p-0 text-secondary text-uppercase"><?php echo $isAuthorized ? $_SESSION['CliNombre'] : 'UNKNOWN'; ?></p>
-        <p class="m-0 p-0 text-secondary text-uppercase"><?php echo $isAuthorized ? ($plantilla->Tipo ?? 'UNKNOWN') : 'UNKNOWN'; ?></p>
+        <p class="m-0 p-0 text-secondary text-uppercase"><?php echo $plantilla->Tipo ?></p>
       </div>
     </div>
 
@@ -271,7 +271,7 @@
       </div>
     </div>
 
-    <!-- ACTIVIDADES -->
+    <!-- PREGUNTAS -->
     <div class="row">
       <div class="col-12 mt-4 mb-2">
         <label class="p-2 bg-light text-secondary fw-bold d-flex justify-content-between align-items-center">PLANTILLA DE PREGUNTAS Y ALTERNATIVAS <i class="fas fa-plus fw-bold" style="cursor: pointer; margin-left:10px;" onclick="FnModalAgregarPlantillaPregunta()"></i></label> 
@@ -329,7 +329,7 @@
     </div>
 
     <!-- MODAL EDITAR ACTIVIDAD -->
-    <div class="modal fade" id="modalModificarActividad" tabindex="-1" aria-labelledby="modalModificarActividadLabel" aria-hidden="true">
+    <div class="modal fade" id="modalModificarPlantillaPregunta" tabindex="-1" aria-labelledby="modalModificarActividadLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header text-secondary">

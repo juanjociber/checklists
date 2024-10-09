@@ -8,16 +8,14 @@
    // if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     if (empty($_POST['id'])) { throw new Exception("La información está incompleta."); }
 
-    $USUARIO = date('Ymd-His (').'jhuiza'.')';
-
-    $id = (int)$_POST['id'];
-    $usuario = $USUARIO;
+    $id    = (int)$_POST['id'];
+    $chkid = $_POST['chkid'];
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    if (FnEliminarArchivoObservacion($conmy, $id)) {
-      $data['msg'] = "Se eliminó Archivo.";
+    if (FnEliminarCheckListObservacion($conmy, $id, $chkid)) {
+      $data['msg'] = "Se eliminó Observacion.";
       $data['res'] = true;
     } else {
-      $data['msg'] = "Error eliminando Archivo.";
+      $data['msg'] = "Error eliminando Observacion.";
     }
   } catch (PDOException $ex) {
       $data['msg'] = $ex->getMessage();

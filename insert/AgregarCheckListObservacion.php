@@ -16,7 +16,7 @@
       $observacion->Usuario = $USUARIO;
 
       $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-      if (FnRegistrarObservacion($conmy, $observacion)) {
+      if (FnRegistrarCheckListObservacion($conmy, $observacion)) {
         $data['msg'] = "Se registró observación.";
         $data['res'] = true;
       } else {

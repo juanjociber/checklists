@@ -16,7 +16,7 @@
     $observacion->Usuario = $USUARIO;
 
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    if (FnModificarObservacion($conmy, $observacion)) {
+    if (FnModificarCheckListObservacion($conmy, $observacion)) {
       $data['msg'] = "Modificación existosa.";
       $data['res'] = true;
     } else {

@@ -18,13 +18,27 @@
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // INICIAR TRANSACCIÓN
     $conmy->beginTransaction();
-    // PROCESAR IMÁGENES
-    $fileNames = FnProcesarImagenes($input, $input['Id']);
+
+    $imageFields = array('imagen1', 'imagen2', 'imagen3', 'imagen4');
+    $fileNames = array();
+    foreach ($imageFields as $field) {
+      if (!empty($input[$field])) {
+        $fileName = 'CHK_'.$input['Id'].'_'.uniqid().'.jpeg';
+        $fileEncoded = str_replace("data:image/jpeg;base64,", "", $input[$field]);
+        $fileDecoded = base64_decode($fileEncoded);
+        file_put_contents($_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$fileName, $fileDecoded);
+        /** ALMACENAR NOMBRE DE ARCHIVO */
+        $fileNames[$field] = $fileName; 
+      } else {
+        $fileNames[$field] = null; 
+      }
+    }
+
     // IMAGENES CHECKLIST
     FnModificarChecklistImagenes($conmy, $fileNames, $USUARIO, $input['Id']);
     // RESPUESTAS
     if (!empty($input['respuestas'])) {
-      FnAgregarModificarActividad($conmy, $input['respuestas'], $input['Id'], $USUARIO);
+      FnAgregarModificarCheckListActividad($conmy, $input['respuestas'], $input['Id'], $USUARIO);
     }
     $conmy->commit();
     

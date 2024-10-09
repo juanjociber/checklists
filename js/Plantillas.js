@@ -17,7 +17,7 @@ async function FnAgregarPlantilla() {
   try {
     const formData = new FormData();
     formData.append('tipo', document.getElementById('txtTipo1').value);
-    //console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+
     const response = await fetch("/checklist/insert/AgregarPlantilla.php", {
       method: "POST",
       body: formData
@@ -26,7 +26,6 @@ async function FnAgregarPlantilla() {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     const datos = await response.json();
-    console.log(datos);
     if (!datos.res) {
       throw new Error(datos.msg);
     }
@@ -47,8 +46,6 @@ async function FnBuscarPlantillas() {
     const formData = new FormData();
     formData.append('tipo', document.querySelector('#txtTipo').value);
     // formData.append('pagina', PaginasTotal);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-    
     const response = await fetch('/checklist/search/BuscarPlantillas.php', {
       method: 'POST',
       body: formData
@@ -57,6 +54,7 @@ async function FnBuscarPlantillas() {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     const datos = await response.json();
+    console.log(datos.data);
     if (!datos.res) {
       document.getElementById('tblPlantillas').innerHTML = `
         <div class="col-12">
@@ -66,11 +64,10 @@ async function FnBuscarPlantillas() {
         </div>`;
       return; 
     }
-    console.log(datos);
     document.getElementById('tblPlantillas').innerHTML = '';
     let estado = '';
     datos.data.forEach(item => {
-      switch (item.estado) {
+      switch (parseInt(item.estado)) {
         case 1:
           estado = '<span class="badge bg-danger">Anulado</span>';
           break;
@@ -104,11 +101,9 @@ async function FnBuscarPlantillas() {
   }
 }
 
-
 function FnPlantilla(id){
-  console.log(id);
   if(id > 0){
-    window.location.href='/checklist/admin/EditarPlantilla.php?id='+id;
+    window.location.href=`/checklist/admin/EditarPlantilla.php?id=${id}`;
   }
   return false;
 }
@@ -116,8 +111,8 @@ function FnPlantilla(id){
 function FnPaginacion(cantidad) {
   try {
     PaginaActual += 1;
-    if (cantidad == 2) {
-      PaginasTotal += 2;
+    if (cantidad == 15) {
+      PaginasTotal += 15;
       document.getElementById("btnSiguiente").classList.remove('d-none');
     } else {
       document.getElementById("btnSiguiente").classList.add('d-none');

@@ -15,7 +15,7 @@ const FnModalModificarObservacion = async (id) => {
   const formData = new FormData();
   formData.append('id', id);
   try {
-    const response = await fetch('/checklist/search/BuscarObservacion.php', {
+    const response = await fetch('/checklist/search/BuscarCheckListObservacion.php', {
       method: 'POST',
       body: formData
     });
@@ -50,7 +50,7 @@ const FnAgregarObservacion = async () => {
     formData.append('descripcion', document.getElementById('txtObservacion').value);
     // console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch("/checklist/insert/AgregarObservacion.php", {
+    const response = await fetch("/checklist/insert/AgregarCheckListObservacion.php", {
         method: "POST",
         body: formData
     });
@@ -78,7 +78,7 @@ const FnModificarObservacion = async () => {
     formData.append('descripcion', document.getElementById('txtObservacion2').value);
     // console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch("/checklist/update/ModificarObservacion.php", {
+    const response = await fetch("/checklist/update/ModificarCheckListObservacion.php", {
         method: "POST",
         body: formData
     });
@@ -103,7 +103,10 @@ const FnModalEliminarObservacion = async (id) =>{
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarObservacion.php', {
+    formData.append('chkid', document.querySelector('#txtIdChecklist').value);
+    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
+
+    const response = await fetch('/checklist/delete/EliminarCheckListObservacion.php', {
       method: 'POST',
       body: formData
     });
@@ -280,7 +283,7 @@ async function FnAgregarArchivo() {
     formData.append('archivo', archivo);
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch('/checklist/insert/AgregarArchivo.php', {
+    const response = await fetch('/checklist/insert/AgregarCheckListObservacionArchivo.php', {
       method: 'POST',
       body: formData
     });
@@ -313,7 +316,7 @@ async function FnEliminarArchivo(id){
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarArchivo.php', {
+    const response = await fetch('/checklist/delete/EliminarCheckListObservacionArchivo.php', {
       method: 'POST',
       body: formData
     });

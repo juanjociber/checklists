@@ -6,6 +6,7 @@
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/SupervisorData.php";
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
@@ -17,7 +18,7 @@
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if(is_numeric($ID) && $ID > 0){
-      $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
+      $checklist = FnBuscarCheckList($conmy, $CLIID, $ID);
       if($checklist){
         $isAuthorized = true;
         $claseHabilitado = "btn-outline-primary";
@@ -42,8 +43,6 @@
     }
   }
   $supervisorInputValue = $supervisorValido ? $checklist->Supervisor : '';
-
-  
 ?>
 <!doctype html>
 <html lang="es">

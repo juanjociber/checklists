@@ -8,7 +8,7 @@
     if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     if(empty($_POST['id'])){ throw new Exception("La informacion esta incompleta."); }
     
-    $observacion = FnBuscarObservacion($conmy, $_POST['id']);
+    $observacion = FnBuscarCheckListObservacion($conmy, $_POST['id']);
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);    
     if ($observacion) {
       $data['res'] = true;

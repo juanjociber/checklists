@@ -11,17 +11,18 @@
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/PlantillaData.php";
 
   try{
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $CHECKLIST=array();
-    $CHECKLIST=FnBuscarCheckList1($conmy, $_SESSION['CliId'], $ID);
+    $CHECKLIST=FnBuscarCheckList2($conmy, $_SESSION['CliId'], $ID);
 
     if(!empty($CHECKLIST['id'])){
       $plantilla = FnBuscarPlantilla($conmy, $CHECKLIST['plaid']);
       $CHK_PREGUNTAS=array();
-      $CHK_PREGUNTAS=FnBuscarCheckListPreguntas1($conmy, $CHECKLIST['id']);
+      $CHK_PREGUNTAS=FnBuscarCheckListActividadPreguntas($conmy, $CHECKLIST['id']);
       $PLA_ALTERNATIVAS=array();
       if(count($CHK_PREGUNTAS)>0){
         $preguntas=array_map(function($elem) {

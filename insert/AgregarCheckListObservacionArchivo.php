@@ -20,7 +20,7 @@
   $observacion->Usuario = $USUARIO;
 
   $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $result = FnRegistrarArchivoObservacion($conmy, $observacion);
+  $result = FnRegistrarCheckListObservacionArchivo($conmy, $observacion);
   if ($result) {
     $data['msg'] = "Se registro archivo";
     $data['res'] = true;

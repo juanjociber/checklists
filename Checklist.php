@@ -9,7 +9,7 @@
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id']; 
-  $tablaActividades = array();
+  $checkListActividades = array();
   $observaciones = array();
   $isAuthorized = false;
   $claseHabilitado = "btn-outline-secondary";
@@ -17,14 +17,14 @@
   $NUMERO=0;
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
+    $checklist = FnBuscarCheckList($conmy, $CLIID, $ID);
     if(is_numeric($ID) && $ID > 0){
       if($checklist){
         $isAuthorized = true;
         $claseHabilitado = "btn-outline-primary";
         $atributoHabilitado = "";      
-        $tablaActividades = FnBuscarTablaActividades($conmy, $ID);
-        $observaciones = FnBuscarObservaciones($conmy, $ID);
+        $checkListActividades = FnBuscarCheckListActividades($conmy, $ID);
+        $observaciones = FnBuscarCheckListObservaciones($conmy, $ID);
       }
     }
   } catch (PDOException $e) {
@@ -41,7 +41,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Checklist | GPEM SAC</title>
+    <title>CheckList | GPEM S.A.C</title>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
     <link rel="stylesheet" href="/mycloud/library/bootstrap-5.0.2-dist/css/bootstrap.min.css">
@@ -63,6 +63,7 @@
         .verificacion1{ grid-column: 3/ 4; }
         .observacion1{ grid-column: 1/ 4; }
         .archivo1{ grid-column: 4/ 5; grid-row: 1 / 3; place-self:center; }
+      }
         @media(min-width:992px){
           .contenedor-respuestas{ grid-template-columns: 1.5fr 1fr 1fr 0.8fr; }
           .descripcion1{ grid-column: 1/ 2; }
@@ -85,8 +86,8 @@
         <div class="col-12 btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnEditarChecklist(<?php echo $ID ?>); return false;"><i class="fas fa-edit"></i><span class="d-none d-sm-block"> Editar</span></button>
-          <!-- <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarChecklist(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
-          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnDescargarChecklist(); return false;"><i class="fas fa-download"></i><span class="d-none d-sm-block"> Descargar</span></button> -->
+          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarChecklist(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
+          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnImprimirChecklist(); return false;"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
         </div>
       </div>
   
@@ -315,8 +316,8 @@
         <div class=" mb-2 mt-3">
           <?php 
             $html = '';
-            if (is_array($tablaActividades) && !empty($tablaActividades)) {
-              foreach($tablaActividades as $actividad) {
+            if (is_array($checkListActividades) && !empty($checkListActividades)) {
+              foreach($checkListActividades as $actividad) {
                 $html.='
                   <div class="contenedor-respuestas border boder-1">
                     <div class="descripcion1" style="">

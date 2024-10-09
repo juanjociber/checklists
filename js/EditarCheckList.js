@@ -411,7 +411,7 @@ const FnModificarActividad = async () => {
     formData.append('archivo', archivo || '');
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
     
-    const response = await fetch("/checklist/update/ModificarTablaActividad.php", {
+    const response = await fetch("/checklist/update/ModificarCheckListActividad.php", {
       method: "POST",
       body: formData
     });
@@ -443,7 +443,7 @@ async function FnEliminarArchivoActividad(id){
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarArchivoActividad.php', {
+    const response = await fetch('/checklist/delete/EliminarCheckListActividadArchivo.php', {
       method: 'POST',
       body: formData
     });

@@ -28,7 +28,7 @@ try {
 
   $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-  $result = FnModificarChecklist($conmy, $checklist);
+  $result = FnModificarCheckList($conmy, $checklist);
   if ($result) {
       $data['msg'] = "Se modificó los datos generales.";
       $data['res'] = true;

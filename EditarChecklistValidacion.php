@@ -17,7 +17,7 @@
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if(is_numeric($ID) && $ID > 0){
-      $checklist = FnBuscarChecklist($conmy, $CLIID, $ID);
+      $checklist = FnBuscarCheckList($conmy, $CLIID, $ID);
       if($checklist->Id){
         $isAuthorized = true;
         $claseHabilitado = "btn-outline-primary";
