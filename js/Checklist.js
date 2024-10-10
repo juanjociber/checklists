@@ -47,30 +47,19 @@ function FnListarChecklists(){
 document.addEventListener("DOMContentLoaded", () => {
   const $boton = document.querySelector("#btnCrearPdf");
   $boton.addEventListener("click", () => {
-    const $elementoParaConvertir = document.body;
+    const $elementoParaConvertir = document.body; // Elemento a convertir
+    const $carrusel = document.querySelector("#miCarrusel"); // Cambia esto al selector correcto
+    const $imagenes = document.querySelectorAll(".imagen"); // Cambia esto al selector correcto
 
-    // Aplicar estilos específicos para PDF
-    const originalStyles = document.head.innerHTML; // Guarda los estilos originales
-    const pdfStyles = `
-      <style>
-        body {
-          width: 210mm; /* Ancho A4 */
-          height: 297mm; /* Alto A4 */
-          margin: 0; /* Eliminar márgenes */
-        }
-        img {
-          max-width: 100%; /* Asegurar que las imágenes no excedan el contenedor */
-          height: auto; /* Mantener la proporción */
-        }
-      </style>
-    `;
+    // Ocultar el carrusel
+    $carrusel.style.display = "none";
     
-    // Añadir estilos para PDF
-    document.head.insertAdjacentHTML('beforeend', pdfStyles);
+    // Mostrar las imágenes
+    $imagenes.forEach(img => img.style.display = "block");
 
     html2pdf()
       .set({
-        margin: -1,
+        margin: 0.5,
         filename: 'CheckList.pdf',
         image: {
           type: 'jpeg',
@@ -81,19 +70,35 @@ document.addEventListener("DOMContentLoaded", () => {
           letterRendering: true,
         },
         jsPDF: {
-          unit: "mm", // Cambiar a mm para un mejor manejo de tamaños
+          unit: "in",
           format: "a4",
           orientation: 'portrait',
           putOnlyUsedFonts: true,
           floatPrecision: 16,
+          pageSize: 'A4',
+          header: function (data) {
+            return {
+              text: 'Encabezado de la Página', // Encabezado personalizado
+              align: 'center',
+              margin: [0, 10, 0, 0], // márgenes
+            };
+          },
+          footer: function (data) {
+            return {
+              text: `Página ${data.pageNumber}`, // Pie de página personalizado
+              align: 'center',
+              margin: [0, 0, 0, 10], // márgenes
+            };
+          }
         }
       })
       .from($elementoParaConvertir)
       .save()
       .catch(err => console.log(err))
       .finally(() => {
-        // Restaurar estilos originales
-        document.head.innerHTML = originalStyles; 
+        // Restaurar el estado original
+        $carrusel.style.display = ""; // Mostrar el carrusel nuevamente
+        $imagenes.forEach(img => img.style.display = ""); // Restaurar el estado original de las imágenes
         console.log('Guardado');
       });
   });
