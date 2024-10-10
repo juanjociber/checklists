@@ -50,6 +50,11 @@
       .img-fluid{height:100%;}
       .imagen-observacion{display:grid; display:grid;grid-template-columns:25% 50% 25%; }
       @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr}}
+      .imagen-ajustada {
+        width: auto !important;
+        height: 200px;
+        object-fit: contain; 
+      }
     </style>
 </head>
 <body>
@@ -109,16 +114,10 @@
             </div>
           </div>
           <?php if($observacion['archivo']):?>
-            <div class="p-1 mb-1 mt-1">
-              <div class="imagen-observacion mt-2">
-                <div class="card p-0" style="grid-column:2/3">
-                  <div class="card-header p-0 bg-light text-center">Imagen</div>
-                  <img src="/mycloud/gesman/files/<?php echo ($observacion['archivo']); ?>" class="img-fluid" alt="">
-                  <div class="card-footer p-0 text-center">
-                    <button class="p-0 bg-light text-secondary w-100 text-center border border-0" onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)">Eliminar</button>
-                  </div>
-                </div>
-              </div>
+            <div class="mt-2" style="position:relative;">
+              <span onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer;">&#x2715</span>
+              <img src="/mycloud/gesman/files/<?php echo ($observacion['archivo']); ?>" class="img-fluid imagen-ajustada" alt="">
+              <button class="p-0 bg-light text-secondary w-100 text-center border border-0" onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)">Eliminar</button>
             </div>
           <?php endif ?>
         </div>

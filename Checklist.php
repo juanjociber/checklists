@@ -78,7 +78,7 @@
         }
       }
       .imagen-ajustada {
-        width: auto;
+        width: auto !important;
         height: 200px;
         object-fit: contain; 
       }
@@ -345,12 +345,8 @@
                     }
                     if (!empty($actividad['archivo'])) {
                     $html .= '
-                    <div class="d-flex justify-content-center align-items-center" style="grid-column: 3 / 4; margin-top: 10px;">
-                      <div class="card p-0">
-                        <div class="card-header p-0 bg-transparent text-center"></div>
-                        <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid imagen-ajustada" alt="">
-                        <div class="card-footer text-center p-0"></div>
-                      </div>
+                    <div class="mt-2" style="grid-column: 1 / 5; place-self: center;">
+                      <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid imagen-ajustada" alt="">
                     </div>';
                     }
                 $html.='</div>';
@@ -369,7 +365,7 @@
           $html = '';
           foreach($observaciones as $observacion) {
             $html .= '
-              <div class="row mb-2">
+              <div class="row mb-2 mt-2">
                 <div class="col-12">
                   <div class="d-flex justify-content-between align-items-center">
                     <div class="d-flex">
@@ -381,11 +377,8 @@
               </div>';
               if ($observacion['archivo']) {
               $html .= '
-              <div class="p-1 mb-1 mt-2 imagen-observacion">
-                <div class="card p-0" style="grid-column:2/3">
-                  <div class="card-header bg-transparent text-center p-0">Imagen</div>
+              <div class="p-1 mb-1 d-flex justify-content-center align-items-center">
                   <img src="/mycloud/gesman/files/'.$observacion['archivo'].'" class="img-fluid imagen-ajustada" alt="">
-                </div>                    
               </div>';
               }
           }  

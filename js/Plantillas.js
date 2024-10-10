@@ -54,7 +54,6 @@ async function FnBuscarPlantillas() {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     const datos = await response.json();
-    console.log(datos.data);
     if (!datos.res) {
       document.getElementById('tblPlantillas').innerHTML = `
         <div class="col-12">
@@ -82,9 +81,9 @@ async function FnBuscarPlantillas() {
       }
       document.getElementById('tblPlantillas').innerHTML += `
       <div class="col-12">
-        <div class="divselect border-bottom border-secondary mb-2 px-1" onclick="FnPlantilla(${item.id}); return false;">
+        <div class="divselect border-bottom border-1 mb-2 px-1" onclick="FnPlantilla(${item.id}); return false;">
           <div class="div d-flex justify-content-between">
-            <p class="m-0"><span class="fw-bold">${item.tipo}</span></p><p class="m-0">${estado}</p>
+            <p class="m-0 text-secondary pb-1"><span class="fw-bold">${item.tipo}</span></p><p class="m-0">${estado}</p>
           </div>
         </div>
       </div>`;

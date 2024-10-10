@@ -62,6 +62,11 @@
     @media(min-width:1200px){ .grid{ grid-template-columns:1fr 1fr 1fr 1fr; }}
     @media(max-width:576px){ .actividad-flex{ display: flex !important; flex-direction: column; } .input-grop-icons{ padding-left: 15px; }}
     @media(min-width:577px){ .actividad-flex{ align-items: center; justify-content: space-between; }}
+    .imagen-ajustada {
+      width: auto !important;
+      height: 200px;
+      object-fit: contain; 
+    }
   </style>
 </head>
 <body>
@@ -90,50 +95,46 @@
     <div id="carouselSiluetas" class="carousel slide d-md-none" data-bs-ride="false" data-bs-interval="false">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <div class="card p-0">
+          <div class="card p-0" style="position:relative;">
             <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(1)">
-              <span style="margin-right:10px">Plantilla 1</span><i class="fa fa-paperclip fw-bold"></i>
+              <span style="margin-right:10px">LADO DERECHO</span><i class="fa fa-paperclip fw-bold"></i>
             </div>
-            <div class="card-header bg-transparent">Lado Derecho</div>
-            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid">
-            <div class="card-footer p-0 bg-transparent">
-              <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,1)" <?php echo empty($plantilla->Imagen1) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid imagen-ajustada">
+            <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+              <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,1)" <?php echo empty($plantilla->Imagen1) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
             </div>
           </div>
         </div>
         <div class="carousel-item">
-          <div class="card p-0">
+          <div class="card p-0" style="position:relative;">
             <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(2)">
-              <span style="margin-right:10px">Plantilla 2</span><i class="fa fa-paperclip fw-bold"></i>
+              <span style="margin-right:10px">LADO ANTERIOR</span><i class="fa fa-paperclip fw-bold"></i>
             </div>
-            <div class="card-header bg-transparent">Anterior</div>
-            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid">
-            <div class="card-footer p-0 bg-transparent">
-              <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,2)" <?php echo empty($plantilla->Imagen2) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid imagen-ajustada">
+            <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+              <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,2)" <?php echo empty($plantilla->Imagen2) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
             </div>
           </div>
         </div>
         <div class="carousel-item">
-          <div class="card p-0">
+          <div class="card p-0" style="position:relative;">
             <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(3)">
-              <span style="margin-right:10px">Plantilla 3</span><i class="fa fa-paperclip fw-bold"></i>
+              <span style="margin-right:10px">LADO IZQUIERDO</span><i class="fa fa-paperclip fw-bold"></i>
             </div>
-            <div class="card-header bg-transparent">Lado Izquierdo</div>
-            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid">
-            <div class="card-footer p-0 bg-transparent">
-              <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,3)" <?php echo empty($plantilla->Imagen3) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid imagen-ajustada">
+            <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+              <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,3)" <?php echo empty($plantilla->Imagen3) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
             </div>
           </div>
         </div>
         <div class="carousel-item">
-          <div class="card p-0">
+          <div class="card p-0" style="position:relative;">
             <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(4)">
-              <span style="margin-right:10px">Plantilla 4</span><i class="fa fa-paperclip fw-bold"></i>
+              <span style="margin-right:10px">LADO POSTERIOR</span><i class="fa fa-paperclip fw-bold"></i>
             </div>
-            <div class="card-header bg-transparent">Posterior</div>
-            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid">
-            <div class="card-footer p-0 bg-transparent">
-              <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,4)" <?php echo empty($plantilla->Imagen4) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+            <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid imagen-ajustada">
+            <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+              <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,4)" <?php echo empty($plantilla->Imagen4) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
             </div>
           </div>
         </div>
@@ -154,26 +155,24 @@
         <div class="carousel-item active">
           <div class="row">
             <div class="col-6">
-              <div class="card p-0">
+              <div class="card p-0" style="position:relative;">
                 <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(1)">
-                  <span style="margin-right:10px">Plantilla 1</span><i class="fa fa-paperclip fw-bold"></i>
+                  <span style="margin-right:10px">LADO DERECHO</span><i class="fa fa-paperclip fw-bold"></i>
                 </div>
-                <div class="card-header bg-transparent">Lado Derecho</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid">
-                <div class="card-footer p-0 bg-transparent">
-                  <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,1)" <?php echo empty($plantilla->Imagen1) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid imagen-ajustada">
+                <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+                  <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,1)" <?php echo empty($plantilla->Imagen1) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
                 </div>
               </div>
             </div>
             <div class="col-6">
-              <div class="card p-0">
+              <div class="card p-0" style="position:relative;">
                 <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(2)">
-                  <span style="margin-right:10px">Plantilla 2</span><i class="fa fa-paperclip fw-bold"></i>
+                  <span style="margin-right:10px">LADO ANTERIOR</span><i class="fa fa-paperclip fw-bold"></i>
                 </div>
-                <div class="card-header bg-transparent">Anterior</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid">
-                <div class="card-footer p-0 bg-transparent">
-                  <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,2)" <?php echo empty($plantilla->Imagen2) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid imagen-ajustada">
+                <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+                  <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,2)" <?php echo empty($plantilla->Imagen2) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
                 </div>
               </div>
             </div>
@@ -182,26 +181,24 @@
         <div class="carousel-item">
           <div class="row">
             <div class="col-6">
-              <div class="card p-0">
+              <div class="card p-0" style="position:relative;">
                 <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(3)">
-                  <span style="margin-right:10px">Plantilla 3</span><i class="fa fa-paperclip fw-bold"></i>
+                  <span style="margin-right:10px">LADO IZQUIERDO</span><i class="fa fa-paperclip fw-bold"></i>
                 </div>
-                <div class="card-header bg-transparent">Lado Izquierdo</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid">
+                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid imagen-ajustada">
                 <div class="card-footer p-0 bg-transparent">
-                  <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,3)" <?php echo empty($plantilla->Imagen3) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+                  <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,3)" <?php echo empty($plantilla->Imagen3) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
                 </div>
               </div>
             </div>
             <div class="col-6">
-              <div class="card p-0">
+              <div class="card p-0" style="position:relative;">
                 <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-center align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(4)">
-                  <span style="margin-right:10px">Plantilla 4</span><i class="fa fa-paperclip fw-bold"></i>
+                  <span style="margin-right:10px">LADO POSTERIOR</span><i class="fa fa-paperclip fw-bold"></i>
                 </div>
-                <div class="card-header bg-transparent">Posterior</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid">
-                <div class="card-footer p-0 bg-transparent">
-                  <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,4)" <?php echo empty($plantilla->Imagen4) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+                <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid imagen-ajustada">
+                <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+                  <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,4)" <?php echo empty($plantilla->Imagen4) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
                 </div>
               </div>
             </div>
@@ -222,50 +219,46 @@
     <!-- Mostrar las 4 imágenes sin carrusel para pantallas grandes (1200px o más) -->
     <div class="row d-none d-xl-flex">
       <div class="col-lg-3">
-        <div class="card p-0">
+        <div class="card p-0" style="position:relative;">
           <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-between align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(1)">
-            <span style="margin-right:10px">Plantilla 1</span><i class="fa fa-paperclip fw-bold"></i>
+            <span style="margin-right:10px">LADO DERECHO</span><i class="fa fa-paperclip fw-bold"></i>
           </div>
-          <div class="card-header bg-transparent">Lado Derecho</div>
-          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid">
-          <div class="card-footer p-0 bg-transparent">
-            <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,1)" <?php echo empty($plantilla->Imagen1) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid imagen-ajustada">
+          <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+            <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,1)" <?php echo empty($plantilla->Imagen1) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
           </div>
         </div>
       </div>
       <div class="col-lg-3">
-        <div class="card p-0">
+        <div class="card p-0" style="position:relative;">
           <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-between align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(2)">
-            <span style="margin-right:10px">Plantilla 2</span><i class="fa fa-paperclip fw-bold"></i>
+            <span style="margin-right:10px">LADO ANTERIOR</span><i class="fa fa-paperclip fw-bold"></i>
           </div>
-          <div class="card-header bg-transparent">Anterior</div>
-          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid">
-          <div class="card-footer p-0 bg-transparent">
-            <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,2)" <?php echo empty($plantilla->Imagen2) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid imagen-ajustada">
+          <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+            <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,2)" <?php echo empty($plantilla->Imagen2) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
           </div>
         </div>
       </div>
       <div class="col-lg-3">
-        <div class="card p-0">
+        <div class="card p-0" style="position:relative;">
           <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-between align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(3)">
-            <span style="margin-right:10px">Plantilla 3</span><i class="fa fa-paperclip fw-bold"></i>
+            <span style="margin-right:10px">LADO IZQUIERDO</span><i class="fa fa-paperclip fw-bold"></i>
           </div>
-          <div class="card-header bg-transparent">Lado Izquierdo</div>
-          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid">
-          <div class="card-footer p-0 bg-transparent">
-            <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,3)" <?php echo empty($plantilla->Imagen3) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid imagen-ajustada">
+          <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+            <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,3)" <?php echo empty($plantilla->Imagen3) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
           </div>
         </div>
       </div>
       <div class="col-lg-3">
-        <div class="card p-0">
+        <div class="card p-0" style="position:relative;">
           <div class="p-2 bg-primary text-white fw-bold d-flex justify-content-between align-items-center" style="cursor: pointer;" onclick="FnModalAgregarPlantillaImagen(4)">
-            <span style="margin-right:10px">Plantilla 4</span><i class="fa fa-paperclip fw-bold"></i>
+            <span style="margin-right:10px">LADO POSTERIOR</span><i class="fa fa-paperclip fw-bold"></i>
           </div>
-          <div class="card-header bg-transparent">Posterior</div>
-          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid">
-          <div class="card-footer p-0 bg-transparent">
-            <button class="p-2 bg-light text-secondary fw-bold w-100 text-center border border-0" value="ELIMINAR" onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,4)" <?php echo empty($plantilla->Imagen4) ? 'disabled' : 'enabled' ?>>Eliminar</button>
+          <img src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid imagen-ajustada">
+          <div class="card-footer p-0 bg-transparent" style="position:absolute; top:40px; left:10px; z-index:2">
+           <button onclick="FnEliminarPlantillaImagen(<?php echo $PLAID?>,4)" <?php echo empty($plantilla->Imagen4) ? 'disabled' : 'enabled' ?> style="font-size:30px; color:tomato; border:unset; background-color:transparent;">&#x2715</button>
           </div>
         </div>
       </div>
@@ -352,7 +345,7 @@
       <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header text-secondary">
-            <h5 class="modal-title fs-5 fw-bold" id="modalAgregarSiluetaLabel">AGREGAR SILUETA</h5>
+            <h5 class="modal-title fs-5 fw-bold" id="modalAgregarSiluetaLabel">AGREGAR PLANTILLA</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body pb-1">

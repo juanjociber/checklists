@@ -48,8 +48,7 @@ const FnAgregarObservacion = async () => {
     const formData = new FormData();
     formData.append('chkid', document.getElementById('txtIdChecklist').value);
     formData.append('descripcion', document.getElementById('txtObservacion').value);
-    // console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
+  
     const response = await fetch("/checklist/insert/AgregarCheckListObservacion.php", {
         method: "POST",
         body: formData
@@ -76,8 +75,7 @@ const FnModificarObservacion = async () => {
     const formData = new FormData();
     formData.append('id', document.getElementById('txtIdChecklistObs').value);
     formData.append('descripcion', document.getElementById('txtObservacion2').value);
-    // console.log('Datos enviados:', Object.fromEntries(formData.entries()));
-
+  
     const response = await fetch("/checklist/update/ModificarCheckListObservacion.php", {
         method: "POST",
         body: formData
@@ -149,20 +147,17 @@ const MIME_TYPE = "image/jpeg";
 const QUALITY = 0.7;
 
 const $divImagen = document.getElementById("divImagen");
-
 document.getElementById('fileImagen').addEventListener('change', function(event) {
   vgLoader.classList.remove('loader-full-hidden');
   
   const file = event.target.files[0];
 
   if (!isValidFileType(file)) {
-      console.log('El archivo', file.name, 'Tipo de archivo no permitido.');
+      // console.log('El archivo', file.name, 'Tipo de archivo no permitido.');
   }
-
   if (!isValidFileSize(file)) {
-      console.log('El archivo', file.name, 'El tamaño del archivo excede los 3MB.');
+      // console.log('El archivo', file.name, 'El tamaño del archivo excede los 3MB.');
   }
-
   while ($divImagen.firstChild) {
       $divImagen.removeChild($divImagen.firstChild);
   }
@@ -281,7 +276,6 @@ async function FnAgregarArchivo() {
     const formData = new FormData();
     formData.append('id', document.querySelector('#txtIdChecklistObs').value);
     formData.append('archivo', archivo);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
     const response = await fetch('/checklist/insert/AgregarCheckListObservacionArchivo.php', {
       method: 'POST',
@@ -410,7 +404,6 @@ async function mostrarContenido (idDeDispositivo){
 
 /** FUNCIÓN PARA ABRIR CÁMARA */
 async function FnAbrirCamara(id){
-  console.log(id);
   document.querySelector('#txtIdChecklistObs').value=id;
   const dispositivos = await obtenerDispositivos();
   const dispositivosDeVideo = dispositivos.filter(dispositivo => dispositivo.kind === "videoinput");
@@ -484,7 +477,6 @@ async function FnAgregarFoto(){
   llenarSelectConDispositivosDisponibles();
 })();
 
-
 /**LISTAR CHEKCLITS */
 function FnListarChecklists(){
   window.location.href='/checklist/CheckLists.php';
@@ -494,7 +486,6 @@ function FnListarChecklists(){
 /** MOSTRAR RESUMEN DE CHECKLIST */
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
-  console.log(id);
   if(id > 0){
     window.location.href='/checklist/checkList.php?id='+id;
   }

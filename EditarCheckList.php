@@ -116,7 +116,7 @@
     .archivo1{ grid-column: 2 / 3; }
     @media(min-width:1200px){.contenedor-archivo{grid-template-columns:1fr 0.7fr 1fr;}}
     .imagen-ajustada {
-      width: auto;
+      width: auto !important;
       height: 200px;
       object-fit: contain; 
     }
@@ -251,15 +251,9 @@
             }
             if(!empty($valor['archivo'])){
             echo '
-            <div class="d-flex justify-content-center align-items-center">
-              <div class="card p-0">
-                <div class="card-header p-0 bg-transparent text-center">
-                  <button type="button" class="btn btn-secondary p-0 col-12 bg-transparent border border-0 text-secondary d-flex justify-content-start" onclick="FnEliminarArchivoActividad('.$valor['id'].')"><i class="fas fa-times text-secondary p-1" style="cursor:pointer; font-size:20px;"></i></button>
-                </div>
-                <img src="/mycloud/gesman/files/'.$valor['archivo'].'" class="img-fluid imagen-ajustada" alt="">
-                <div class="card-footer text-center p-0">
-                </div>
-              </div>
+            <div class="mt-2 mb-2" style="position:relative;">
+              <span onclick="FnEliminarArchivoActividad('.$valor['id'].')" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer;">&#x2715</span>
+              <img src="/mycloud/gesman/files/'.$valor['archivo'].'" class="img-fluid imagen-ajustada" alt="">
             </div>';
             } 
           echo '
@@ -307,16 +301,6 @@
         </div>
         <div class="modal-body pb-1">
           <div class="row">
-            <!-- <input type="hidden" id="txtRespuesta" value="">                       -->
-            <!-- <div class="col-12">
-              <label for="txtDescripcion" class="form-label mb-0">Descripcion</label>
-              <input id="txtDescripcion" type="text" class="form-control mb-2"/>
-            </div> -->
-            <!-- <div class="col-12 mb-2">
-              <label class="form-label mb-0 col-12">Respuesta</label>
-              <input type="hidden" id="txtPreid" value="0">
-              <div id="tblAlternativas"></div>
-            </div> -->
             <div class="col-12">
               <label for="txtObservacion" class="form-label mb-0">Observacion</label>
               <input id="txtObservacion" type="text" class="form-control mb-2"/>

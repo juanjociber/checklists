@@ -8,8 +8,8 @@ var PaginaActual = 0;
 const vgLoader = document.querySelector('.container-loader-full');
 
 window.onload = function() {
-    document.getElementById('MenuInformes').classList.add('menu-activo','fw-bold');
-    vgLoader.classList.add('loader-full-hidden');
+  document.getElementById('MenuInformes').classList.add('menu-activo','fw-bold');
+  vgLoader.classList.add('loader-full-hidden');
 };
 
 $(document).ready(function() {
@@ -39,20 +39,20 @@ $(document).ready(function() {
 });
 
 async function FnBuscarChecklists(){
-    vgLoader.classList.remove('loader-full-hidden');
-    try {
-        Nombre = document.getElementById('txtChecklist').value;
-        EquId = document.getElementById('cbActivo1').value;
-        FechaInicial = document.getElementById('dtpFechaInicial').value;
-        FechaFinal = document.getElementById('dtpFechaFinal').value;
-        PaginasTotal = 0;
-        PaginaActual = 0;
-        await FnBuscarChecklist2();
-    } catch (ex) {
-        console.log(ex.message);
-    } finally {
-        setTimeout(function () { vgLoader.classList.add('loader-full-hidden'); }, 500);
-    }
+  vgLoader.classList.remove('loader-full-hidden');
+  try {
+    Nombre = document.getElementById('txtChecklist').value;
+    EquId = document.getElementById('cbActivo1').value;
+    FechaInicial = document.getElementById('dtpFechaInicial').value;
+    FechaFinal = document.getElementById('dtpFechaFinal').value;
+    PaginasTotal = 0;
+    PaginaActual = 0;
+    await FnBuscarChecklist2();
+  } catch (ex) {
+      console.log(ex.message);
+  } finally {
+      setTimeout(function () { vgLoader.classList.add('loader-full-hidden'); }, 500);
+  }
 }
 
 async function FnBuscarChecklist2(){
@@ -63,7 +63,6 @@ async function FnBuscarChecklist2(){
     formData.append('fechainicial', FechaInicial);
     formData.append('fechafinal', FechaFinal);
     formData.append('pagina', PaginasTotal);
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
     const response = await fetch('/checklist/search/BuscarCheckLists.php', {
         method:'POST',
@@ -78,7 +77,7 @@ async function FnBuscarChecklist2(){
     let estado = '';
     datos.data.forEach(item => {
       console.log(item);
-        switch (item.estado){
+        switch (parseInt(item.estado)){
           case 1:
               estado='<span class="badge bg-danger">Anulado</span>';
           break;
@@ -116,7 +115,6 @@ function FnPaginacion(cantidad) {
     } else {
         document.getElementById("btnSiguiente").classList.add('d-none');
     }
-
     if (PaginaActual > 1) {
         document.getElementById("btnPrimero").classList.remove('d-none');
     } else {

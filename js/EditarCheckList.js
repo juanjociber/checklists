@@ -9,7 +9,7 @@ let imgDibujo;
 const FnHabilitarDibujo = (button) => {
   const card = button.closest('.card');
   if (!card) {
-    console.error("No se encontró un elemento con la clase 'card'");
+    // console.error("No se encontró un elemento con la clase 'card'");
     return;
   }
   currentCard = card;
@@ -176,28 +176,23 @@ const $divImagen = document.getElementById("divImagen");
 
 document.getElementById('fileImagen').addEventListener('change', function(event) {
   vgLoader.classList.remove('loader-full-hidden');
-  
   const file = event.target.files[0];
 
   if (!isValidFileType(file)) {
-      console.log('El archivo', file.name, 'Tipo de archivo no permitido.');
+      // console.log('El archivo', file.name, 'Tipo de archivo no permitido.');
   }
-
   if (!isValidFileSize(file)) {
-      console.log('El archivo', file.name, 'El tamaño del archivo excede los 3MB.');
+      // console.log('El archivo', file.name, 'El tamaño del archivo excede los 3MB.');
   }
-
   while ($divImagen.firstChild) {
       $divImagen.removeChild($divImagen.firstChild);
   }
-
   if (file.type.startsWith('image/')) {
       displayImage(file);
   }
-
-  console.log('Nombre del archivo:', file.name);
-  console.log('Tipo del archivo:', file.type);
-  console.log('Tamaño del archivo:', file.size, 'bytes');
+  // console.log('Nombre del archivo:', file.name);
+  // console.log('Tipo del archivo:', file.type);
+  // console.log('Tamaño del archivo:', file.size, 'bytes');
 
   setTimeout(function() {
     vgLoader.classList.add('loader-full-hidden');
@@ -235,7 +230,6 @@ function displayImage(file) {
       context.strokeStyle = 'rgba(216, 216, 216, 0.7)';// color del texto (blanco con opacidad)
       context.font = '15px Verdana'; // fuente y tamaño del texto
       context.strokeText("GPEM SAC", 10, newHeight-10);// texto y posición
-
       canvas.toBlob(
         (blob) => {  
           displayInfo('Original: ', file);
@@ -343,7 +337,7 @@ function FnAgregarDatosChecklist() {
       ...imagenes,
       respuestas
     };
-    console.log(data);
+
     fetch('/checklist/insert/AgregarChecklist.php', {
       method: 'POST',
       headers: {
@@ -354,7 +348,6 @@ function FnAgregarDatosChecklist() {
     //.then(response=>response.text()).then((response)=>{console.log(response)}).catch(err=>console.log(err))
     .then(response => response.json())
     .then(datos => {
-      console.log(datos);
       if (!datos.res) throw new Error(datos.msg);
       setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
       Swal.fire({
@@ -409,7 +402,6 @@ const FnModificarActividad = async () => {
     formData.append('id', document.getElementById('txtIdChkActividad').value);
     formData.append('observaciones', document.getElementById('txtObservacion').value);
     formData.append('archivo', archivo || '');
-    console.log('Datos enviados:', Object.fromEntries(formData.entries()));
     
     const response = await fetch("/checklist/update/ModificarCheckListActividad.php", {
       method: "POST",
@@ -419,7 +411,6 @@ const FnModificarActividad = async () => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const datos = await response.json();
-    // console.log(datos);
     if (!datos.res) {
       throw new Error(datos.msg);
     }
@@ -438,7 +429,6 @@ const FnModificarActividad = async () => {
 };
 
 async function FnEliminarArchivoActividad(id){
-  console.log(id);
   try {
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
@@ -486,7 +476,6 @@ function FnListarChecklists(){
 
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
-  console.log(id);
   if(id > 0){
     window.location.href='/checklist/CheckList.php?id='+id;
   }

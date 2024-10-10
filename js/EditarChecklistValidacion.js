@@ -136,7 +136,6 @@ function FnListarChecklists(){
 
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
-  console.log(id);
   if(id > 0){
       window.location.href='/checklist/CheckList.php?id='+id;
   }

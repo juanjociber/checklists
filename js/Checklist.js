@@ -1,5 +1,5 @@
 function FnModalFinalizarCheckList(){
-  
+  console.log('click');
 }
 
 
