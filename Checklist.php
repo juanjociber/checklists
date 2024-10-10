@@ -49,6 +49,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CheckList | GPEM S.A.C</title>
+    <script src="/checklist/js/html2pdf.bundle.min.js"></script>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
     <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">
@@ -100,7 +101,7 @@
           <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnEditarChecklist(<?php echo $ID ?>); return false;"><i class="fas fa-edit"></i><span class="d-none d-sm-block"> Editar</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarCheckList(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
-          <!-- <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnImprimirCheckList(); return false;"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button> -->
+          <button type="button" id="btnCrearPdf" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
         </div>
       </div>
   
@@ -111,7 +112,6 @@
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $checklist->Nombre : 'UNKNOWN'; ?></p>
         </div>
       </div>
-
       <?php if ($isAuthorized): ?>
         <?php $NUMERO+=1; ?>
         <!-- DATOS GENERALES -->
@@ -451,7 +451,6 @@
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
     <script src="/mycloud/library/bootstrap-5-alerta-1.0/js/bootstrap-5-alerta-1.0.js"></script>
-    <script src="/mycloud/library/select2-4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="/gesman/menu/sidebar.js"></script>
   </body>
 </html>

@@ -81,7 +81,6 @@
           <ol class="breadcrumb">                        
             <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListDatos.php?id=<?php echo $ID ?>" class="text-decoration-none">DATOS</a></li>
             <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckList.php?id=<?php echo $ID ?>" class="text-decoration-none">CHECKLIST</a></li>
-            <!-- <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListActividad.php?id=<?php echo $ID ?>" class="text-decoration-none">ACTIVIDAD</a></li>                         -->
             <li class="breadcrumb-item active fw-bold" aria-current="page">OBSERVACION</li>
             <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListValidacion.php?id=<?php echo $ID ?>" class="text-decoration-none">VALIDACION</a></li>
           </ol>
@@ -115,7 +114,7 @@
           </div>
           <?php if($observacion['archivo']):?>
             <div class="mt-2" style="position:relative;">
-              <span onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer; color: tomato;">&#x2715</span>
+              <span onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer; color: #ede2e2;">&#x2715</span>
               <img src="/mycloud/gesman/files/<?php echo ($observacion['archivo']); ?>" class="img-fluid imagen-ajustada" alt="">
             </div>
           <?php endif ?>

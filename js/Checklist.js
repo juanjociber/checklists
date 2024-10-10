@@ -33,7 +33,6 @@ async function FnFinalizarCheckList(){
 }
 
 function FnEditarChecklist(id){
-  console.log(id);
   if(id > 0){
     window.location.href='/checklist/EditarCheckListDatos.php?id='+id;
   }
@@ -44,6 +43,62 @@ function FnListarChecklists(){
   window.location.href='/checklist/CheckLists.php';
   return false;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const $boton = document.querySelector("#btnCrearPdf");
+  $boton.addEventListener("click", () => {
+    const $elementoParaConvertir = document.body;
+
+    // Aplicar estilos específicos para PDF
+    const originalStyles = document.head.innerHTML; // Guarda los estilos originales
+    const pdfStyles = `
+      <style>
+        body {
+          width: 210mm; /* Ancho A4 */
+          height: 297mm; /* Alto A4 */
+          margin: 0; /* Eliminar márgenes */
+        }
+        img {
+          max-width: 100%; /* Asegurar que las imágenes no excedan el contenedor */
+          height: auto; /* Mantener la proporción */
+        }
+      </style>
+    `;
+    
+    // Añadir estilos para PDF
+    document.head.insertAdjacentHTML('beforeend', pdfStyles);
+
+    html2pdf()
+      .set({
+        margin: -1,
+        filename: 'CheckList.pdf',
+        image: {
+          type: 'jpeg',
+          quality: 1
+        },
+        html2canvas: {
+          scale: 4,
+          letterRendering: true,
+        },
+        jsPDF: {
+          unit: "mm", // Cambiar a mm para un mejor manejo de tamaños
+          format: "a4",
+          orientation: 'portrait',
+          putOnlyUsedFonts: true,
+          floatPrecision: 16,
+        }
+      })
+      .from($elementoParaConvertir)
+      .save()
+      .catch(err => console.log(err))
+      .finally(() => {
+        // Restaurar estilos originales
+        document.head.innerHTML = originalStyles; 
+        console.log('Guardado');
+      });
+  });
+});
+
 
 
 
