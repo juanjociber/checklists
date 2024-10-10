@@ -8,12 +8,12 @@
   require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
   
   $CLIID = $_SESSION['CliId'];
-  $ID = empty($_GET['id'])?0:$_GET['id']; 
+  $ID = empty($_GET['id'])?0:$_GET['id'];
+  $Estado=0;
   $checkListActividades = array();
   $observaciones = array();
   $isAuthorized = false;
-  $claseHabilitado = "btn-outline-secondary";
-  $atributoHabilitado = " disabled";
+  $Nombre='UNKNOWN';
   $NUMERO=0;
   try {
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -21,8 +21,8 @@
     if(is_numeric($ID) && $ID > 0){
       if($checklist){
         $isAuthorized = true;
-        $claseHabilitado = "btn-outline-primary";
-        $atributoHabilitado = "";      
+        $Nombre = $checklist->Nombre;
+        $Estado = $checklist->Estado;   
         $checkListActividades = FnBuscarCheckListActividades($conmy, $ID);
         $observaciones = FnBuscarCheckListObservaciones($conmy, $ID);
       }
@@ -35,6 +35,13 @@
       $conmy = null;
   }
 
+  $claseHabilitado = "btn-outline-secondary";
+  $atributoHabilitado = " disabled";
+  if($Estado == 1 || $Estado == 2){
+      $claseHabilitado = "btn-outline-primary";
+      $atributoHabilitado = "";
+  }
+
 ?>
 <!doctype html>
 <html lang="es">
@@ -44,6 +51,7 @@
     <title>CheckList | GPEM S.A.C</title>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
+    <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">
     <link rel="stylesheet" href="/mycloud/library/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/mycloud/library/select-gpem-1.0/css/select-gpem-1.0.css">
     <link rel="stylesheet" href="/mycloud/library/gpemsac/css/gpemsac.css"> 
@@ -92,13 +100,14 @@
           <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnEditarChecklist(<?php echo $ID ?>); return false;"><i class="fas fa-edit"></i><span class="d-none d-sm-block"> Editar</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarCheckList(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
-          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnImprimirCheckList(); return false;"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
+          <!-- <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnImprimirCheckList(); return false;"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button> -->
         </div>
       </div>
   
       <div class="row border-bottom mb-2 fs-5">
         <div class="col-12 fw-bold d-flex justify-content-between">
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $_SESSION['CliNombre'] : 'UNKNOWN'; ?></p>
+          <input type="hidden" id="idCheckList" value="<?php echo $ID;?>">
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $checklist->Nombre : 'UNKNOWN'; ?></p>
         </div>
       </div>
@@ -414,7 +423,7 @@
     </div>
 
     <!-- MODAL PARA FINALIZAR CHEKCLIST -->
-    <div class="modal fade" id="modalFinalizarChecklist" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalFinalizarCheckList" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -423,20 +432,26 @@
           </div>                
           <div class="modal-body pb-1">
             <div class="row text-center fw-bold pt-3">                        
-              <p class="text-center">Para finalizar el Checklist 001 haga clic en el botón CONFIRMAR.</p>                    
+              <p class="text-center">Para finalizar el Checklist <?php echo $Nombre;?> haga clic en el botón CONFIRMAR.</p>                    
             </div>
           </div>
           <div class="modal-body pt-1" id="msjFinalizarChecklist"></div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" onclick="FnFinalizarChecklist(); return false;">CONFIRMAR</button>
+            <button type="button" class="btn btn-primary" onclick="FnFinalizarCheckList(); return false;">CONFIRMAR</button>
           </div>              
         </div>
       </div>
     </div>
+
+    <div class="container-loader-full">
+      <div class="loader-full"></div>
+    </div>
     
     <script src="/checklist/js/CheckList.js"></script>
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
+    <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
     <script src="/mycloud/library/bootstrap-5-alerta-1.0/js/bootstrap-5-alerta-1.0.js"></script>
+    <script src="/mycloud/library/select2-4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="/gesman/menu/sidebar.js"></script>
   </body>
 </html>

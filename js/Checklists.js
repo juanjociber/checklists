@@ -6,7 +6,6 @@ var PaginasTotal = 0;
 var PaginaActual = 0;
 
 const vgLoader = document.querySelector('.container-loader-full');
-
 window.onload = function() {
   document.getElementById('MenuInformes').classList.add('menu-activo','fw-bold');
   vgLoader.classList.add('loader-full-hidden');
@@ -49,7 +48,7 @@ async function FnBuscarChecklists(){
     PaginaActual = 0;
     await FnBuscarChecklist2();
   } catch (ex) {
-      console.log(ex.message);
+      throw (ex.message);
   } finally {
       setTimeout(function () { vgLoader.classList.add('loader-full-hidden'); }, 500);
   }
@@ -63,20 +62,21 @@ async function FnBuscarChecklist2(){
     formData.append('fechainicial', FechaInicial);
     formData.append('fechafinal', FechaFinal);
     formData.append('pagina', PaginasTotal);
-
     const response = await fetch('/checklist/search/BuscarCheckLists.php', {
         method:'POST',
         body: formData
-    });/*.then(response=>response.text()).then((response)=>{console.log(response)}).catch(err=>console.log(err));*/
-
-    if (!response.ok) { throw new Error(`${response.status} ${response.statusText}`);}
+    });
+    //.then(response=>response.text()).then((response)=>{console.log(response)}).catch(err=>console.log(err));
+    if (!response.ok) { 
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
     const datos = await response.json();
-    if (!datos.res) { throw new Error(`${datos.msg}`); }
-
+    if (!datos.res) { 
+      throw new Error(`${datos.msg}`);
+    }
     document.getElementById('tblChecklists').innerHTML = '';
     let estado = '';
     datos.data.forEach(item => {
-      console.log(item);
         switch (parseInt(item.estado)){
           case 1:
               estado='<span class="badge bg-danger">Anulado</span>';
@@ -102,7 +102,18 @@ async function FnBuscarChecklist2(){
     });
     FnPaginacion(datos.pag);
   } catch (ex) {
-      throw ex;
+    document.getElementById('tblChecklists').innerHTML='';
+    setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    await Swal.fire({
+        title: "Aviso",
+        text: ex.message,
+        icon: "info",
+        timer: 2000
+    });
+    document.getElementById('tblChecklists').innerHTML+=`
+    <div class="col-12">
+      <p class="fst-italic">Haga clic en el botón Buscar para obtener resultados.</p>
+    </div>`;
   }
 }
 

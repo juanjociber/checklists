@@ -19,6 +19,7 @@
     <title>Checklists | GPEM SAC.</title>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
+    <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">
     <link rel="stylesheet" href="/mycloud/library/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/mycloud/library/select2-4.1.0-rc.0/dist/css/select2.min.css">
     <link rel="stylesheet" href="/mycloud/library/gpemsac/css/gpemsac.css"> 
@@ -97,6 +98,12 @@
         <p class="fst-italic">Haga clic en el botón Buscar para obtener resultados.</p>
       </div>
     </div>
+    <div class="row mb-3">
+      <div class="col-12 font-weight-bold d-flex justify-content-center mb-3">
+        <button type="button" id="btnPrimero" class="btn btn-sm btn-outline-primary d-none mx-2" onclick="FnBuscarPrimero(); return false;">PRIMERO</button>
+        <button type="button" id="btnSiguiente" class="btn btn-sm btn-outline-primary d-none mx-2" onclick="FnBuscarSiguiente(); return false;">SIGUIENTE</button>
+      </div>
+    </div>
     <div class="row p-2">            
       <div class="col-12 text-center mb-3 d-none" id="divPaginacion">
         <button type="button" class="btn btn-outline-primary" onclick="fnNuevaPagina(); return false;"><i class="fas fa-chevron-down"></i> Ver mas.. </button>
@@ -105,10 +112,11 @@
   </div>
   <div class="container-loader-full">
     <div class="loader-full"></div>
-  </div>
+  </div> 
 
   <script src="/mycloud/library/jquery-3.5.1/jquery-3.5.1.js"></script>
   <script src="/checklist/js/CheckLists.js"></script>
+  <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
   <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script src="/mycloud/library/select2-4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="/gesman/menu/sidebar.js"></script>

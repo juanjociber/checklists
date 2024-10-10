@@ -115,9 +115,8 @@
           </div>
           <?php if($observacion['archivo']):?>
             <div class="mt-2" style="position:relative;">
-              <span onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer;">&#x2715</span>
+              <span onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer; color: tomato;">&#x2715</span>
               <img src="/mycloud/gesman/files/<?php echo ($observacion['archivo']); ?>" class="img-fluid imagen-ajustada" alt="">
-              <button class="p-0 bg-light text-secondary w-100 text-center border border-0" onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)">Eliminar</button>
             </div>
           <?php endif ?>
         </div>
