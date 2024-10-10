@@ -17,7 +17,7 @@
     $actividad->Actualizacion = $USUARIO;
 
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    if (FnRegistrarAlternativa($conmy, $actividad)) {
+    if (FnRegistrarPlantillaAlternativa($conmy, $actividad)) {
       $data['msg'] = "Se registró Alternativa.";
       $data['res'] = true;
     } else {

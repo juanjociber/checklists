@@ -232,7 +232,7 @@
       TABLA: tblchkalternativas 
       ================================
   */
-  function FnRegistrarAlternativa($conmy, $alternativa) {
+  function FnRegistrarPlantillaAlternativa($conmy, $alternativa) {
     try {
       $res = false;
       $stmt = $conmy->prepare("INSERT INTO tblchkalternativas(preid,descripcion,creacion,actualizacion) VALUES(:Preid,:Descripcion,:Creacion,:Actualizacion)");
@@ -258,17 +258,6 @@
     }
   }
 
-  function FnBuscarAlternativas2($conmy, $preid) {
-    try {
-      $stmt = $conmy->prepare("SELECT id, preid FROM tblchkalternativas WHERE preid=:PreId");
-      $stmt->execute(array(':PreId'=>$preid));
-      $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-      return $resultados;
-    } catch (PDOException $ex) {
-      return null;
-    }
-  }
-
   function FnBuscarPlantillaPreguntasAlternativas($conmy, $preguntas) {
     try {
         $datos=array();
@@ -290,7 +279,7 @@
     }
   }
 
-  function FnEliminarAlternativa($conmy, $id) {
+  function FnEliminarPlantillaAlternativa($conmy, $id) {
     try {
       $stmt = $conmy->prepare("DELETE FROM tblchkalternativas WHERE id =:Id");
       $params = array(':Id' => $id);

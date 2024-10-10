@@ -115,6 +115,11 @@
     .observacion1{ grid-column: 1 / 4; }
     .archivo1{ grid-column: 2 / 3; }
     @media(min-width:1200px){.contenedor-archivo{grid-template-columns:1fr 0.7fr 1fr;}}
+    .imagen-ajustada {
+      width: auto;
+      height: 200px;
+      object-fit: contain; 
+    }
   </style>
 <body>
   <?php require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/menu/sidebar.php';?>
@@ -161,28 +166,28 @@
       <div class="contenedor-imagen mt-2">
         <div class="card p-0">
           <div class="card-header p-0 bg-transparent text-center">Lado derecho</div>
-          <img id="imagen1" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid" alt="">
+          <img id="imagen1" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen1) ? '0.jpg' : $plantilla->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
           <div class="card-footer text-center p-0">
             <button type="button" class="btn btn-secondary p-0 col-12 bg-transparent border border-0 text-secondary" onclick="FnHabilitarDibujo(this)"><i class="fa fa-arrow-right"></i> Trazar</button>
           </div>
         </div>
         <div class="card p-0 ">
           <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-          <img id="imagen2" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid" alt="">
+          <img id="imagen2" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen2) ? '0.jpg' : $plantilla->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
           <div class="card-footer text-center p-0">
             <button type="button" class="btn btn-secondary p-0 col-12 bg-transparent border border-0 text-secondary" onclick="FnHabilitarDibujo(this)"><i class="fa fa-arrow-right"></i> Trazar</button>
           </div>
         </div>
         <div class="card p-0 ">
           <div class="card-header p-0 bg-transparent text-center">Lado izquierdo</div>
-          <img id="imagen3" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid" alt="">
+          <img id="imagen3" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen3) ? '0.jpg' : $plantilla->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
           <div class="card-footer text-center p-0">
             <button type="button" class="btn btn-secondary p-0 col-12 bg-transparent border border-0 text-secondary" onclick="FnHabilitarDibujo(this)"><i class="fa fa-arrow-right"></i> Trazar</button>
           </div>
         </div>
         <div class="card p-0 ">
           <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-          <img id="imagen4" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid" alt="">
+          <img id="imagen4" src="/mycloud/gesman/files/<?php echo empty($plantilla->Imagen4) ? '0.jpg' : $plantilla->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
           <div class="card-footer text-center p-0">
             <button type="button" class="btn btn-secondary p-0 col-12 bg-transparent border border-0 text-secondary" onclick="FnHabilitarDibujo(this)"><i class="fa fa-arrow-right"></i> Trazar</button>
           </div>
@@ -236,25 +241,27 @@
               </div>';
               }
             echo '
-            </div>
-          
-            <div class="contenedor-archivo">';
-              if(!empty($valor['observaciones'])){
-              echo '  
-              <div class="row observacion1 d-flex mt-2";>
-                <label class="text-secondary">Observación:</label>
-                <p class="mb-0 text-secondary fw-bold" id="idActividad" style="text-align: justify;">'.$valor['observaciones'].'</p>
-              </div>';
-              }
-              if(!empty($valor['archivo'])){
-              echo '
-              <div class="archivo1 mt-2 pb-2">
-                <span class="border border-1 d-block bg-light"><i class="fas fa-times text-secondary p-1" style="cursor:pointer; font-size:20px;" onclick="FnEliminarArchivoActividad('.$valor['id'].')"></i></span>
-                <img src="/mycloud/gesman/files/'.$valor['archivo'].'" class="img-thumbnail border border-1" alt="">
-              </div>';
-              } 
-            echo 
-            '</div>';
+            </div>';
+            if(!empty($valor['observaciones'])){
+            echo '  
+            <div class="row observacion1 d-flex mt-2";>
+              <label class="text-secondary">Observación:</label>
+              <p class="mb-0 text-secondary fw-bold" id="idActividad" style="text-align: justify;">'.$valor['observaciones'].'</p>
+            </div>';
+            }
+            if(!empty($valor['archivo'])){
+            echo '
+            <div class="d-flex justify-content-center align-items-center">
+              <div class="card p-0">
+                <div class="card-header p-0 bg-transparent text-center">
+                  <button type="button" class="btn btn-secondary p-0 col-12 bg-transparent border border-0 text-secondary d-flex justify-content-start" onclick="FnEliminarArchivoActividad('.$valor['id'].')"><i class="fas fa-times text-secondary p-1" style="cursor:pointer; font-size:20px;"></i></button>
+                </div>
+                <img src="/mycloud/gesman/files/'.$valor['archivo'].'" class="img-fluid imagen-ajustada" alt="">
+                <div class="card-footer text-center p-0">
+                </div>
+              </div>
+            </div>';
+            } 
           echo '
           </div>';
         }

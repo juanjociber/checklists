@@ -100,21 +100,12 @@
           <label for="dtpFecha" class="form-label mb-0">Fecha:</label>
           <input type="date" class="form-control text-secondary text-uppercase fw-bold" id="dtpFecha" value="<?php echo $checklist->Fecha ?>">
         </div>
-        <!-- CLIENTE -->
-        <div class="col-6 col-md-4 mt-2">
-          <label for="txtCliente" class="form-label mb-0">Cliente:</label>
-          <input type="text" class="form-control text-secondary fw-bold" id="txtCliente" value="<?php echo $checklist->CliNombre ?>" disabled>
-        </div>
-        <div class="col-6 col-md-4 mt-2">
-          <label for="txtCliente" class="form-label mb-0">RUC:</label>
-          <input type="text" class="form-control text-secondary fw-bold" id="txtRuc" value="<?php echo $checklist->CliRuc ?>" disabled>
-        </div>
-        <div class="col-12 col-md-6 mt-2">
+        <div class="col-12 col-md-4 mt-2">
           <label class="form-label mb-0">Contacto:</label>
           <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtContacto" value="<?php echo $checklist->CliContacto ?>"></input>
         </div>
         <!-- SUPERVISOR -->
-        <div class="custom-select-container col-12 col-md-6 mt-2">
+        <div class="custom-select-container col-12 col-md-4 mt-2">
           <label for="txtSupervisor" class="form-label mb-0">Supervisor:</label>
           <div class="custom-select-wrapper">
             <input type="text" class="custom-select-input text-secondary fw-bold" id="txtSupervisor" value="<?php echo  $checklist->Supervisor;?>"/>

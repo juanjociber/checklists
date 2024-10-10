@@ -1,3 +1,7 @@
+function FnModalFinalizarCheckList(){
+  
+}
+
 
 function FnEditarChecklist(id){
   console.log(id);

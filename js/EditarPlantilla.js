@@ -366,7 +366,7 @@ const FnAgregarAlternativa = async () => {
     const formData = new FormData();
     formData.append('preid',document.querySelector('#txtIdActividad').value);
     formData.append('descripcion', document.getElementById('txtAlternativa').value);
-    const response = await fetch("/checklist/insert/AgregarAlternativa.php", {
+    const response = await fetch("/checklist/insert/AgregarPlantillaAlternativa.php", {
       method: "POST",
       body: formData
     });
@@ -397,7 +397,7 @@ async function FnEliminarAlternativa(id){
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarAlternativa.php', {
+    const response = await fetch('/checklist/delete/EliminarPlantillaAlternativa.php', {
       method: 'POST',
       body: formData
     });

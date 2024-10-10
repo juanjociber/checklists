@@ -77,6 +77,11 @@
           .archivo1{ grid-column: 3 / 4; grid-row: 2 / 3; place-self:center; }
         }
       }
+      .imagen-ajustada {
+        width: auto;
+        height: 200px;
+        object-fit: contain; 
+      }
     </style>
   </head>
   <body>
@@ -86,8 +91,8 @@
         <div class="col-12 btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnEditarChecklist(<?php echo $ID ?>); return false;"><i class="fas fa-edit"></i><span class="d-none d-sm-block"> Editar</span></button>
-          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarChecklist(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
-          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnImprimirChecklist(); return false;"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
+          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarCheckList(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
+          <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnImprimirCheckList(); return false;"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
         </div>
       </div>
   
@@ -194,28 +199,28 @@
               <div class="carousel-item active">
                 <div class="card p-0 h-100">
                   <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
                   <div class="card-footer p-0 text-center"></div>
                 </div>
               </div>
               <div class="carousel-item">
                 <div class="card p-0 h-100">
                   <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
                   <div class="card-footer p-0 text-center"></div>
                 </div>
               </div>
               <div class="carousel-item">
                 <div class="card p-0 h-100">
                   <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
                   <div class="card-footer p-0 text-center"></div>
                 </div>
               </div>
               <div class="carousel-item">
                 <div class="card p-0 h-100">
                   <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
+                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
                   <div class="card-footer p-0 text-center"></div>
                 </div>
               </div>
@@ -238,14 +243,14 @@
                   <div class="col-6">
                     <div class="card p-0">
                       <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
                       <div class="card-footer p-0 text-center"></div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="card p-0">
                       <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
                       <div class="card-footer p-0 text-center"></div>
                     </div>
                   </div>
@@ -256,14 +261,14 @@
                   <div class="col-6">
                     <div class="card p-0">
                       <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
                       <div class="card-footer p-0 text-center"></div>
                     </div>
                   </div>
                   <div class="col-6">
                     <div class="card p-0">
                       <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
+                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
                       <div class="card-footer p-0 text-center"></div>
                     </div>
                   </div>
@@ -285,28 +290,28 @@
             <div class="col-lg-3">
               <div class="card p-0">
                 <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid" alt="">
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
                 <div class="card-footer p-0 text-center"></div>
               </div>
             </div>
             <div class="col-lg-3">
               <div class="card p-0">
                 <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid" alt="">
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
                 <div class="card-footer p-0 text-center"></div>
               </div>
             </div>
             <div class="col-lg-3">
               <div class="card p-0">
                 <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid" alt="">
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
                 <div class="card-footer p-0 text-center"></div>
               </div>
             </div>
             <div class="col-lg-3">
               <div class="card p-0">
                 <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid" alt="">
+                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
                 <div class="card-footer p-0 text-center"></div>
               </div>
             </div>
@@ -340,8 +345,12 @@
                     }
                     if (!empty($actividad['archivo'])) {
                     $html .= '
-                    <div class="archivo1">
-                      <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-thumbnail border border-0" alt="">
+                    <div class="d-flex justify-content-center align-items-center" style="grid-column: 3 / 4; margin-top: 10px;">
+                      <div class="card p-0">
+                        <div class="card-header p-0 bg-transparent text-center"></div>
+                        <img src="/mycloud/gesman/files/'.$actividad['archivo'].'" class="img-fluid imagen-ajustada" alt="">
+                        <div class="card-footer text-center p-0"></div>
+                      </div>
                     </div>';
                     }
                 $html.='</div>';
@@ -375,7 +384,7 @@
               <div class="p-1 mb-1 mt-2 imagen-observacion">
                 <div class="card p-0" style="grid-column:2/3">
                   <div class="card-header bg-transparent text-center p-0">Imagen</div>
-                  <img src="/mycloud/gesman/files/'.$observacion['archivo'].'" class="img-fluid" alt="">
+                  <img src="/mycloud/gesman/files/'.$observacion['archivo'].'" class="img-fluid imagen-ajustada" alt="">
                 </div>                    
               </div>';
               }
@@ -392,7 +401,7 @@
             <?php if(!empty($checklist->EmpFirma) || !empty($checklist->Supervisor)) : ?>
               <p class="text-center mb-0">Firma de supervisor</p>
               <div id="signatureCanvasSupervisor" class="d-flex justify-content-center align-items-center">
-                <img src="/mycloud/gesman/files/<?php echo $checklist->EmpFirma ?>" class="img-fluid" alt="">
+                <img src="/mycloud/gesman/files/<?php echo $checklist->EmpFirma ?>" class="img-fluid imagen-ajustada" alt="">
               </div>
               <p class="text-center mb-0"><?php echo $checklist->Supervisor ?></p>
             <?php endif ?>
@@ -401,7 +410,7 @@
             <?php if(!empty($checklist->CliFirma) || !empty($checklist->CliContacto)) : ?>
               <p class="text-center mb-0">Firma de cliente</p>
               <div id="signatureCanvasAprobo" class="d-flex justify-content-center align-items-center">
-                <img src="/mycloud/gesman/files/<?php echo $checklist->CliFirma ?>" class="img-fluid" alt="">
+                <img src="/mycloud/gesman/files/<?php echo $checklist->CliFirma ?>" class="img-fluid imagen-ajustada" alt="">
               </div>
               <p class="text-center mb-0"><?php echo $checklist->CliContacto ?></p>
             <?php endif ?>

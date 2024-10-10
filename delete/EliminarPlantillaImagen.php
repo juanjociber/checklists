@@ -7,6 +7,7 @@
   try {
     if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) { throw new Exception("Usuario no tiene Autorización."); }
     if (empty($_POST['id']) || empty($_POST['numImagen'])) { throw new Exception("La información está incompleta."); }
+    
     $numImagen = (int)$_POST['numImagen'];
     if ($numImagen < 1 || $numImagen > 4) {
       throw new Exception("El número de imagen es inválido.");

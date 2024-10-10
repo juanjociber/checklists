@@ -10,7 +10,7 @@
 
     $id = (int)$_POST['id'];
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    if (FnEliminarAlternativa($conmy, $id)) {
+    if (FnEliminarPlantillaAlternativa($conmy, $id)) {
       $data['msg'] = "Se eliminó alternativa.";
       $data['res'] = true;
     } else {

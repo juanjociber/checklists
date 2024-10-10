@@ -5,9 +5,7 @@
   $data = array('res' => false, 'msg' => 'Error general.');
   
   try {
-    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) {
-      throw new Exception("Usuario no tiene Autorización.");
-    }
+    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) { throw new Exception("Usuario no tiene Autorización.");}
     // LECTURA A DATOS DEL JSON
     $input = json_decode(file_get_contents('php://input'), true);
     if (!$input || !isset($input['Id']) || empty($input['respuestas'])) {
@@ -33,7 +31,6 @@
         $fileNames[$field] = null; 
       }
     }
-
     // IMAGENES CHECKLIST
     FnModificarChecklistImagenes($conmy, $fileNames, $USUARIO, $input['Id']);
     // RESPUESTAS
