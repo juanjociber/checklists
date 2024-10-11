@@ -38,8 +38,8 @@
   $claseHabilitado = "btn-outline-secondary";
   $atributoHabilitado = " disabled";
   if($Estado == 1 || $Estado == 2){
-      $claseHabilitado = "btn-outline-primary";
-      $atributoHabilitado = "";
+    $claseHabilitado = "btn-outline-primary";
+    $atributoHabilitado = "";
   }
 
 ?>
@@ -58,10 +58,13 @@
     <link rel="stylesheet" href="/mycloud/library/gpemsac/css/gpemsac.css"> 
     <link rel="stylesheet" href="/gesman/menu/sidebar.css">
     <style>
-      .imagen-observacion{display:grid; display:grid; grid-template-columns:30% 40% 30%; }
-      @media(min-width:992px){.imagen-observacion{grid-template-columns:1fr 0.5fr 1fr !important; }}
-      @media(min-width:768px){.imagen-observacion{grid-template-columns:2fr 1.5fr 2fr;}}
-      .contenedor-respuestas,.contenedor-imagen{ display: grid; grid-template-columns: 1fr 1fr 3fr 1fr 1fr; margin-bottom: 10px; padding:5px; }
+      .no-pdf { display: block; /* Mantener visible en la web */}
+      @media print {
+        .no-pdf { display: none !important; /* Ocultar cuando se imprima o genere PDF */}
+      }
+
+      
+      .contenedor-respuestas{ display: grid; grid-template-columns: 1fr 1fr 3fr 1fr 1fr; margin-bottom: 10px; padding:5px; }
       .descripcion1{ grid-column: 1 / 4; }
       .verificacion1{ grid-column: 4 / 6; }
       .observacion1{ grid-column: 1 / 6; }
@@ -94,9 +97,11 @@
     </style>
   </head>
   <body>
-    <?php require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/menu/sidebar.php';?>
+    <div class="no-pdf">
+      <?php require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/menu/sidebar.php';?>
+    </div>
     <div class="container section-top">
-      <div class="row mb-3">
+      <div class="row mb-3 no-pdf">
         <div class="col-12 btn-group" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnEditarChecklist(<?php echo $ID ?>); return false;"><i class="fas fa-edit"></i><span class="d-none d-sm-block"> Editar</span></button>
@@ -104,8 +109,7 @@
           <button type="button" id="btnCrearPdf" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
         </div>
       </div>
-  
-      <div class="row border-bottom mb-2 fs-5">
+      <div class="row border-bottom mb-2 fs-5 no-pdf">
         <div class="col-12 fw-bold d-flex justify-content-between">
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $_SESSION['CliNombre'] : 'UNKNOWN'; ?></p>
           <input type="hidden" id="idCheckList" value="<?php echo $ID;?>">
@@ -114,8 +118,7 @@
       </div>
       <?php if ($isAuthorized): ?>
         <?php $NUMERO+=1; ?>
-        <!-- DATOS GENERALES -->
-        <div class="row p-1 mb-2 mt-2">
+              <div class="row p-1 mb-2 mt-2">
           <div class="col-12 m-0 border border-1 bg-light" >
             <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - DATOS GENERALES:</p>
           </div>
@@ -160,7 +163,6 @@
             </div>
           </div>
         </div>
-        
         <?php $NUMERO+=1; ?>
         <!-- DATOS DEL EQUIPO -->
         <div class="row p-1 mb-2 mt-2">
@@ -194,14 +196,12 @@
             </div>
           </div>
         </div>
-      
         <?php $NUMERO+=1; ?>
         <!-- CHECKLIST-->
         <div class="row p-1 mb-2 mt-2">
           <div class="col-12 mb-2 border border-1 bg-light">
             <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - CHECKLIST:</p>
           </div>
-
           <!-- Carrusel para pantallas pequeñas (hasta 767px) -->
           <div id="carouselImages" class="carousel slide d-md-none" data-bs-ride="false" data-bs-interval="false">
             <div class="carousel-inner">
@@ -243,7 +243,6 @@
               <span class="visually-hidden">Next</span>
             </button>
           </div>
-
           <!-- Carrusel para pantallas entre 768px y 1199px -->
           <div id="carouselImagesTablet" class="carousel slide d-none d-md-block d-xl-none" data-bs-ride="false" data-bs-interval="false">
             <div class="carousel-inner">
@@ -293,9 +292,8 @@
               <span class="visually-hidden">Next</span>
             </button>
           </div>
-
           <!-- Mostrar las 4 imágenes sin carrusel para pantallas grandes (1200px o más) -->
-          <div class="row d-none d-xl-flex">
+          <div class="row d-none d-xl-flex" id="carrusel">
             <div class="col-lg-3">
               <div class="card p-0">
                 <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
@@ -394,7 +392,6 @@
           echo $html;
           ?>
         </div>
-
         <div class="row mb-2 mt-2">
           <div class="col-12 mb-2 border border-1 bg-light">
             <p class="mt-2 mb-2 fw-bold text-secondary"> V° B°</p>
@@ -418,10 +415,8 @@
             <?php endif ?>
           </div>
         </div>
-
       <?php endif ?>
     </div>
-
     <!-- MODAL PARA FINALIZAR CHEKCLIST -->
     <div class="modal fade" id="modalFinalizarCheckList" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -442,11 +437,9 @@
         </div>
       </div>
     </div>
-
     <div class="container-loader-full">
       <div class="loader-full"></div>
     </div>
-    
     <script src="/checklist/js/CheckList.js"></script>
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>

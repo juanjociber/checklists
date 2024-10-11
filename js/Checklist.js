@@ -47,62 +47,89 @@ function FnListarChecklists(){
 document.addEventListener("DOMContentLoaded", () => {
   const $boton = document.querySelector("#btnCrearPdf");
   $boton.addEventListener("click", () => {
-    const $elementoParaConvertir = document.body; // Elemento a convertir
-    const $carrusel = document.querySelector("#miCarrusel"); // Cambia esto al selector correcto
-    const $imagenes = document.querySelectorAll(".imagen"); // Cambia esto al selector correcto
+    // ELEMENTO QUE SE CONVERTIRA A PDF
+    const $elementoParaConvertir = document.body; 
+    // OCULTAR ELEMENTOS CON LA CLASE 'no-pdf'
+    const elementosNoPdf = document.querySelectorAll('.no-pdf');
+    elementosNoPdf.forEach(el => el.style.display = 'none');
 
-    // Ocultar el carrusel
-    $carrusel.style.display = "none";
-    
-    // Mostrar las imágenes
-    $imagenes.forEach(img => img.style.display = "block");
+    const opt = {
+      margin: [1.2, -1, 0.5, -1],  
+      filename: 'CheckList.pdf',
+      image: { type: 'jpeg', quality: 1 },
+      html2canvas: { scale: 4, letterRendering: true },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    const fechaActual = new Date().toLocaleDateString(); 
+    const numeroChecklist = 'CHK-01'; 
+    const nombreEmpresa = 'GPEM S.A.C'; 
+    const direccion = 'Av. Los Incas, Comas 15313'; 
+    const telefono = 'Teléfono: (01)7130628 / 7130629'; 
 
     html2pdf()
-      .set({
-        margin: 0.5,
-        filename: 'CheckList.pdf',
-        image: {
-          type: 'jpeg',
-          quality: 1
-        },
-        html2canvas: {
-          scale: 4,
-          letterRendering: true,
-        },
-        jsPDF: {
-          unit: "in",
-          format: "a4",
-          orientation: 'portrait',
-          putOnlyUsedFonts: true,
-          floatPrecision: 16,
-          pageSize: 'A4',
-          header: function (data) {
-            return {
-              text: 'Encabezado de la Página', // Encabezado personalizado
-              align: 'center',
-              margin: [0, 10, 0, 0], // márgenes
-            };
-          },
-          footer: function (data) {
-            return {
-              text: `Página ${data.pageNumber}`, // Pie de página personalizado
-              align: 'center',
-              margin: [0, 0, 0, 10], // márgenes
-            };
-          }
+      .set(opt)
+      .from($elementoParaConvertir)
+      .toPdf()
+      .get('pdf')
+      .then(function (pdf) {
+        const totalPages = pdf.internal.getNumberOfPages();
+        const logoUrl = '/mycloud/logos/logo-gpem.png'; 
+        for (let i = 1; i <= totalPages; i++) {
+          pdf.setPage(i);
+          pdf.setFontSize(12);
+          // ENCABEZADO
+          pdf.setTextColor(100, 100, 100);
+          pdf.text('CHECKLIST DE "EQUIPO"', pdf.internal.pageSize.getWidth() / 2, 1, { align: 'center' });
+          // LOGO
+          pdf.addImage(logoUrl, 'JPEG', 0.1, 0.5, 1.5, 0.5, null, 'FAST'); 
+          
+          // FECHA - NOMBRE
+          pdf.setFontSize(10);
+          pdf.setTextColor(100, 100, 100); 
+          const textYPosition = 0.5 + 0.5 / 2; 
+          pdf.text(`Fecha Actual: ${fechaActual}`, pdf.internal.pageSize.getWidth() - 0.2, textYPosition, { align: 'right' }); 
+          pdf.text(`Nombre: ${numeroChecklist}`, pdf.internal.pageSize.getWidth() - 0.7, textYPosition + 0.2, { align: 'right' }); 
+          
+          // NÚMERO DE PÁGINA Y PIE DE PÁGINA
+          const pageNumberYPosition = pdf.internal.pageSize.getHeight() - 0.6; 
+          pdf.setTextColor(100, 100, 100); 
+          pdf.text(`Página ${i} de ${totalPages}`, pdf.internal.pageSize.getWidth() / 2, pageNumberYPosition, { align: 'center' });
+
+          // INFORMACIÓN DE EMPRESA
+          const footerYPosition = pageNumberYPosition + 0.14; 
+          pdf.setTextColor(100, 100, 100); 
+          pdf.text(nombreEmpresa, pdf.internal.pageSize.getWidth() / 2, footerYPosition + 0, { align: 'center' });
+          pdf.text(telefono, pdf.internal.pageSize.getWidth() / 2, footerYPosition + 0.15, { align: 'center' });
+          pdf.text(direccion, pdf.internal.pageSize.getWidth() / 2, footerYPosition + 0.3, { align: 'center' });
         }
       })
-      .from($elementoParaConvertir)
       .save()
-      .catch(err => console.log(err))
-      .finally(() => {
-        // Restaurar el estado original
-        $carrusel.style.display = ""; // Mostrar el carrusel nuevamente
-        $imagenes.forEach(img => img.style.display = ""); // Restaurar el estado original de las imágenes
-        console.log('Guardado');
+      .then(() => {
+        elementosNoPdf.forEach(el => el.style.display = '');
+      })
+      .catch(err => {
+        console.log(err);
+        elementosNoPdf.forEach(el => el.style.display = '');
       });
   });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
