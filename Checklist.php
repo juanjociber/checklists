@@ -5,7 +5,7 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
@@ -49,7 +49,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>CheckList | GPEM S.A.C</title>
-    <script src="/checklist/js/html2pdf.bundle.min.js"></script>
+    <script src="/checklists/js/html2pdf.bundle.min.js"></script>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
     <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">
@@ -62,8 +62,6 @@
       @media print {
         .no-pdf { display: none !important; /* Ocultar cuando se imprima o genere PDF */}
       }
-
-      
       .contenedor-respuestas{ display: grid; grid-template-columns: 1fr 1fr 3fr 1fr 1fr; margin-bottom: 10px; padding:5px; }
       .descripcion1{ grid-column: 1 / 4; }
       .verificacion1{ grid-column: 4 / 6; }
@@ -440,7 +438,7 @@
     <div class="container-loader-full">
       <div class="loader-full"></div>
     </div>
-    <script src="/checklist/js/CheckList.js"></script>
+    <script src="/checklists/js/CheckList.js"></script>
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
     <script src="/mycloud/library/bootstrap-5-alerta-1.0/js/bootstrap-5-alerta-1.0.js"></script>

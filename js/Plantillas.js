@@ -18,7 +18,7 @@ async function FnAgregarPlantilla() {
     const formData = new FormData();
     formData.append('tipo', document.getElementById('txtTipo1').value);
 
-    const response = await fetch("/checklist/insert/AgregarPlantilla.php", {
+    const response = await fetch("/checklists/insert/AgregarPlantilla.php", {
       method: "POST",
       body: formData
     });
@@ -46,7 +46,7 @@ async function FnBuscarPlantillas() {
     const formData = new FormData();
     formData.append('tipo', document.querySelector('#txtTipo').value);
     // formData.append('pagina', PaginasTotal);
-    const response = await fetch('/checklist/search/BuscarPlantillas.php', {
+    const response = await fetch('/checklists/search/BuscarPlantillas.php', {
       method: 'POST',
       body: formData
     });
@@ -102,7 +102,7 @@ async function FnBuscarPlantillas() {
 
 function FnPlantilla(id){
   if(id > 0){
-    window.location.href=`/checklist/admin/EditarPlantilla.php?id=${id}`;
+    window.location.href=`/checklists/admin/EditarPlantilla.php?id=${id}`;
   }
   return false;
 }

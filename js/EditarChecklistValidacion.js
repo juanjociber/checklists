@@ -24,7 +24,7 @@ async function FnAgregarFirma(tipo) {
     formData.append('tipo', tipo); 
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch('/checklist/insert/AgregarCheckListFirma.php', {
+    const response = await fetch('/checklists/insert/AgregarCheckListFirma.php', {
       method: 'POST',
       body: formData
     });
@@ -130,14 +130,14 @@ function iniciarCanvas() {
 window.onload = iniciarCanvas;
 
 function FnListarChecklists(){
-  window.location.href='/checklist/CheckLists.php';
+  window.location.href='/checklists/CheckLists.php';
   return false;
 }
 
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   if(id > 0){
-      window.location.href='/checklist/CheckList.php?id='+id;
+      window.location.href='/checklists/CheckList.php?id='+id;
   }
   return false;
 }

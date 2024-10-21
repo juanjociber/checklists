@@ -17,7 +17,7 @@ async function FnFinalizarCheckList(){
   try {
       const formData = new FormData();
       formData.append('id', document.getElementById('idCheckList').value);
-      const response = await fetch('/checklist/update/FinalizarCheckList.php', {
+      const response = await fetch('/checklists/update/FinalizarCheckList.php', {
           method:'POST',
           body: formData
       });
@@ -34,13 +34,13 @@ async function FnFinalizarCheckList(){
 
 function FnEditarChecklist(id){
   if(id > 0){
-    window.location.href='/checklist/EditarCheckListDatos.php?id='+id;
+    window.location.href='/checklists/EditarCheckListDatos.php?id='+id;
   }
   return false;
 }
 
 function FnListarChecklists(){
-  window.location.href='/checklist/CheckLists.php';
+  window.location.href='/checklists/CheckLists.php';
   return false;
 }
 

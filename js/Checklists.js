@@ -62,7 +62,7 @@ async function FnBuscarChecklist2(){
     formData.append('fechainicial', FechaInicial);
     formData.append('fechafinal', FechaFinal);
     formData.append('pagina', PaginasTotal);
-    const response = await fetch('/checklist/search/BuscarCheckLists.php', {
+    const response = await fetch('/checklists/search/BuscarCheckLists.php', {
         method:'POST',
         body: formData
     });
@@ -77,28 +77,28 @@ async function FnBuscarChecklist2(){
     document.getElementById('tblChecklists').innerHTML = '';
     let estado = '';
     datos.data.forEach(item => {
-        switch (parseInt(item.estado)){
-          case 1:
-              estado='<span class="badge bg-danger">Anulado</span>';
-          break;
-          case 2:
-              estado='<span class="badge bg-primary">Abierto</span>';
-          break;
-          case 3:
-              estado='<span class="badge bg-success">Cerrado</span>';
-          break;
-          default:
-              estado='<span class="badge bg-light text-dark">Unknown</span>';
-        }
-        document.getElementById('tblChecklists').innerHTML +=`
-        <div class="col-12">
-          <div class="divselect border-bottom border-1 mb-2 px-1" onclick="FnChecklist(${item.id}); return false;">
-            <div class="div d-flex justify-content-between">
-              <p class="m-0"><span class="fw-bold">${item.nombre}</span> <span class="text-secondary" style="font-size: 13px;">${item.fecha}</span></p><p class="m-0">${estado}</p>
-            </div>
-            <div class="div">${item.equnombre}</div>
+      switch (parseInt(item.estado)){
+        case 1:
+          estado='<span class="badge bg-danger">Anulado</span>';
+        break;
+        case 2:
+          estado='<span class="badge bg-primary">Abierto</span>';
+        break;
+        case 3:
+          estado='<span class="badge bg-success">Cerrado</span>';
+        break;
+        default:
+          estado='<span class="badge bg-light text-dark">Unknown</span>';
+      }
+      document.getElementById('tblChecklists').innerHTML +=`
+      <div class="col-12">
+        <div class="divselect border-bottom border-1 mb-2 px-1" onclick="FnChecklist(${item.id}); return false;">
+          <div class="div d-flex justify-content-between">
+            <p class="m-0"><span class="fw-bold">${item.nombre}</span> <span class="text-secondary" style="font-size: 13px;">${item.fecha}</span></p><p class="m-0">${estado}</p>
           </div>
-        </div>`;
+          <div class="div">${item.equnombre}</div>
+        </div>
+      </div>`;
     });
     FnPaginacion(datos.pag);
   } catch (ex) {
@@ -164,7 +164,7 @@ async function FnBuscarPrimero() {
 
 function FnChecklist(id){
   if(id > 0){
-    window.location.href='/checklist/CheckList.php?id='+id;
+    window.location.href='/checklists/CheckList.php?id='+id;
   }
   return false;
 }

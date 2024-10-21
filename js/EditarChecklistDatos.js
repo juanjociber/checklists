@@ -81,7 +81,7 @@ const FnModificarChecklist = async () => {
     formData.append('equ_km', document.querySelector('#txtEquKm').value); 
     formData.append('equ_hm', document.querySelector('#txtEquHm').value);
     
-    const response = await fetch('/checklist/update/ModificarCheckList.php', {
+    const response = await fetch('/checklists/update/ModificarCheckList.php', {
         method: 'POST',
         body: formData
     });
@@ -112,14 +112,14 @@ const FnModificarChecklist = async () => {
 }
 
 function FnListarChecklists(){
-  window.location.href='/checklist/CheckLists.php';
+  window.location.href='/checklists/CheckLists.php';
   return false;
 }
 
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   if(id > 0){
-      window.location.href='/checklist/CheckList.php?id='+id;
+      window.location.href='/checklists/CheckList.php?id='+id;
   }
   return false;
 }

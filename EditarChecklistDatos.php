@@ -5,8 +5,8 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/SupervisorData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/SupervisorData.php";
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
@@ -49,7 +49,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Editar Checklist | GPEM SAC</title>
+    <title>CheckList Datos | GPEM S.A.C</title>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
     <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">
@@ -85,10 +85,9 @@
           <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
             <ol class="breadcrumb">                        
               <li class="breadcrumb-item active fw-bold" aria-current="page">DATOS</li>
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckList.php?id=<?php echo $ID ?>" class="text-decoration-none">CHECKLIST</a></li>
-              <!-- <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListActividad.php?id=<?php echo $ID ?>" class="text-decoration-none">ACTIVIDAD</a></li> -->
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListObservacion.php?id=<?php echo $ID ?>" class="text-decoration-none">OBSERVACION</a></li>
-              <li class="breadcrumb-item fw-bold"><a href="/checklist/EditarCheckListValidacion.php?id=<?php echo $ID ?>" class="text-decoration-none">VALIDACION</a></li>
+              <li class="breadcrumb-item fw-bold"><a href="/checklists/EditarCheckList.php?id=<?php echo $ID ?>" class="text-decoration-none">CHECKLIST</a></li>
+              <li class="breadcrumb-item fw-bold"><a href="/checklists/EditarCheckListObservacion.php?id=<?php echo $ID ?>" class="text-decoration-none">OBSERVACION</a></li>
+              <li class="breadcrumb-item fw-bold"><a href="/checklists/EditarCheckListValidacion.php?id=<?php echo $ID ?>" class="text-decoration-none">VALIDACION</a></li>
             </ol>
           </nav>
         </div>
@@ -174,7 +173,7 @@
       <div class="loader-full"></div>
     </div>
 
-    <script src="/checklist/js/EditarCheckListDatos.js"></script>
+    <script src="/checklists/js/EditarCheckListDatos.js"></script>
     <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
     <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
     <script src="/gesman/menu/sidebar.js"></script>

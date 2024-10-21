@@ -338,7 +338,7 @@ function FnAgregarDatosChecklist() {
       respuestas
     };
 
-    fetch('/checklist/insert/AgregarChecklist.php', {
+    fetch('/checklists/insert/AgregarChecklist.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -403,7 +403,7 @@ const FnModificarActividad = async () => {
     formData.append('observaciones', document.getElementById('txtObservacion').value);
     formData.append('archivo', archivo || '');
     
-    const response = await fetch("/checklist/update/ModificarCheckListActividad.php", {
+    const response = await fetch("/checklists/update/ModificarCheckListActividad.php", {
       method: "POST",
       body: formData
     });
@@ -433,7 +433,7 @@ async function FnEliminarArchivoActividad(id){
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarCheckListActividadArchivo.php', {
+    const response = await fetch('/checklists/delete/EliminarCheckListActividadArchivo.php', {
       method: 'POST',
       body: formData
     });
@@ -470,14 +470,14 @@ async function FnEliminarArchivoActividad(id){
 }
 
 function FnListarChecklists(){
-  window.location.href='/checklist/CheckLists.php';
+  window.location.href='/checklists/CheckLists.php';
   return false;
 }
 
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   if(id > 0){
-    window.location.href='/checklist/CheckList.php?id='+id;
+    window.location.href='/checklists/CheckList.php?id='+id;
   }
   return false;
 }

@@ -15,7 +15,7 @@ const FnModalModificarObservacion = async (id) => {
   const formData = new FormData();
   formData.append('id', id);
   try {
-    const response = await fetch('/checklist/search/BuscarCheckListObservacion.php', {
+    const response = await fetch('/checklists/search/BuscarCheckListObservacion.php', {
       method: 'POST',
       body: formData
     });
@@ -49,7 +49,7 @@ const FnAgregarObservacion = async () => {
     formData.append('chkid', document.getElementById('txtIdChecklist').value);
     formData.append('descripcion', document.getElementById('txtObservacion').value);
   
-    const response = await fetch("/checklist/insert/AgregarCheckListObservacion.php", {
+    const response = await fetch("/checklists/insert/AgregarCheckListObservacion.php", {
         method: "POST",
         body: formData
     });
@@ -76,7 +76,7 @@ const FnModificarObservacion = async () => {
     formData.append('id', document.getElementById('txtIdChecklistObs').value);
     formData.append('descripcion', document.getElementById('txtObservacion2').value);
   
-    const response = await fetch("/checklist/update/ModificarCheckListObservacion.php", {
+    const response = await fetch("/checklists/update/ModificarCheckListObservacion.php", {
         method: "POST",
         body: formData
     });
@@ -104,7 +104,7 @@ const FnModalEliminarObservacion = async (id) =>{
     formData.append('chkid', document.querySelector('#txtIdChecklist').value);
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-    const response = await fetch('/checklist/delete/EliminarCheckListObservacion.php', {
+    const response = await fetch('/checklists/delete/EliminarCheckListObservacion.php', {
       method: 'POST',
       body: formData
     });
@@ -277,7 +277,7 @@ async function FnAgregarArchivo() {
     formData.append('id', document.querySelector('#txtIdChecklistObs').value);
     formData.append('archivo', archivo);
 
-    const response = await fetch('/checklist/insert/AgregarCheckListObservacionArchivo.php', {
+    const response = await fetch('/checklists/insert/AgregarCheckListObservacionArchivo.php', {
       method: 'POST',
       body: formData
     });
@@ -310,7 +310,7 @@ async function FnEliminarArchivo(id){
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarCheckListObservacionArchivo.php', {
+    const response = await fetch('/checklists/delete/EliminarCheckListObservacionArchivo.php', {
       method: 'POST',
       body: formData
     });
@@ -441,7 +441,7 @@ async function FnAgregarFoto(){
   formData.append('archivo', archivo);
   console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
-  const response = await fetch("/checklist/insert/AgregarArchivo.php", {
+  const response = await fetch("/checklists/insert/AgregarArchivo.php", {
     method: "POST",
     body: formData
   });
@@ -479,7 +479,7 @@ async function FnAgregarFoto(){
 
 /**LISTAR CHEKCLITS */
 function FnListarChecklists(){
-  window.location.href='/checklist/CheckLists.php';
+  window.location.href='/checklists/CheckLists.php';
   return false;
 }
 
@@ -487,7 +487,7 @@ function FnListarChecklists(){
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   if(id > 0){
-    window.location.href='/checklist/checkList.php?id='+id;
+    window.location.href='/checklists/checkList.php?id='+id;
   }
   return false;
 }

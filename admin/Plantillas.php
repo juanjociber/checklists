@@ -133,7 +133,7 @@
   <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
   <script src="/mycloud/library/bootstrap-5-alerta-1.0/js/bootstrap-5-alerta-1.0.js"></script>
   <script src="/mycloud/library/select2-4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script src="/checklist/js/Plantillas.js"></script>
+  <script src="/checklists/js/Plantillas.js"></script>
   <script src="/gesman/menu/sidebar.js"></script>
 </body>
 </html>

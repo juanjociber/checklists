@@ -7,7 +7,7 @@
   $CLIID = $_SESSION['CliId'];
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/PlantillaData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/PlantillaData.php";
 
   $plantilla= new stdClass();
   $plantillaPreguntas =array();
@@ -395,7 +395,7 @@
   <div class="container-loader-full">
     <div class="loader-full"></div>
   </div>
-  <script src="/checklist/js/EditarPlantilla.js"></script>
+  <script src="/checklists/js/EditarPlantilla.js"></script>
   <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
   <script src="/gesman/menu/sidebar.js"></script>

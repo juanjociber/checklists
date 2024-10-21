@@ -5,7 +5,7 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklist/datos/CheckListData.php"; 
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php"; 
   
   $CLIID = $_SESSION['CliId'];
 ?>
@@ -16,7 +16,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checklists | GPEM SAC.</title>
+    <title>CheckLists | GPEM S.A.C</title>
     <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
     <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
     <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">
@@ -115,7 +115,7 @@
   </div> 
 
   <script src="/mycloud/library/jquery-3.5.1/jquery-3.5.1.js"></script>
-  <script src="/checklist/js/CheckLists.js"></script>
+  <script src="/checklists/js/CheckLists.js"></script>
   <script src="/mycloud/library/SweetAlert2/js/sweetalert2.all.min.js"></script>
   <script src="/mycloud/library/bootstrap-5.0.2-dist/js/bootstrap.min.js"></script>
   <script src="/mycloud/library/select2-4.1.0-rc.0/dist/js/select2.min.js"></script>

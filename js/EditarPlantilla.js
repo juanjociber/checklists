@@ -141,7 +141,7 @@ async function FnAgregarPlantillaImagen() {
       throw new Error('No se reconoce el archivo');
     }
     formData.append('archivo', archivo);
-    const response = await fetch('/checklist/insert/AgregarPlantillaImagen.php', {
+    const response = await fetch('/checklists/insert/AgregarPlantillaImagen.php', {
       method: 'POST',
       body: formData
     });
@@ -174,7 +174,7 @@ const FnEliminarPlantillaImagen = async (id, numImagen) => {
     const formData = new FormData();
     formData.append('id', id);
     formData.append('numImagen', numImagen); 
-    const response = await fetch('/checklist/delete/EliminarPlantillaImagen.php', {
+    const response = await fetch('/checklists/delete/EliminarPlantillaImagen.php', {
       method: 'POST',
       body: formData,
     });
@@ -220,7 +220,7 @@ const FnAgregarPlantillaPregunta = async () => {
     const formData = new FormData();
     formData.append('plaid',document.querySelector('#txtIdPlantilla').value);
     formData.append('descripcion', document.querySelector('#txtDescripcion').value);
-    const response = await fetch("/checklist/insert/AgregarPlantillaPregunta.php", {
+    const response = await fetch("/checklists/insert/AgregarPlantillaPregunta.php", {
       method: "POST",
       body: formData
     });
@@ -252,7 +252,7 @@ const FnModalModificarPlantillaPregunta = async (id) => {
   const formData = new FormData();
   formData.append('id', id);
   try {
-    const response = await fetch('/checklist/search/BuscarPlantillaPregunta.php', {
+    const response = await fetch('/checklists/search/BuscarPlantillaPregunta.php', {
       method: 'POST',
       body: formData
     });
@@ -284,7 +284,7 @@ const FnModificarPlantillaPregunta = async () => {
     const formData = new FormData();
     formData.append('id', document.getElementById('txtIdActividad').value);
     formData.append('descripcion', document.getElementById('txtDescripcion2').value);
-    const response = await fetch("/checklist/update/ModificarPlantillaPregunta.php", {
+    const response = await fetch("/checklists/update/ModificarPlantillaPregunta.php", {
       method: "POST",
       body: formData
     });
@@ -316,7 +316,7 @@ const FnModalEliminarPlantillaPregunta = async (id) =>{
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarPlantillaPregunta.php', {
+    const response = await fetch('/checklists/delete/EliminarPlantillaPregunta.php', {
       method: 'POST',
       body: formData
     });
@@ -366,7 +366,7 @@ const FnAgregarAlternativa = async () => {
     const formData = new FormData();
     formData.append('preid',document.querySelector('#txtIdActividad').value);
     formData.append('descripcion', document.getElementById('txtAlternativa').value);
-    const response = await fetch("/checklist/insert/AgregarPlantillaAlternativa.php", {
+    const response = await fetch("/checklists/insert/AgregarPlantillaAlternativa.php", {
       method: "POST",
       body: formData
     });
@@ -397,7 +397,7 @@ async function FnEliminarAlternativa(id){
     vgLoader.classList.remove('loader-full-hidden');
     const formData = new FormData();
     formData.append('id', id);
-    const response = await fetch('/checklist/delete/EliminarPlantillaAlternativa.php', {
+    const response = await fetch('/checklists/delete/EliminarPlantillaAlternativa.php', {
       method: 'POST',
       body: formData
     });
@@ -437,13 +437,13 @@ async function FnEliminarAlternativa(id){
 function FnResumenPlantilla(){
   id = document.getElementById('txtIdPlantilla').value;
   if(id > 0){
-    window.location.href='/checklist/admin/Plantilla.php?id='+id;
+    window.location.href='/checklists/admin/Plantilla.php?id='+id;
   }
   return false;
 }
 
 /** LISTAR PLANTILLAS */
 function FnListarPlantillas(){
-  window.location.href='/checklist/admin/Plantillas.php';
+  window.location.href='/checklists/admin/Plantillas.php';
   return false;
 }
