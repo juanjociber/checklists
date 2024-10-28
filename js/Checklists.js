@@ -169,5 +169,8 @@ function FnChecklist(id){
   return false;
 }
 
+function FnAgregarPlantilla(){
+  window.location.href='/checklists/admin/Plantillas.php';
+}
 
 

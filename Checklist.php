@@ -104,7 +104,7 @@
           <button type="button" class="btn btn-outline-primary fw-bold" onclick="FnListarChecklists(); return false;"><i class="fas fa-list"></i><span class="d-none d-sm-block"> Checklists</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnEditarChecklist(<?php echo $ID ?>); return false;"><i class="fas fa-edit"></i><span class="d-none d-sm-block"> Editar</span></button>
           <button type="button" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>" onclick="FnModalFinalizarCheckList(); return false;"><i class="fas fa-check-square"></i><span class="d-none d-sm-block"> Finalizar</span></button>
-          <button type="button" id="btnCrearPdf" class="btn btn-outline-primary fw-bold <?php echo $claseHabilitado;?> <?php echo $atributoHabilitado;?>"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
+          <button type="button" id="btnCrearPdf" class="btn btn-outline-primary fw-bold"><i class="fas fa-print"></i><span class="d-none d-sm-block"> Imprimir</span></button>
         </div>
       </div>
       <div class="row border-bottom mb-2 fs-5 no-pdf">
@@ -131,15 +131,15 @@
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Teléfono:</p> 
-              <p class="m-0 text-secondary fw-bold"><?php echo empty($checklist->CliTelefono) ? 'UNKNOWN' : $checklist->CliTelefono; ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->CliTelefono; ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Correo:</p> 
-              <p class="m-0 text-secondary fw-bold"><?php echo empty($checklist->CliCorreo) ? 'UNKNOWN' : $checklist->CliCorreo; ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->CliCorreo; ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary" style="font-size: 15px;">Supervisor</p> 
-              <p class="m-0 text-secondary fw-bold"><?php echo empty($checklist->Supervisor) ? 'UNKNOWN' : $checklist->Supervisor ?></p>
+              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->Supervisor ?></p>
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-bold" style="font-size: 12px;">Estado</p>
@@ -170,7 +170,7 @@
           <div class="row p-1 m-0">
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Nombre Equipo</p>
-              <p class="m-0 text-secondary fw-bold"><?php echo $checklist->EquNombre ?></p>              
+              <p class="m-0 text-secondary fw-bold" id="txtEquNombre"><?php echo $checklist->EquNombre ?></p>              
             </div>
             <div class="col-6 col-sm-4 col-lg-4 mb-1">
               <p class="m-0 text-secondary fw-light" style="font-size: 15px;">Modelo Equipo</p> 
@@ -200,129 +200,35 @@
           <div class="col-12 mb-2 border border-1 bg-light">
             <p class="mt-2 mb-2 fw-bold text-secondary"><?php echo $NUMERO; ?> - CHECKLIST:</p>
           </div>
-          <!-- Carrusel para pantallas pequeñas (hasta 767px) -->
-          <div id="carouselImages" class="carousel slide d-md-none" data-bs-ride="false" data-bs-interval="false">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="card p-0 h-100">
-                  <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
-                  <div class="card-footer p-0 text-center"></div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="card p-0 h-100">
-                  <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
-                  <div class="card-footer p-0 text-center"></div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="card p-0 h-100">
-                  <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
-                  <div class="card-footer p-0 text-center"></div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="card p-0 h-100">
-                  <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-                  <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
-                  <div class="card-footer p-0 text-center"></div>
-                </div>
-              </div>
+          <div class="col-6 col-lg-3">
+            <div class="card p-0 mb-3">
+              <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
+              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
+              <div class="card-footer p-0 text-center"></div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImages" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselImages" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
           </div>
-          <!-- Carrusel para pantallas entre 768px y 1199px -->
-          <div id="carouselImagesTablet" class="carousel slide d-none d-md-block d-xl-none" data-bs-ride="false" data-bs-interval="false">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="card p-0">
-                      <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
-                      <div class="card-footer p-0 text-center"></div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="card p-0">
-                      <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
-                      <div class="card-footer p-0 text-center"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="card p-0">
-                      <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
-                      <div class="card-footer p-0 text-center"></div>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="card p-0">
-                      <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-                      <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
-                      <div class="card-footer p-0 text-center"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <div class="col-6 col-lg-3">
+            <div class="card p-0 mb-3">
+              <div class="card-header p-0 bg-transparent text-center">Anterior</div>
+              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
+              <div class="card-footer p-0 text-center"></div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselImagesTablet" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselImagesTablet" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
           </div>
-          <!-- Mostrar las 4 imágenes sin carrusel para pantallas grandes (1200px o más) -->
-          <div class="row d-none d-xl-flex" id="carrusel">
-            <div class="col-lg-3">
-              <div class="card p-0">
-                <div class="card-header p-0 bg-transparent text-center">Lado Derecho</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen1) ? '0.jpg' : $checklist->Imagen1 ?>" class="img-fluid imagen-ajustada" alt="">
-                <div class="card-footer p-0 text-center"></div>
-              </div>
+          <div class="col-6 col-lg-3">
+            <div class="card p-0 mb-3">
+              <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
+              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
+              <div class="card-footer p-0 text-center"></div>
             </div>
-            <div class="col-lg-3">
-              <div class="card p-0">
-                <div class="card-header p-0 bg-transparent text-center">Anterior</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen2) ? '0.jpg' : $checklist->Imagen2 ?>" class="img-fluid imagen-ajustada" alt="">
-                <div class="card-footer p-0 text-center"></div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="card p-0">
-                <div class="card-header p-0 bg-transparent text-center">Lado Izquierdo</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen3) ? '0.jpg' : $checklist->Imagen3 ?>" class="img-fluid imagen-ajustada" alt="">
-                <div class="card-footer p-0 text-center"></div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-              <div class="card p-0">
-                <div class="card-header p-0 bg-transparent text-center">Posterior</div>
-                <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
-                <div class="card-footer p-0 text-center"></div>
-              </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="card p-0 mb-3">
+              <div class="card-header p-0 bg-transparent text-center">Posterior</div>
+              <img src="/mycloud/gesman/files/<?php echo empty($checklist->Imagen4) ? '0.jpg' : $checklist->Imagen4 ?>" class="img-fluid imagen-ajustada" alt="">
+              <div class="card-footer p-0 text-center"></div>
             </div>
           </div>
         </div>
-        <!-- <div style="margin-top:20px"></div> -->
         <div class=" mb-2 mt-3">
           <?php 
             $html = '';

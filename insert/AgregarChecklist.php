@@ -1,57 +1,44 @@
-<?php
-  session_start();
-  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
-  $data = array('res' => false, 'msg' => 'Error general.');
-  
-  try {
-    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) { throw new Exception("Usuario no tiene Autorización.");}
-    // LECTURA A DATOS DEL JSON
-    $input = json_decode(file_get_contents('php://input'), true);
-    if (!$input || !isset($input['Id']) || empty($input['respuestas'])) {
-      echo json_encode(array('res' => false, 'msg' => 'Datos incompletos para enviar al servidor.'));
-      exit;
-    }
-    $USUARIO = date('Ymd-His (') . $_SESSION['UserName'] . ')';
-    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // INICIAR TRANSACCIÓN
-    $conmy->beginTransaction();
-
-    $imageFields = array('imagen1', 'imagen2', 'imagen3', 'imagen4');
-    $fileNames = array();
-    foreach ($imageFields as $field) {
-      if (!empty($input[$field])) {
-        $fileName = 'CHK_'.$input['Id'].'_'.uniqid().'.jpeg';
-        $fileEncoded = str_replace("data:image/jpeg;base64,", "", $input[$field]);
-        $fileDecoded = base64_decode($fileEncoded);
-        file_put_contents($_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$fileName, $fileDecoded);
-        /** ALMACENAR NOMBRE DE ARCHIVO */
-        $fileNames[$field] = $fileName; 
-      } else {
-        $fileNames[$field] = null; 
-      }
-    }
-    // IMAGENES CHECKLIST
-    FnModificarChecklistImagenes($conmy, $fileNames, $USUARIO, $input['Id']);
-    // RESPUESTAS
-    if (!empty($input['respuestas'])) {
-      FnAgregarModificarCheckListActividad($conmy, $input['respuestas'], $input['Id'], $USUARIO);
-    }
-    $conmy->commit();
+<?php 
+    session_start();
+	$res=false;
+    $id=0;
+	$msg='Error general creando el CheckList.';
+    require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/OrdenesData.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/EquiposData.php";
+    require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/ClientesData.php";
     
-    $data['msg'] = "Datos guardados exitosamente.";
-    $data['res'] = true; 
-  } catch (PDOException $ex) {
-    if ($conmy->inTransaction()) {
-      $conmy->rollBack();
+    try {
+        $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        if(!isset($_SESSION)){throw new Exception("Se ha perdido la conexión.");}
+        //if(empty($_POST['ordid']) || empty($_POST['fecha']) || empty($_POST['actividad'])){throw new Exception("La información esta incompleta.");} 
+
+        $orden=FnBuscarOrden($conmy, $_POST['ordid']);
+        if(empty($orden->id)){ throw new Exception("No se encontró la Orden."); }
+        
+        $equipo=FnBuscarEquipo($conmy, $orden->equid);
+        if(empty($orden->id)){ throw new Exception("No se encontró el Equipo."); }
+        
+        $cliente=FnBuscarCliente($conmy, $orden->cliid);
+        if(empty($orden->id)){ throw new Exception("No se encontró el Cliente."); }
+
+        $usuario=date('Ymd-His (').$_SESSION['UserName'].')';
+
+        $id=FnRegistrarCheckList($conmy, $orden, $cliente, $equipo, $_POST['fecha'], $_POST['actividad'], $usuario);
+        if($id>0){
+            $res=true;
+            $msg='Se generó el Informe';
+        }else{
+            throw new Exception("Error generando el Informe.");  
+        }
+    } catch(PDOException $ex){
+        $msg=$ex->getMessage();
+        $conmy=null;
+    } catch (Exception $ex) {
+        $msg=$ex->getMessage();
+        $conmy=null;
     }
-    $data['msg'] = $ex->getMessage();
-  } catch (Exception $ex) {
-    if ($conmy->inTransaction()) {
-      $conmy->rollBack();
-    }
-    $data['msg'] = $ex->getMessage();
-  }
-  echo json_encode($data);
+    echo json_encode(array('res'=>$res, 'id'=>$id, 'msg'=>$msg));
 ?>
 

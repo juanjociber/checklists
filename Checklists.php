@@ -70,6 +70,7 @@
     <div class="row border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold d-flex justify-content-between">
         <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['CliNombre'];?></p>
+        <span class="fas fa-cog text-secondary" style="font-size: 28px; cursor:pointer" onclick="FnAgregarPlantilla()"></span>
       </div>
     </div>
     <div class="row mb-1">

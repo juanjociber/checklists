@@ -83,7 +83,7 @@
     </div>
     <div class="row border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold d-flex justify-content-between">
-        <p class="m-0 p-0 text-secondary text-uppercase"><?php echo $isAuthorized ? $_SESSION['CliNombre'] : 'UNKNOWN'; ?></p>
+        <p class="m-0 p-0 text-secondary text-uppercase">CONFIGURACIÓN DE PLANTILLA</p>
         <p class="m-0 p-0 text-secondary text-uppercase"><?php echo $plantilla->Tipo ?></p>
       </div>
     </div>

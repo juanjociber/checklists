@@ -338,7 +338,7 @@ function FnAgregarDatosChecklist() {
       respuestas
     };
 
-    fetch('/checklists/insert/AgregarChecklist.php', {
+    fetch('/checklists/update/ModificarChecklists.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

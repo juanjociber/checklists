@@ -28,7 +28,7 @@
   <div class="container section-top">
     <div class="border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold d-flex justify-content-between">
-        <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['CliNombre'];?></p>
+        <p class="m-0 p-0 text-secondary">LISTA DE PLANTILLAS</p>
         <input type="hidden" id="txtIdPlantilla" value="0">
       </div>
     </div>
