@@ -10,7 +10,7 @@
   $DATOS=array();
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/PlantillaData.php";
 
   try{
@@ -158,7 +158,7 @@
     </div>
 
     <!-- PLANTILLAS -->
-    <div class="row">
+    <div class="row m-0">
       <div class="col-12 mb-2 border border-1 bg-light">
         <p class="mt-2 mb-2 fw-bold text-secondary">PLANTILLAS:</p>
       </div>

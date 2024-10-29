@@ -1,6 +1,6 @@
-// const vgLoader = document.querySelector('.container-loader-full');
+const vgLoader = document.querySelector('.container-loader-full');
 window.onload = function() {
-  //document.getElementById('MenuInformes').classList.add('menu-activo','fw-bold');
+  document.getElementById('MenuCheckLists').classList.add('menu-activo','fw-bold');
   // vgLoader.classList.add('loader-full-hidden');
 };
 // Función para limpiar el canvas
@@ -31,7 +31,7 @@ async function FnAgregarFirma(tipo) {
     if (!response.ok) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
-    // setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    // setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 500);
     const datos = await response.json(); 
     console.log(datos);
 
@@ -45,7 +45,7 @@ async function FnAgregarFirma(tipo) {
     });
     setTimeout(() => { location.reload(); }, 1000);
   } catch (error) {
-    // setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 300);
+    // setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 500);
     Swal.fire({
       icon: 'error',
       title: 'Error',
@@ -137,7 +137,7 @@ function FnListarChecklists(){
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   if(id > 0){
-      window.location.href='/checklists/CheckList.php?id='+id;
+    window.location.href='/checklists/CheckList.php?id='+id;
   }
   return false;
 }

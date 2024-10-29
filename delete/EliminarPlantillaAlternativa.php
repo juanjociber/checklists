@@ -11,16 +11,17 @@
     $id = (int)$_POST['id'];
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if (FnEliminarPlantillaAlternativa($conmy, $id)) {
-      $data['msg'] = "Se eliminó alternativa.";
+      $data['msg'] = "Eliminación existosa.";
       $data['res'] = true;
     } else {
-      $data['msg'] = "Error eliminando actividad.";
+      $data['msg'] = "Error al procesar la solicitud.";
     }
   } catch (PDOException $ex) {
       $data['msg'] = $ex->getMessage();
+      $conmy = null;
   } catch (Exception $ex) {
       $data['msg'] = $ex->getMessage();
+      $conmy = null;
   } 
-  $conmy = null;
   echo json_encode($data);
 ?>

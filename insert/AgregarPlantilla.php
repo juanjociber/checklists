@@ -6,7 +6,6 @@
 
   try {
     if (empty($_POST['tipo'])) { throw new Exception("Campo tipo obligatorio."); }
-    // $USUARIO = date('Ymd-His (').'jhuiza'.')';
     $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
     $plantilla = new stdClass();
     $plantilla->Tipo = $_POST['tipo'];
@@ -23,12 +22,12 @@
     // REGISTRAR PLANTILLA
     $id = FnRegistrarPlantilla($conmy, $plantilla);
     if ($id) {
-      $data['msg'] = "Registro insertado correctamente.";
+      $data['msg'] = "Registro exitoso.";
       $data['res'] = true;
       $data['id'] = $id;
     } 
     else {
-      $data['msg'] = "Error al insertar el registro.";
+      $data['msg'] = "Error al procesar la solicitud.";
     }
   } catch (PDOException $ex) {
       $data['msg'] = $ex->getMessage();

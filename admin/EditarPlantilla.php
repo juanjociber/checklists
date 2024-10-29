@@ -46,7 +46,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Plantilla | GPEM SAC</title>
+  <title>Plantilla | GPEM S.A.C</title>
   <link rel="shortcut icon" href="/mycloud/logos/favicon.ico">
   <link rel="stylesheet" href="/mycloud/library/fontawesome-free-5.9.0-web/css/all.css">
   <link rel="stylesheet" href="/mycloud/library/SweetAlert2/css/sweetalert2.min.css">

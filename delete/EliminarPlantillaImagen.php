@@ -16,10 +16,10 @@
     $id = (int)$_POST['id'];
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if (FnEliminarPlantillaImagen($conmy, $id, $numImagen)) {
-        $data['msg'] = "Imagen eliminada.";
+        $data['msg'] = "Eliminación existosa.";
         $data['res'] = true;
     } else {
-        $data['msg'] = "Error eliminando imagen.";
+        $data['msg'] = "Error al procesar la solicitud.";
     }
   } catch (PDOException $ex) {
       $data['msg'] = $ex->getMessage();

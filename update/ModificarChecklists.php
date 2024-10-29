@@ -1,7 +1,7 @@
 <?php
   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   $data = array('res' => false, 'msg' => 'Error general.');
   
   try {
@@ -39,7 +39,7 @@
     }
     $conmy->commit();
     
-    $data['msg'] = "Datos guardados exitosamente.";
+    $data['msg'] = "Modificación realizada con éxito.";
     $data['res'] = true; 
   } catch (PDOException $ex) {
     if ($conmy->inTransaction()) {

@@ -5,7 +5,7 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   
   $CLIID = $_SESSION['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
@@ -55,6 +55,14 @@
         height: 200px;
         object-fit: contain; 
       }
+      @media(min-width:768px){.contenedor-imagen{
+        display:grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }}
+      @media(min-width:992px){.contenedor-imagen{
+        gap: 15px;
+      }}
     </style>
 </head>
 <body>
@@ -93,17 +101,11 @@
         <label class="pt-2 pb-2 d-flex justify-content-between align-items-center text-secondary">OBSERVACIONES <i class="fas fa-plus fw-bold" style="cursor: pointer;" data-bs-toggle="tooltip" data-bs-placement="left" title="Agregar" onclick="FnModalAgregarObservacion()"></i></label> 
       </div>
     </div>
-    <div class="row m-0">
+    <div class="contenedor-imagen">
       <?php foreach($observaciones as $observacion): ?>
-        <div class="border border-1 mb-2 pt-2 pb-2">
-          <div class="row p-1">
-            <div class="col-12 col-md-8">
-              <div class="d-flex";>
-                <i class="fas fa-check text-secondary" style="margin-right:10px; margin-top:4px;"></i>
-                <p class="mb-0 text-secondary fw-bold" id="idActividad" style="text-align: justify;"><?php echo $observacion['descripcion'] ?></p>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
+        <div class="border border-1 mb-2 p-2">
+          <div class="row p-1 mb-2">
+            <div class="col-12 d-flex justify-content-end mb-1">
               <div class="d-flex justify-content-md-end input-grop-icons" style="margin-left: 15px">
                 <span class="input-group-text bg-white border border-0"><i class="fas fa-edit text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="Editar" style="cursor: pointer;" onclick="FnModalModificarObservacion(<?php echo $observacion['id'] ?>)"></i></span>
                 <span class="input-group-text bg-white border border-0"><i class="fas fa-trash-alt text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="Eliminar" style="cursor: pointer;" onclick="FnModalEliminarObservacion(<?php echo $observacion['id'] ?>)"></i></span>
@@ -111,11 +113,21 @@
                 <span class="input-group-text bg-white border border-0"><i class="fas fa-camera-retro text-secondary" data-bs-toggle="tooltip" data-bs-placement="left" title="Abrir cámara" onclick="FnAbrirCamara(<?php echo ($observacion['id']); ?>)"></i></span>              
               </div>
             </div>
+            <div class="col-12">
+              <div class="d-flex";>
+                <span class="text-secondary" style="margin-right:10px;">&#x2713</span>
+                <p class="mb-0 text-secondary" id="idActividad" style="text-align: justify; line-height: 1.3"><?php echo $observacion['descripcion'] ?></p>
+              </div>
+            </div>
           </div>
           <?php if($observacion['archivo']):?>
-            <div class="mt-2" style="position:relative;">
-              <span onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)" style="position: absolute; color:#ede2e2; font-size:30px; top:0; left:5px; cursor:pointer; color: #ede2e2;">&#x2715</span>
-              <img src="/mycloud/gesman/files/<?php echo ($observacion['archivo']); ?>" class="img-fluid imagen-ajustada" alt="">
+            <div class="d-flex flex-column">
+              <div class="card text-center p-0 mb-2" style="margin: 0px 100px">
+                <div class="card-header bg-white border border-bottom-0 text-secondary p-0" style="text-align:justify;padding-left:10px !important;padding-top: 5px !important; cursor:pointer" data-bs-toggle="tooltip" data-bs-placement="left" title="Eliminar" onclick="FnEliminarArchivo(<?php echo $observacion['id']?>)"><i class="fas fa-trash-alt text-secondary"></i></div>
+                <div class="card-body p-0">
+                  <img src="/mycloud/gesman/files/<?php echo ($observacion['archivo']); ?>" class="imagen-ajustada" alt="">
+                </div>
+              </div>
             </div>
           <?php endif ?>
         </div>

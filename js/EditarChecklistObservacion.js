@@ -1,6 +1,6 @@
 const vgLoader = document.querySelector('.container-loader-full');
 window.onload = function() {
-  //document.getElementById('MenuInformes').classList.add('menu-activo','fw-bold');
+  document.getElementById('MenuCheckLists').classList.add('menu-activo','fw-bold');
   vgLoader.classList.add('loader-full-hidden');
 };
 
@@ -487,7 +487,7 @@ function FnListarChecklists(){
 function FnResumenChecklist(){
   id = document.getElementById('txtIdChecklist').value;
   if(id > 0){
-    window.location.href='/checklists/checkList.php?id='+id;
+    window.location.href='/checklists/CheckList.php?id='+id;
   }
   return false;
 }

@@ -21,11 +21,11 @@
     else {
       // SI NO TIENE ALTERNATIVAS SE PROCEDE A ELIMINAR PREGUNTA
       if (FnEliminarPlantillaPregunta($conmy, $id)) {
-        $data['msg'] = "Se eliminó actividad.";
+        $data['msg'] = "Eliminación existosa.";
         $data['res'] = true;
       } 
       else {
-        $data['msg'] = "Error eliminando actividad.";
+        $data['msg'] = "Error al procesar la solicitud.";
       }
     }
   } catch (PDOException $ex) {

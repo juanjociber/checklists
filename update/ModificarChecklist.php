@@ -1,13 +1,13 @@
 <?php
   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   $data = array('res' => false, 'msg' => 'Error general.', 'result' => null);
 
 try {
   if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
   if (empty($_POST['id']) || empty($_POST['fecha'])) {throw new Exception("La información está incompleta.");}
-  // $USUARIO = date('Ymd-His (').'jhuiza'.')';
+
   $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
   $checklist = new stdClass();
   $checklist->Id = $_POST['id'];
@@ -30,11 +30,11 @@ try {
 
   $result = FnModificarCheckList($conmy, $checklist);
   if ($result) {
-      $data['msg'] = "Se modificó los datos generales.";
+      $data['msg'] = "Modificación realizada con éxito.";
       $data['res'] = true;
       $data['result'] = $result;
   } else {
-      $data['msg'] = "Error modificando datos generales.";
+      $data['msg'] = "Error al procesar la solicitud.";
   }
 } catch (PDOException $ex) {
     $data['msg'] = $ex->getMessage();

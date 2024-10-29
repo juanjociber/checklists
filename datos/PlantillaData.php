@@ -18,49 +18,7 @@
         throw new Exception($e->getMessage());
     }
   }
-
-//   function FnBuscarPlantillas($conmy, $plantilla) {
-//     try {
-//         $plantillas = array('data' => array(), 'pag' => 0);
-//         $query = "";
-//         if (!empty($plantilla->Tipo)) {
-//           $query .= " WHERE tipo = :Tipo";
-//         }
-//         if (isset($plantilla->Pagina)) {
-//           $query .= " LIMIT " . (int)$plantilla->Pagina . ", 15";
-//         }
-//         $sql = "SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas" . $query;
-//         $stmt = $conmy->prepare($sql);
-//         if (!empty($plantilla->Tipo)) {
-//           $stmt->bindParam(':Tipo', $plantilla->Tipo, PDO::PARAM_STR);
-//         }
-//         $stmt->execute();
-//         $n = $stmt->rowCount();
-//         if ($n > 0) {
-//             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-//                 $plantillas['data'][] = array(
-//                     'id' => (int)$row['id'],
-//                     'tipo' => $row['tipo'],
-//                     'imagenes' => array(
-//                         $row['imagen1'],
-//                         $row['imagen2'],
-//                         $row['imagen3'],
-//                         $row['imagen4']
-//                     ),
-//                     'estado' => (int)$row['estado']
-//                 );
-//             }
-//             $plantillas['pag'] = $n;
-//         }
-
-//         return $plantillas;
-//     } catch (PDOException $e) {
-//         throw new Exception($e->getMessage());
-//     } catch (Exception $e) {
-//         throw new Exception($e->getMessage());
-//     }
-// }
-
+  
   function FnBuscarPlantilla($conmy, $id){
     try {
       $stmt = $conmy->prepare("SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas WHERE id=:Id");

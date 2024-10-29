@@ -8,7 +8,6 @@
     if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     if (empty($_POST['plaid']) || empty($_POST['descripcion'])) {throw new Exception("La información está incompleta.");}
 
-    // $USUARIO = date('Ymd-His (').'jhuiza'.')';
     $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
     $plantillaPregunta = new stdClass();
     $plantillaPregunta->Plaid = $_POST['plaid'];
@@ -18,10 +17,10 @@
 
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if (FnRegistrarPlantillaPregunta($conmy, $plantillaPregunta)) {
-      $data['msg'] = "Se registró la Actividad.";
+      $data['msg'] = "Registro exitoso.";
       $data['res'] = true;
     } else {
-      $data['msg'] = "Error registrando la Actividad.";
+      $data['msg'] = "Error al procesar la solicitud.";
     }
   } catch (PDOException $ex) {
     $data['msg'] = $ex->getMessage();

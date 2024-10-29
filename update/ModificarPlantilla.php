@@ -1,13 +1,12 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
 $data = array('res' => false, 'msg' => 'Error general.');
 
 try {
   if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
   if (empty($_POST['id'])) {throw new Exception("La información está incompleta.");}
 
-  // $USUARIO = date('Ymd-His (').'jhuiza'.')';
   $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
   $FileName1 = 'ANTERIOR'.'_'.$_POST['id'].'_'.uniqid().'.jpeg';
   $FileName2 = 'DERECHO'.'_'.$_POST['id'].'_'.uniqid().'.jpeg';
@@ -17,10 +16,10 @@ try {
   $FileDecoded = base64_decode($FileEncoded);
 
   $filePaths = [
-      $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName1,
-      $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName2,
-      $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName3,
-      $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName4
+    $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName1,
+    $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName2,
+    $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName3,
+    $_SERVER['DOCUMENT_ROOT']."/mycloud/gesman/files/".$FileName4
   ];
 
   foreach ($filePaths as $filePath) {
@@ -39,10 +38,10 @@ try {
 
   $result = FnModificarPlanilla($conmy, $plantilla);
   if ($result) {
-      $data['msg'] = "Ok";
+      $data['msg'] = "Modificación realizada con éxito.";
       $data['res'] = true;
   } else {
-      $data['msg'] = "Error modificando datos generales.";
+      $data['msg'] = "Error al procesar la solicitud.";
   }
 } catch (PDOException $ex) {
     $data['msg'] = $ex->getMessage();

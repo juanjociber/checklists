@@ -1,12 +1,11 @@
 <?php
   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   $data = array('res' => false, 'pag' => 0, 'msg' => 'Error general.', 'data'=>array());
 
   try {
     if (empty($_SESSION['CliId'])) {throw new Exception("Usuario no tiene Autorización.");}
-
     if (empty($_POST['fechainicial']) || empty($_POST['fechafinal'])) {throw new Exception("Las fechas de búsqueda están incompletas.");}
 
     $checklist = new stdClass();
@@ -26,12 +25,14 @@
       $data['pag'] = $checklists['pag'];
       $data['data'] = $checklists['data'];
     } else {  
-      $data['msg'] = 'No se encontraron resultados.';
+      $data['msg'] = 'No existen registros en la base de datos.';
     }
   } catch(PDOException $ex) {
     $data['msg'] = $ex->getMessage();
+    $conmy = null;
   } catch (Exception $ex) {
     $data['msg'] = $ex->getMessage();
+    $conmy = null;
   }
   echo json_encode($data);
 ?>

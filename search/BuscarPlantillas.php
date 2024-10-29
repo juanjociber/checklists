@@ -16,7 +16,7 @@
       $data['msg'] = 'Ok.';
       $data['data'] = $plantillas;
     } else {
-      $data['msg'] = 'No se encontraron resultados.';
+      $data['msg'] = 'No existen registros en la base de datos.';
     }
   } catch (PDOException $ex) {
       $data['msg'] = $ex->getMessage();

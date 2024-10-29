@@ -1,7 +1,7 @@
 <?php 
   session_start();
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   $data = array('res' => false,'msg' => 'Error general.', 'data'=>null);
 
   try {
@@ -15,7 +15,7 @@
       $data['msg'] = 'Ok.';
       $data['data'] = $observacion;
     } else {
-      $data['msg'] = 'No se encontró la actividad.';
+      $data['msg'] = 'No existen registros en la base de datos.';
     }
 
   } catch(PDOException $ex){

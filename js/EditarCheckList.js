@@ -1,6 +1,6 @@
 const vgLoader = document.querySelector('.container-loader-full');
 window.onload = function() {
-  //document.getElementById('MenuInformes').classList.add('menu-activo','fw-bold');
+  document.getElementById('MenuCheckLists').classList.add('menu-activo','fw-bold');
   vgLoader.classList.add('loader-full-hidden');
 };
 
@@ -293,7 +293,6 @@ function obtenerImagenes(arrayImagenes) {
 }
 
 function FnModificarRespuesta(consulta){
-  console.log(consulta.getAttribute('datapreid'));
   document.querySelector('#txtPreId').value = consulta.getAttribute('datapreid');
 }
 
@@ -380,7 +379,6 @@ function handleFetchError(error) {
 
 /** MODAL BUSCAR-MODIFICAR ACTIVIDAD */
 async function FnModalModificarActividad(actividad) {
-  console.log(actividad.getAttribute('dataId'));
   document.getElementById('txtIdChkActividad').value = actividad.getAttribute('dataId');
   document.getElementById('txtObservacion').value = actividad.getAttribute('dataObservacion'); 
   

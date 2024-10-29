@@ -15,9 +15,8 @@
       $data['msg'] = 'Ok.';
       $data['data'] = $plantillaPregunta;
     } else {
-      $data['msg'] = 'No se encontró la pregunta.';
+      $data['msg'] = 'No existen registros en la base de datos.';
     }
-
   } catch(PDOException $ex){
       $data['msg'] = $ex->getMessage();
       $conmy = null;

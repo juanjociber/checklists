@@ -7,8 +7,7 @@
   try {
     if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
     if (empty($_POST['preid']) || empty($_POST['descripcion'])) {throw new Exception("La información está incompleta.");}
-
-    // $USUARIO = date('Ymd-His (').'jhuiza'.')';
+    
     $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
     $actividad = new stdClass();
     $actividad->Preid = $_POST['preid'];
@@ -18,10 +17,10 @@
 
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     if (FnRegistrarPlantillaAlternativa($conmy, $actividad)) {
-      $data['msg'] = "Se registró Alternativa.";
+      $data['msg'] = "Registro exitoso.";
       $data['res'] = true;
     } else {
-      $data['msg'] = "Error registrando Alternativa.";
+      $data['msg'] = "Error al procesar la solicitud.";
     }
   } catch (PDOException $ex) {
     $data['msg'] = $ex->getMessage();
