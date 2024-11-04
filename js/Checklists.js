@@ -16,17 +16,23 @@ $(document).ready(function() {
     width: 'resolve', //Personalizar el alto del select, aplicar estilo.
     ajax: {
       delay: 450, //Tiempo de demora para buscar
-      url: '/gesman/search/ListarActivos.php',
+      url: '/gesman/search/ListarEquipos.php',
       type: 'POST',
       dataType: 'json',
       data: function (params) {
         return {
-          nombre: params.term // parametros a enviar al server. params.term captura lo que se escribe en el input
+          codigo:params.term
         };
       },
-      processResults: function (data) {
+      processResults: function(datos){
+        console.log(datos);
         return {
-          results: data.data //Retornar el json obtenido
+          results:datos.data.map(function(elem) {
+              return {
+                  id:elem.id,
+                  text:elem.codigo
+              };
+          })
         }
       },
       cache: true

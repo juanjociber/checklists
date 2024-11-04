@@ -1,13 +1,20 @@
 <?php 
   session_start();
-  if(!isset($_SESSION['UserName']) || !isset($_SESSION['CliId'])){
-    header("location:/gesman");
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
+  
+  if(!FnValidarSesion()){
+    header("location:/gesman/Salir.php");
+    exit();
+  }
+
+  if(!FnValidarSesionManNivel1()){
+    header("HTTP/1.1 403 Forbidden");
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php"; 
   
-  $CLIID = $_SESSION['CliId'];
+  $CLIID = $_SESSION['gesman']['CliId'];
 ?>
 
 <!DOCTYPE html>
@@ -69,8 +76,12 @@
   <div class="container section-top">
     <div class="row border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold d-flex justify-content-between">
-        <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['CliNombre'];?></p>
-        <span class="fas fa-cog text-secondary" style="font-size: 28px; cursor:pointer" onclick="FnAgregarPlantilla()"></span>
+        <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['gesman']['CliNombre'];?></p>
+        <?php
+          if($_SESSION['gesman']['RolMan']>=3){
+            echo '<span class="fas fa-cog text-secondary" style="font-size: 28px; cursor:pointer" onclick="FnAgregarPlantilla()"></span>'; 
+          }
+        ?>
       </div>
     </div>
     <div class="row mb-1">

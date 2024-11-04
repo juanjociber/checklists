@@ -1,8 +1,12 @@
 <?php
   session_start();
-
-  if(empty($_SESSION['UserName']) || empty($_SESSION['CliId']) || empty($_SESSION['CliNombre'])){
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
+  if(!FnValidarSesion()){
     header("location:/gesman/Salir.php");
+    exit();
+  }
+  if(!FnValidarSesionManNivel1()){
+    header("HTTP/1.1 403 Forbidden");
     exit();
   }
 
@@ -17,7 +21,7 @@
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $CHECKLIST=array();
-    $CHECKLIST=FnBuscarCheckList2($conmy, $_SESSION['CliId'], $ID);
+    $CHECKLIST=FnBuscarCheckList2($conmy, $_SESSION['gesman']['CliId'], $ID);
 
     if(!empty($CHECKLIST['id'])){
       $plantilla = FnBuscarPlantilla($conmy, $CHECKLIST['plaid']);
@@ -133,7 +137,7 @@
 
     <div class="row border-bottom mb-3 fs-5">
       <div class="col-12 fw-bold" style="display:flex; justify-content:space-between;">
-        <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['CliNombre'];?></p>
+        <p class="m-0 p-0 text-secondary"><?php echo $_SESSION['gesman']['CliNombre'];?></p>
         <input type="text" class="d-none" id="txtIdChecklist" value="<?php echo $ID ?>"/>
         <input type="hidden" id="txtIdChkActividad" value="0"/>
         <input type="hidden" id="txtId" value="<?php echo $ID;?>" readonly/>

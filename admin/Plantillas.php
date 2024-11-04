@@ -1,11 +1,10 @@
 <?php  
   session_start();
-  if(!isset($_SESSION['UserName']) || !isset($_SESSION['CliId'])){
-    header("location:/gesman");
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
+  if(!FnValidarSesion()){
+    header("location:/gesman/Salir.php");
     exit();
   }
-  $CLIID = $_SESSION['CliId'];
-  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
 ?>
 <!DOCTYPE html>
 <html lang="es">

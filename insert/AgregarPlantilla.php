@@ -1,12 +1,15 @@
 <?php
   session_start();
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/PlantillaData.php";
   $data = array('res' => false, 'msg' => 'Error general.', 'id' => 0);
 
   try {
+    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if(!FnValidarSesion()){throw new Exception("Usuario no tiene Autorización.");}
     if (empty($_POST['tipo'])) { throw new Exception("Campo tipo obligatorio."); }
-    $USUARIO = date('Ymd-His (').$_SESSION['UserName'].')';
+    $USUARIO = date('Ymd-His (').$_SESSION['gesman']['Nombre'].')';
     $plantilla = new stdClass();
     $plantilla->Tipo = $_POST['tipo'];
     $plantilla->Imagen1 = !empty($_POST['imagen1']) ? $_POST['imagen1'] : null;
@@ -16,7 +19,6 @@
     $plantilla->Creacion = $USUARIO;
     $plantilla->Usuario = $USUARIO;
 
-    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // VERIFICAR SI 'TIPO' EXISTE
     if (FnTipoPlantillaExiste($conmy, $plantilla->Tipo)) { throw new Exception("El tipo '{$plantilla->Tipo}' ya existe."); }
     // REGISTRAR PLANTILLA

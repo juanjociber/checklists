@@ -1,14 +1,16 @@
 <?php
   session_start();
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   $data = array('res' => false, 'msg' => 'Error general.');
 
   try {
-    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) { throw new Exception("Usuario no tiene Autorización."); }
+    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if(!FnValidarSesion()){throw new Exception("Usuario no tiene Autorización.");}
     if (empty($_POST['id']) || empty($_POST['tipo'])) { throw new Exception("La información está incompleta.");}
     
-    $USUARIO = date('Ymd-His (') . $_SESSION['UserName'] . ')';
+    $USUARIO = date('Ymd-His (') . $_SESSION['gesman']['Nombre'] . ')';
     $FileName = 'VB'.'_'.$_POST['id'].'_'.uniqid().'.jpeg';
     $FileEncoded = str_replace("data:image/jpeg;base64,", "", $_POST['archivo']);
     $FileDecoded = base64_decode($FileEncoded);
@@ -23,7 +25,6 @@
     // DETERMINAR QUE CAMPO ACTUALIZAR
     $campo = ($_POST['tipo'] === 'emp') ? 'emp_firma' : 'cli_firma';
 
-    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $stmt = $conmy->prepare("UPDATE tblchecklists SET $campo = :Firma, actualizacion = :Actualizacion WHERE id = :Id");
     $params = array(':Firma' => $FileName, ':Actualizacion' => $USUARIO, ':Id' => $checklist->Id);
     $result = $stmt->execute($params);

@@ -1,19 +1,19 @@
 <?php
   session_start();
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   $data = array('res' => false, 'msg' => 'Error general.');
   
   try {
-    if (empty($_SESSION['CliId']) && empty($_SESSION['UserName'])) { throw new Exception("Usuario no tiene Autorización.");}
-    // LECTURA A DATOS DEL JSON
+    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if(!FnValidarSesion()){throw new Exception("Usuario no tiene Autorización.");}
     $input = json_decode(file_get_contents('php://input'), true);
     if (!$input || !isset($input['Id']) || empty($input['respuestas'])) {
       echo json_encode(array('res' => false, 'msg' => 'Datos incompletos para enviar al servidor.'));
       exit;
     }
-    $USUARIO = date('Ymd-His (') . $_SESSION['UserName'] . ')';
-    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $USUARIO = date('Ymd-His (') . $_SESSION['gesman']['Nombre'] . ')';
     // INICIAR TRANSACCIÓN
     $conmy->beginTransaction();
 

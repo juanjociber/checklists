@@ -1,27 +1,34 @@
 const vgLoader = document.querySelector('.container-loader-full');
 window.onload = function() {
-  document.getElementById('MenuCheckLists').classList.add('menu-activo','fw-bold');
+  document.getElementById('MenuCheckLists').classList.add('menu-activo', 'fw-bold');
   // vgLoader.classList.add('loader-full-hidden');
 };
+
 // Función para limpiar el canvas
 function FnEliminarFirma(tipo) {
   const canvasId = tipo === 1 ? 'canvasEmpFirma' : 'canvasCliFirma';
   const canvas = document.getElementById(canvasId);
   const context = canvas.getContext('2d');
+  
+  // Limpiar el canvas
   context.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Establecer el color de fondo y rellenar el canvas
+  context.fillStyle = 'white'; // Color de fondo
+  context.fillRect(0, 0, canvas.width, canvas.height); // Rellenar el canvas con el color de fondo
 }
 
-/** GUARDAR FIRMA */
+// GUARDAR FIRMA
 async function FnAgregarFirma(tipo) {
   try {
     // vgLoader.classList.remove('loader-full-hidden');
     const canvasId = tipo === 'emp' ? 'canvasEmpFirma' : 'canvasCliFirma';
     const canvas = document.getElementById(canvasId);
-    const dataURL = canvas.toDataURL('image/jpeg'); 
+    const dataURL = canvas.toDataURL('image/jpeg');
     const formData = new FormData();
     formData.append('id', document.getElementById('txtIdChecklist').value);
     formData.append('archivo', dataURL);
-    formData.append('tipo', tipo); 
+    formData.append('tipo', tipo);
     console.log('Datos enviados:', Object.fromEntries(formData.entries()));
 
     const response = await fetch('/checklists/insert/AgregarCheckListFirma.php', {
@@ -32,7 +39,7 @@ async function FnAgregarFirma(tipo) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
     // setTimeout(() => { vgLoader.classList.add('loader-full-hidden'); }, 500);
-    const datos = await response.json(); 
+    const datos = await response.json();
     console.log(datos);
 
     if (!datos.res) {
@@ -101,6 +108,7 @@ function iniciarCanvas() {
       drawing = false;
       context.closePath();
     });
+    
     // Soporte para dispositivos táctiles
     canvas.addEventListener('touchstart', (event) => {
       event.preventDefault();
@@ -127,7 +135,9 @@ function iniciarCanvas() {
   });
 }
 
-window.onload = iniciarCanvas;
+window.onload = function() {
+  iniciarCanvas();
+};
 
 function FnListarChecklists(){
   window.location.href='/checklists/CheckLists.php';
@@ -141,8 +151,3 @@ function FnResumenChecklist(){
   }
   return false;
 }
-
-
-
-
-

@@ -1,11 +1,11 @@
 <?php
     session_start();
+    require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
     require_once $_SERVER['DOCUMENT_ROOT'].'/gesman/connection/ConnGesmanDb.php';
 
     $Bandera = false;
-	if(isset($_SESSION['CliId']) && isset($_SESSION['UserName'])){
-		$Bandera = true;
-	}
+    if(!FnValidarSesion()){throw new Exception("Usuario no tiene Autorización.");}
+    $Bandera = true;
 
     $data = array();
     $data['res'] = false;
@@ -13,7 +13,7 @@
 
     if($Bandera==true && $_SERVER['REQUEST_METHOD']==='POST'){
         if(!empty($_POST['id'])){
-            $Usuario = date('Ymd-His').' ('.$_SESSION['UserName'].')';
+            $Usuario = date('Ymd-His').' ('.$_SESSION['gesman']['Nombre'].')';
             try{
                 $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $stmt=$conmy->prepare("UPDATE tblchecklists SET estado=:Estado, actualizacion=:Actualizacion WHERE id=:Id AND cliid=:Cliid AND estado IN(1,2,4);");
@@ -21,7 +21,7 @@
                     ':Estado' => 3,
                     ':Actualizacion' => $Usuario,
                     ':Id' => $_POST['id'],
-                    ':Cliid' => $_SESSION['CliId']             
+                    ':Cliid' => $_SESSION['gesman']['CliId']             
                 ));
 
                 if($stmt->rowCount()>0){

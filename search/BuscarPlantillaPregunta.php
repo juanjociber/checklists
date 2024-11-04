@@ -1,15 +1,16 @@
 <?php 
   session_start();
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/PlantillaData.php";
   $data = array('res' => false,'msg' => 'Error general.', 'data'=>null);
 
   try {
-    if(empty($_SESSION['CliId']) && empty($_SESSION['UserName'])){throw new Exception("Usuario no tiene Autorización.");}
+    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    if(!FnValidarSesion()){throw new Exception("Usuario no tiene Autorización.");}
     if(empty($_POST['id'])){ throw new Exception("La informacion esta incompleta."); }
     
     $plantillaPregunta = FnBuscarPlantillaPregunta($conmy, $_POST['id']);
-    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);    
     if ($plantillaPregunta) {
       $data['res'] = true;
       $data['msg'] = 'Ok.';
@@ -17,6 +18,7 @@
     } else {
       $data['msg'] = 'No existen registros en la base de datos.';
     }
+    $conmy = null;
   } catch(PDOException $ex){
       $data['msg'] = $ex->getMessage();
       $conmy = null;

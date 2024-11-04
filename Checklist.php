@@ -1,13 +1,20 @@
-<?php 
-  session_start();
-  if(!isset($_SESSION['UserName']) || !isset($_SESSION['CliId'])){
-    header("location:/gesman");
+<?php
+  session_start(); 
+  require_once $_SERVER['DOCUMENT_ROOT']."/gesman/data/SesionData.php";
+  
+  if(!FnValidarSesion()){
+    header("location:/gesman/Salir.php");
+    exit();
+  }
+
+  if(!FnValidarSesionManNivel1()){
+    header("HTTP/1.1 403 Forbidden");
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
   
-  $CLIID = $_SESSION['CliId'];
+  $CLIID = $_SESSION['gesman']['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
   $Estado=0;
   $checkListActividades = array();
@@ -109,7 +116,7 @@
       </div>
       <div class="row border-bottom mb-2 fs-5 no-pdf">
         <div class="col-12 fw-bold d-flex justify-content-between">
-          <p class="m-0 text-secondary"><?php echo $isAuthorized ? $_SESSION['CliNombre'] : 'UNKNOWN'; ?></p>
+          <p class="m-0 text-secondary"><?php echo $isAuthorized ? $_SESSION['gesman']['CliNombre'] : 'UNKNOWN'; ?></p>
           <input type="hidden" id="idCheckList" value="<?php echo $ID;?>">
           <p class="m-0 text-secondary"><?php echo $isAuthorized ? $checklist->Nombre : 'UNKNOWN'; ?></p>
         </div>
