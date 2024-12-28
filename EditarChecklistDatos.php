@@ -10,8 +10,8 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/SupervisorData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/data/CheckListsData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/data/SupervisorData.php";
   
   $CLIID = $_SESSION['gesman']['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];

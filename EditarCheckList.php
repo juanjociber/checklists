@@ -14,8 +14,8 @@
   $DATOS=array();
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/CheckListsData.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/PlantillaData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/data/CheckListsData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/data/PlantillaData.php";
 
   try{
     $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

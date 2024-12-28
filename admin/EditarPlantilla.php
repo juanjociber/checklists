@@ -12,7 +12,7 @@
   $CLIID = $_SESSION['gesman']['CliId'];
 
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
-  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/datos/PlantillaData.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/checklists/data/PlantillaData.php";
 
   $plantilla= new stdClass();
   $plantillaPreguntas =array();
