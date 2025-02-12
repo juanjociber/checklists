@@ -44,7 +44,7 @@ async function FnAgregarPlantilla() {
 async function FnBuscarPlantillas() {
   try {
     const formData = new FormData();
-    formData.append('tipo', document.querySelector('#txtTipo').value);
+    formData.append('nombre', document.querySelector('#txtTipo').value);
     // formData.append('pagina', PaginasTotal);
     const response = await fetch('/checklists/search/BuscarPlantillas.php', {
       method: 'POST',
@@ -83,7 +83,7 @@ async function FnBuscarPlantillas() {
       <div class="col-12">
         <div class="divselect border-bottom border-1 mb-2 px-1" onclick="FnPlantilla(${item.id}); return false;">
           <div class="div d-flex justify-content-between">
-            <p class="m-0 text-secondary pb-1"><span class="fw-bold">${item.tipo}</span></p><p class="m-0">${estado}</p>
+            <p class="m-0 text-secondary pb-1"><span class="fw-bold">${item.nombre}</span></p><p class="m-0">${estado}</p>
           </div>
         </div>
       </div>`;

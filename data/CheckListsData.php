@@ -5,8 +5,7 @@
   function FnRegistrarCheckList($conmy, $checklist) {
     try {
         $stmt = $conmy->prepare("CALL spman_agregarchecklist(:_cliid, :_solid, :_plaid, :_equid, :_fecha, :_cliruc, :_clinombre, :_clidireccion, :_clicontacto, :_clitelefono, 
-        :_clicorreo, :_supervisor, :_equcodigo, :_equnombre, :_equmarca, :_equmodelo, :_equplaca, :_equserie, :_equmotor, :_equtransmision, :_equdiferencial, 
-        :_equkm, :_equhm, :_usuario, @_id)");
+        :_clicorreo, :_supervisor, :_equnombre, :_equmarca, :_equmodelo, :_equplaca, :_equserie, :_equkm, :_equhm, :_usuario, @_id)");
         $stmt->bindParam(':_cliid', $checklist['cliid'], PDO::PARAM_INT);
         $stmt->bindParam(':_solid', $checklist['solid'], PDO::PARAM_INT);
         $stmt->bindParam(':_plaid', $checklist['plaid'], PDO::PARAM_INT);
@@ -19,15 +18,11 @@
         $stmt->bindParam(':_clitelefono', $checklist['clitelefono'], PDO::PARAM_STR);
         $stmt->bindParam(':_clicorreo', $checklist['clicorreo'], PDO::PARAM_STR);
         $stmt->bindParam(':_supervisor', $checklist['supervisor'], PDO::PARAM_STR);
-        $stmt->bindParam(':_equcodigo', $checklist['equcodigo'], PDO::PARAM_STR);
         $stmt->bindParam(':_equnombre', $checklist['equnombre'], PDO::PARAM_STR);
         $stmt->bindParam(':_equmarca', $checklist['equmarca'], PDO::PARAM_STR);
         $stmt->bindParam(':_equmodelo', $checklist['equmodelo'], PDO::PARAM_STR);
         $stmt->bindParam(':_equplaca', $checklist['equplaca'], PDO::PARAM_STR);
         $stmt->bindParam(':_equserie', $checklist['equserie'], PDO::PARAM_STR);
-        $stmt->bindParam(':_equmotor', $checklist['equmotor'], PDO::PARAM_STR);
-        $stmt->bindParam(':_equtransmision', $checklist['equtransmision'], PDO::PARAM_STR);
-        $stmt->bindParam(':_equdiferencial', $checklist['equdiferencial'], PDO::PARAM_STR);
         $stmt->bindParam(':_equkm', $checklist['equkm'], PDO::PARAM_INT);
         $stmt->bindParam(':_equhm', $checklist['equhm'], PDO::PARAM_INT);
         $stmt->bindParam(':_usuario', $checklist['usuario'], PDO::PARAM_STR);
@@ -80,7 +75,7 @@
 
   function FnBuscarCheckList($conmy, $cliid, $id) {
     try {
-      $stmt = $conmy->prepare("SELECT id, cliid, solid, plaid, equid, fecha, numero, nombre, cli_ruc, cli_nombre, cli_direccion, cli_contacto, cli_telefono, cli_correo, supervisor, equ_codigo, equ_nombre, equ_marca, equ_modelo, equ_placa, equ_serie, equ_motor, equ_transmision, equ_diferencial, equ_km, equ_hm, imagen1, imagen2, imagen3, imagen4, emp_firma, cli_firma, estado FROM tblchecklists WHERE id = :Id AND cliid = :Cliid");
+      $stmt = $conmy->prepare("SELECT id, cliid, solid, plaid, equid, fecha, numero, nombre, cli_ruc, cli_nombre, cli_direccion, cli_contacto, cli_telefono, cli_correo, supervisor, equ_nombre, equ_marca, equ_modelo, equ_placa, equ_serie, equ_km, equ_hm, imagen1, imagen2, imagen3, imagen4, emp_firma, cli_firma, estado FROM tblchecklists WHERE id = :Id AND cliid = :Cliid");
       $stmt->execute(array(':Id' => $id, ':Cliid' => $cliid));
       $row = $stmt->fetch(PDO::FETCH_ASSOC);
       if ($row) {
@@ -100,15 +95,11 @@
         $checklist->CliTelefono = $row['cli_telefono'];
         $checklist->CliCorreo = $row['cli_correo'];
         $checklist->Supervisor = $row['supervisor'];
-        $checklist->EquCodigo = $row['equ_codigo'];
         $checklist->EquNombre = $row['equ_nombre'];
         $checklist->EquMarca = $row['equ_marca'];
         $checklist->EquModelo = $row['equ_modelo'];
         $checklist->EquPlaca = $row['equ_placa'];
         $checklist->EquSerie = $row['equ_serie'];
-        $checklist->EquMotor = $row['equ_motor'];
-        $checklist->EquTransmision = $row['equ_transmision'];
-        $checklist->EquDiferencial = $row['equ_diferencial'];
         $checklist->EquKm = $row['equ_km'];
         $checklist->EquHm = $row['equ_hm'];
         $checklist->Imagen1 = $row['imagen1'];
@@ -153,9 +144,10 @@
   function FnModificarCheckList($conmy, $checklist) {
     try {
       $stmt = $conmy->prepare("UPDATE tblchecklists 
-                               SET  fecha = :Fecha, cli_contacto = :CliContacto, supervisor = :Supervisor, equ_nombre = :EquNombre, equ_marca = :EquMarca, 
-                               equ_modelo = :EquModelo, equ_placa = :EquPlaca, equ_serie = :EquSerie, equ_motor = :EquMotor, equ_transmision =:EquTransmision, 
-                               equ_diferencial =:EquDiferencial, equ_km = :EquKm, equ_hm = :EquHm, actualizacion = :Actualizacion WHERE id = :Id");
+                               SET  fecha = :Fecha, cli_contacto = :CliContacto, supervisor = :Supervisor, 
+                                    equ_nombre = :EquNombre, equ_marca = :EquMarca, equ_modelo = :EquModelo, 
+                                    equ_placa = :EquPlaca, equ_serie = :EquSerie, equ_km = :EquKm, equ_hm = :EquHm, 
+                                    actualizacion = :Actualizacion WHERE id = :Id");
       $params = array(
         ':Fecha' => $checklist->Fecha,
         ':CliContacto' => $checklist->CliContacto,
@@ -165,9 +157,6 @@
         ':EquModelo' => $checklist->EquModelo,
         ':EquPlaca' => $checklist->EquPlaca,
         ':EquSerie' => $checklist->EquSerie,
-        ':EquMotor' => $checklist->EquMotor,
-        ':EquTransmision' => $checklist->EquTransmision,
-        ':EquDiferencial' => $checklist->EquDiferencial,
         ':EquKm' => $checklist->EquKm,
         ':EquHm' => $checklist->EquHm,
         ':Actualizacion' => $checklist->Usuario,

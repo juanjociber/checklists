@@ -16,6 +16,7 @@
   $CLIID = $_SESSION['gesman']['CliId'];
   $ID = empty($_GET['id'])?0:$_GET['id'];
   $supervisores = array();
+  $contactos = array();
   $isAuthorized = false;
   $claseHabilitado = "btn-outline-secondary";
   $atributoHabilitado = " disabled";
@@ -29,8 +30,10 @@
         $claseHabilitado = "btn-outline-primary";
         $atributoHabilitado = ""; 
         $supervisores = FnBuscarSupervisores($conmy);
+        $contactos = FnBuscarContacto($conmy, $_SESSION['gesman']['CliId']);
       }
     }
+    $conmy = null;
   } catch (PDOException $e) {
       $errorMessage = $e->getMessage();
       $conmy = null;
@@ -104,15 +107,27 @@
           <label for="dtpFecha" class="form-label mb-0">Fecha:</label>
           <input type="date" class="form-control text-secondary text-uppercase fw-bold" id="dtpFecha" value="<?php echo $checklist->Fecha ?>">
         </div>
-        <div class="col-12 col-md-4 mt-2">
-          <label class="form-label mb-0">Contacto:</label>
-          <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtContacto" value="<?php echo $checklist->CliContacto ?>"></input>
+        <!-- CLIENTE CONTACTO-->
+        <div class="custom-select-container col-12 col-md-4 mt-2">
+          <label for="txtCliContacto" class="form-label mb-0">Contacto :</label>
+          <div class="custom-select-wrapper">
+            <input type="text" id="txtCliContacto" class="custom-select-input text-secondary fw-bold" value="<?php echo $checklist->CliContacto;?>"/>
+            <span class="custom-select-arrow"><i class="bi bi-chevron-down"></i></span>
+            <div id="contactoList" class="custom-select-list">
+              <?php foreach ($contactos as $contacto): ?>
+                <div class="custom-select-item" data-value="<?php echo ($contacto['idsupervisor']); ?>">
+                  <?php echo ($contacto['supervisor']); ?>
+                </div>
+              <?php endforeach ?>
+            </div>
+          </div>
         </div>
+
         <!-- SUPERVISOR -->
         <div class="custom-select-container col-12 col-md-4 mt-2">
           <label for="txtSupervisor" class="form-label mb-0">Supervisor:</label>
           <div class="custom-select-wrapper">
-            <input type="text" class="custom-select-input text-secondary fw-bold" id="txtSupervisor" value="<?php echo  $checklist->Supervisor;?>"/>
+            <input type="text" id="txtSupervisor" class="custom-select-input text-secondary fw-bold" value="<?php echo  $checklist->Supervisor;?>"/>
             <span class="custom-select-arrow"><i class="bi bi-chevron-down"></i></span>
             <div id="supervisorList" class="custom-select-list">
               <!-- SUPERVISORES -->
@@ -124,6 +139,7 @@
             </div>
           </div>
         </div>
+
         <div class="col-6 col-md-3 mt-2">
           <label class="form-label mb-0">Nombre Equipo:</label>
           <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtEquNombre" value="<?php echo $checklist->EquNombre ?>"></input>
@@ -143,18 +159,6 @@
         <div class="col-6 col-md-6 mt-2">
           <label class="form-label mb-0">Serie:</label>
           <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtEquSerie" value="<?php echo $checklist->EquSerie ?>"></input>
-        </div>
-        <div class="col-6 col-md-6 mt-2">
-          <label class="form-label mb-0">Motor:</label>
-          <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtEquMotor" value="<?php echo $checklist->EquMotor ?>"></input>
-        </div>
-        <div class="col-6 col-md-3 mt-2">
-          <label class="form-label mb-0">Transmisión:</label>
-          <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtEquTransmision" value="<?php echo $checklist->EquTransmision ?>"></input>
-        </div>
-        <div class="col-6 col-md-3 mt-2">
-          <label class="form-label mb-0">Diferencial:</label>
-          <input type="text" class="form-control text-secondary fw-bold" style="font-size:15px" id="txtEquDiferencial" value="<?php echo $checklist->EquDiferencial ?>"></input>
         </div>
         <div class="col-6 col-md-3 mt-2">
           <label class="form-label mb-0">Kilometraje:</label>

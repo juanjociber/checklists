@@ -21,9 +21,6 @@ try {
   $checklist->EquModelo = $_POST['equ_modelo'];
   $checklist->EquPlaca = $_POST['equ_placa'];
   $checklist->EquSerie = $_POST['equ_serie'];
-  $checklist->EquMotor = $_POST['equ_motor'];
-  $checklist->EquTransmision = $_POST['equ_transmision'];
-  $checklist->EquDiferencial = $_POST['equ_diferencial'];
   $checklist->EquKm = $_POST['equ_km'];
   $checklist->EquHm = $_POST['equ_hm'];
   $checklist->Usuario = $USUARIO;

@@ -58,6 +58,7 @@ const FnCargarSelect = () => {
   };
   // INICIALIZANDO SELECT
   initCustomSelect('txtSupervisor', 'supervisorList');
+  initCustomSelect('txtCliContacto', 'contactoList');
 };
 document.addEventListener('DOMContentLoaded', FnCargarSelect);
 
@@ -68,18 +69,19 @@ const FnModificarChecklist = async () => {
     const formData = new FormData();      
     formData.append('id', document.querySelector('#txtIdChecklist').value);
     formData.append('fecha', document.querySelector('#dtpFecha').value.trim());
-    formData.append('cli_contacto', document.querySelector('#txtContacto').value.trim());
+    formData.append('cli_contacto', document.querySelector('#txtCliContacto').value.trim());
     formData.append('supervisor', document.querySelector('#txtSupervisor').value.trim());
     formData.append('equ_nombre', document.querySelector('#txtEquNombre').value.trim());
     formData.append('equ_marca', document.querySelector('#txtEquMarca').value.trim()); 
     formData.append('equ_modelo', document.querySelector('#txtEquModelo').value.trim());
     formData.append('equ_placa', document.querySelector('#txtEquPlaca').value.trim());
     formData.append('equ_serie', document.querySelector('#txtEquSerie').value.trim());
-    formData.append('equ_motor', document.querySelector('#txtEquMotor').value.trim());
-    formData.append('equ_transmision', document.querySelector('#txtEquTransmision').value.trim());
-    formData.append('equ_diferencial', document.querySelector('#txtEquDiferencial').value.trim());
     formData.append('equ_km', document.querySelector('#txtEquKm').value); 
     formData.append('equ_hm', document.querySelector('#txtEquHm').value);
+
+    formData.forEach((key,value)=>{
+      console.log(key,value);
+    });
     
     const response = await fetch('/checklists/update/ModificarCheckList.php', {
         method: 'POST',

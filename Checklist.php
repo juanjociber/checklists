@@ -48,7 +48,6 @@
     $claseHabilitado = "btn-outline-primary";
     $atributoHabilitado = "";
   }
-
 ?>
 <!doctype html>
 <html lang="es">

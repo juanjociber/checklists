@@ -12,9 +12,21 @@
     exit();
   }
   require_once $_SERVER['DOCUMENT_ROOT']."/gesman/connection/ConnGesmanDb.php";
+  require_once $_SERVER['DOCUMENT_ROOT']."/solicitudes/data/SolicitudesData.php";
   require_once $_SERVER['DOCUMENT_ROOT']."/checklists/data/CheckListsData.php"; 
   
   $CLIID = $_SESSION['gesman']['CliId'];
+  $PLANTILLAS=array();
+
+  try{
+    $conmy->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $PLANTILLAS=FnListarPlantilla($conmy);
+    $conmy==null;
+  } catch(PDOException $ex) {
+      $conmy = null;
+  } catch (Exception $ex) {
+      $conmy = null;
+  }
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +113,10 @@
         <p class="m-0" style="font-size:12px;">Fecha Final</p>
         <input type="date" class="form-control" id="dtpFechaFinal" value="<?php echo date('Y-m-d');?>"/>
       </div>
-      <div class="col-12 mb-2">
+      <div class="col-6 mb-2">
+        <button type="button" class="btn btn-outline-primary form-control" onclick="FnModalAgregarCheckList(); return false;"><i class="fas fa-plus"></i> CheckList</button>
+      </div>
+      <div class="col-6 mb-2">
         <button type="button" class="btn btn-outline-primary w-100 form-control" onclick="FnBuscarChecklists(); return false;"><i class="fas fa-search"></i> Buscar</button>
       </div>  
     </div>  
@@ -122,6 +137,56 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="modalAgregarCheckList" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-white" id="exampleModalLabel">AGREGAR CHECKLIST</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body pb-1 mb-1">
+          <div class="row mb-3">
+
+            <div class="col-12">
+              <label for="dtpCheckList" class="form-label text-secondary" style="font-size:12px;">Fecha:</label>
+              <input type="date" class="form-control" id="dtpCheckList" value="<?php echo date('Y-m-d');?>" required/>
+            </div>
+            <div class="col-12 mt-2">
+                <label class="form-label text-secondary" style="font-size:12px;">Equipo:</label>
+                <select class="js-example-responsive" name="cbActivo2" id="cbActivo2" style="width: 100%">
+                  <option value="0">Seleccionar</option>
+                </select>
+            </div>
+            <div class="col-6 mt-2">
+              <label for="txtKm" class="form-label text-secondary" style="font-size:12px;">Km:</label>
+              <input type="number" class="form-control" id="txtKm" value="0"/>
+            </div>
+            <div class="col-6 mt-2">
+              <label for="txtHm" class="form-label text-secondary" style="font-size:12px;">Hm:</label>
+              <input type="number" class="form-control" id="txtHm" value="0"/>
+            </div>
+            <div class="col-12">
+              <p class="m-0 text-secondary" style="font-size:13px;">Plantilla:</label>
+              <select class="form-select" id="cbPlantilla">
+                <option value="0">Seleccionar</option>
+                <?php
+                  foreach($PLANTILLAS as $key=>$valor){
+                    echo '<option value="'.$valor['id'].'">'.$valor['nombre'].'</option>';
+                  }
+                ?>
+              </select>
+            </div>
+          </div>  
+        </div>
+        <div class="modal-body pb-1 pt-1" id="msjAgregarCheckList"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary w-100" onclick="FnAgregarCheckList(); return false;">GUARDAR</button>
+        </div>              
+      </div>
+    </div>
+  </div>
+
   <div class="container-loader-full">
     <div class="loader-full"></div>
   </div> 

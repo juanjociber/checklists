@@ -88,10 +88,10 @@
     $conmy==null;
   } catch(PDOException $ex) {
       $conmy = null;
-      print_r($ex);
+      // print_r($ex);
   } catch (Exception $ex) {
       $conmy = null;
-      print_r($ex);
+      // print_r($ex);
   }
 
 ?>
@@ -276,7 +276,7 @@
 
   <!-- MODAL DIBUJAR CANVA -->
   <div class="modal fade " id="modalAgregarCanva" tabindex="-1" aria-labelledby="modalAgregarCanvaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
+    <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header bg-secondary text-white">
           <h5 class="modal-title fs-5" id="modalAgregarCanvaLabel">REALIZAR TRAZADO</h5>

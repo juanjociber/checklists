@@ -5,8 +5,8 @@
     */
   function FnBuscarPlantillas($conmy, $tipo = null) {
     try {
-      $sql = "SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas";
-      if ($tipo !== null) { $sql .= " WHERE tipo = :Tipo"; }
+      $sql = "SELECT id, nombre, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas";
+      if ($tipo !== null) { $sql .= " WHERE nombre = :Tipo"; }
       $stmt = $conmy->prepare($sql);
       if ($tipo !== null) { $stmt->bindParam(':Tipo', $tipo, PDO::PARAM_STR); }
       $stmt->execute();
@@ -21,12 +21,12 @@
   
   function FnBuscarPlantilla($conmy, $id){
     try {
-      $stmt = $conmy->prepare("SELECT id, tipo, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas WHERE id=:Id");
+      $stmt = $conmy->prepare("SELECT id, nombre, imagen1, imagen2, imagen3, imagen4, estado FROM tblchkplantillas WHERE id=:Id");
       $stmt -> execute(array(':Id'=>$id));
       $plantilla = new stdClass();
       while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
         $plantilla->Id = $row['id'];
-        $plantilla->Tipo = $row['tipo'];
+        $plantilla->Tipo = $row['nombre'];
         $plantilla->Imagen1 = $row['imagen1'];
         $plantilla->Imagen2 = $row['imagen2'];
         $plantilla->Imagen3 = $row['imagen3'];
@@ -42,7 +42,7 @@
   function FnRegistrarPlantilla($conmy, $plantilla) {
     try {
       $res = false;
-      $stmt = $conmy->prepare("INSERT INTO tblchkplantillas(tipo, creacion, actualizacion) VALUES(:Tipo,:Creacion,:Actualizacion)");
+      $stmt = $conmy->prepare("INSERT INTO tblchkplantillas(nombre, creacion, actualizacion) VALUES(:Tipo,:Creacion,:Actualizacion)");
       $params = array(':Tipo' => $plantilla->Tipo,':Creacion' => $plantilla->Creacion,':Actualizacion' => $plantilla->Usuario);
       if ($stmt->execute($params)) {
         $res = true;
@@ -55,7 +55,7 @@
 
   function FnTipoPlantillaExiste($conmy, $tipo) {
     try {
-        $stmt = $conmy->prepare("SELECT COUNT(*) FROM tblchkplantillas WHERE tipo = :Tipo");
+        $stmt = $conmy->prepare("SELECT COUNT(*) FROM tblchkplantillas WHERE nombre = :Tipo");
         $stmt->bindParam(':Tipo', $tipo, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt->fetchColumn() > 0;

@@ -21,16 +21,15 @@ $(document).ready(function() {
       dataType: 'json',
       data: function (params) {
         return {
-          codigo:params.term
+          nombre:params.term
         };
       },
       processResults: function(datos){
-        console.log(datos);
         return {
           results:datos.data.map(function(elem) {
               return {
                   id:elem.id,
-                  text:elem.codigo
+                  text:elem.nombre
               };
           })
         }
@@ -38,10 +37,48 @@ $(document).ready(function() {
       cache: true
     },
     placeholder: 'Seleccionar',
-    // allowClear: true, // Permite borrar la selección
+    allowClear: true, // Permite borrar la selección
     minimumInputLength:1 //Caracteres minimos para buscar
   });
 });
+
+$(document).ready(function() {
+  $('#cbActivo2').select2({
+    dropdownParent: $('#modalAgregarCheckList'),
+    width: 'resolve', //Personalizar el alto del select, aplicar estilo.
+    ajax: {
+      delay: 450, //Tiempo de demora para buscar
+      url: '/gesman/search/ListarEquipos.php',
+      type: 'POST',
+      dataType: 'json',
+      data: function (params) {
+          return {
+              nombre: params.term // parametros a enviar al server. params.term captura lo que se escribe en el input
+          };
+      },
+      processResults: function (datos) {
+        return {
+          results:datos.data.map(function(elem) {
+              return {
+                id: elem.id,
+                text: elem.nombre,
+              };
+          })
+        }
+      },
+      cache: true
+    },
+    placeholder: 'Seleccionar',
+    minimumInputLength:1 //Caracteres minimos para buscar
+  });
+});
+
+async function FnModalAgregarCheckList(){
+  const modalAgregarCheckList = new bootstrap.Modal(document.getElementById('modalAgregarCheckList'),{
+    keyboard: false
+  }).show();
+  return false;
+}
 
 async function FnBuscarChecklists(){
   vgLoader.classList.remove('loader-full-hidden');
@@ -177,6 +214,36 @@ function FnChecklist(id){
 
 function FnAgregarPlantilla(){
   window.location.href='/checklists/admin/Plantillas.php';
+}
+
+async function FnAgregarCheckList(){
+  vgLoader.classList.remove('loader-full-hidden');
+  try {        
+    const formData = new FormData();
+    formData.append('fecha',document.getElementById('dtpCheckList').value);
+    formData.append('equid',document.getElementById('cbActivo2').value);
+    formData.append('equkm',document.getElementById('txtKm').value);
+    formData.append('equhm',document.getElementById('txtHm').value);
+    formData.append('plaid', document.getElementById('cbPlantilla').value);
+
+    const response = await fetch("/solicitudes/insert/AgregarSolicitudCheckList.php", {
+      method: "POST",
+      body: formData
+    });
+    //.then(response=>response.text()).then((response)=>{console.log(response)}).catch(err=>console.log(err));
+    if(!response.ok){throw new Error(`${response.status} ${response.statusText}`)}
+    const datos = await response.json();
+    if(!datos.res){throw new Error(datos.msg);}
+    setTimeout(()=>{window.location.href='/checklists/CheckList.php?id='+datos.id;},1000);
+  } catch (ex) {
+      setTimeout(()=>{vgLoader.classList.add('loader-full-hidden');},500);
+      await Swal.fire({
+        title: "Aviso",
+        text: ex.message,
+        icon: "error",
+        timer: 2000
+    });
+  }
 }
 
 
